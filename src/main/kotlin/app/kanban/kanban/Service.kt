@@ -49,7 +49,7 @@ class KanbanService(
     }
 
     fun addCard(boardId: Long, title: String, description: String, column: String): Int {
-        return kanbanBoardRepository.addCard(boardId, title, description, column)
+        return kanbanCardRepository.addCard(boardId, title, description, column)
     }
 
     fun getBoard(id: Long) = kanbanBoardRepository.findById(id)
@@ -63,7 +63,7 @@ class KanbanService(
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
-    fun findAll() : List<KanbanBoard>
+    fun findAll(): List<KanbanBoard>
     fun deleteAll()
 
     @Query("INSERT INTO kanban_board (title, columns) VALUES (:title, :columns) RETURNING id")
@@ -71,6 +71,12 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
 
     @Query("UPDATE kanban_board SET title = :title, columns = :columns WHERE id = :id RETURNING id")
     fun update(id: Long, title: String, columns: Array<String>): Long
+
+    fun findById(id: Long): KanbanBoard
+}
+
+interface KanbanCardRepository : Repository<KanbanCard, KanbanCardId> {
+    fun deleteAll()
 
     @Query(
         """
@@ -85,12 +91,7 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
         RETURNING id
     """
     )
-    fun addCard(boardId: Long, title: String, description: String, column: String) : Int
-    fun findById(id: Long): KanbanBoard
-}
-
-interface KanbanCardRepository : Repository<KanbanCard, KanbanCardId> {
-    fun deleteAll()
+    fun addCard(boardId: Long, title: String, description: String, column: String): Int
 
     @Query("SELECT * FROM kanban_card WHERE board_id = :boardId AND \"column\" = :column ORDER BY index")
     fun findKanbanCards(boardId: Long, column: String): List<KanbanCard>
