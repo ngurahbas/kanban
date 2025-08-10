@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: kanban
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kanban
+    username: kanban
+    password: kanban
+    driver-class-name: org.postgresql.Driver
