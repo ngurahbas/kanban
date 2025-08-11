@@ -43,3 +43,7 @@ out/
 node_modules
 package.json
 package-lock.json
+
+#generated css js
+src/main/resources/static/css/main.css
+src/main/resources/static/js/main.js
