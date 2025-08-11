@@ -18,20 +18,20 @@
         </button>
     </div>
 </nav>
-<div class="flex">
-    <div x-show="sidebarOpen"
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0 transform -translate-x-full"
-         x-transition:enter-end="opacity-100 transform translate-x-0"
-         x-transition:leave="transition ease-in duration-300"
-         x-transition:leave-start="opacity-100 transform translate-x-0"
-         x-transition:leave-end="opacity-0 transform -translate-x-full"
-         class="w-64 min-h-screen p-4 shadow-md">
-        <!-- Sidebar content goes here -->
-    </div>
-    <div class="flex-1">
-       
-    </div>
+<div class="flex p-4">
+    <form th:if="${kanban.id} == null" class="grid">
+        <input type="hidden" name="id" th:value="${kanban.id}">
+        <label class="input">
+            Title
+            <input type="text"  placeholder="Kanban Board Title" name="title" required />
+        </label>
+        <th:block th:each="column : ${kanban.columns}">
+            <input type="hidden" name="columns" th:value="${column}">
+
+        </th:block>
+        <button th:if="${kanban.id} == null" type="submit" class="btn btn-primary">Create</button>
+        <button th:if="${kanban.id} != null" type="submit" class="btn btn-primary">Update</button>
+    </form>
 </div>
 
 </body>
