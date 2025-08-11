@@ -38,3 +38,8 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+#npm controlled by gradlew
+node_modules
+package.json
+package-lock.json
