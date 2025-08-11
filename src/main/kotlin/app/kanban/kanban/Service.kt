@@ -2,10 +2,13 @@ package app.kanban.kanban
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Query
+import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
+import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.Repository
 import org.springframework.stereotype.Service
+import java.io.Serializable
 import java.time.Instant
 
 @Table
@@ -58,7 +61,7 @@ class KanbanService(
 
     fun getCards(boardId: Long, column: String) = kanbanCardRepository.findKanbanCards(boardId, column)
 
-    fun getColumnToCardMap(kanbanBoard: KanbanBoard) =
+    fun mapColumnToCards(kanbanBoard: KanbanBoard) =
         kanbanBoard.cards.groupBy { it.column }.mapValues { (_, cards) -> cards.sortedBy { it.index } }
 }
 
@@ -75,8 +78,7 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
     fun findById(id: Long): KanbanBoard
 }
 
-interface KanbanCardRepository : Repository<KanbanCard, KanbanCardId> {
-    fun deleteAll()
+interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
 
     @Query(
         """

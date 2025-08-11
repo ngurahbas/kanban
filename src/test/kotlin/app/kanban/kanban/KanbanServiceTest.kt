@@ -13,8 +13,7 @@ import kotlin.test.Test
 class KanbanServiceTest @Autowired constructor(
     val service: KanbanService,
     val boardRepository: KanbanBoardRepository,
-    val cardRepository: KanbanCardRepository
-
+    val cardRepository: KanbanCardRepository,
 ) {
 
     @BeforeAll
@@ -39,8 +38,9 @@ class KanbanServiceTest @Autowired constructor(
         val board1 = service.getBoard(board.id)
         assertNotNull(board1)
 
-        val card =  service.getCard(board.id, board1.cards[0].id)
-        assertNotNull(card) }
+        val card = service.getCard(board.id, 1)
+        assertNotNull(card)
+    }
 
     @Test
     fun `return only cards of a given column`() {
@@ -52,4 +52,12 @@ class KanbanServiceTest @Autowired constructor(
         assert(cards[1].title == "Test Card 3")
     }
 
+    @Test
+    fun `return map of cards grouped by column`() {
+        val board = boardRepository.findAll()[0]
+        val mapToCards = service.mapColumnToCards(board)
+        val invalidMap = mapToCards.mapValues { (_, cards) -> cards.distinctBy { it.column } }
+            .filter { it.key != it.value[0].column || it.value.size > 1 }
+        assert(invalidMap.isEmpty())
+    }
 }
