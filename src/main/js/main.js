@@ -1,8 +1,5 @@
-import Alpine from 'alpinejs'
-import htmx from 'htmx.org'
+import 'htmx.org';
+import Alpine from 'alpinejs';
 
-// Expose to window for global access in templates if needed
-window.Alpine = Alpine
-window.htmx = htmx
-
-Alpine.start()
+window.Alpine = Alpine;
+Alpine.start();
