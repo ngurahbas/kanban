@@ -42,7 +42,7 @@ class KanbanService(
     private val kanbanBoardRepository: KanbanBoardRepository,
     private val kanbanCardRepository: KanbanCardRepository
 ) {
-    fun saveBoard(id: Long?, title: String, columns: Collection<String>): Long {
+    fun saveBoard(id: Long?, title: String, columns: List<String>): Long {
         val columnsAsArray = columns.toTypedArray()
         return if (id == null) {
             kanbanBoardRepository.create(title, columnsAsArray)

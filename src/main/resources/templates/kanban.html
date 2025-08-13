@@ -18,21 +18,25 @@
         </button>
     </div>
 </nav>
-<div class="flex p-4">
-    <form th:if="${kanban.id} == null" class="grid">
-        <input type="hidden" name="id" th:value="${kanban.id}">
-        <label class="input">
-            Title
-            <input type="text"  placeholder="Kanban Board Title" name="title" required />
-        </label>
-        <th:block th:each="column : ${kanban.columns}">
-            <input type="hidden" name="columns" th:value="${column}">
-
-        </th:block>
-        <button th:if="${kanban.id} == null" type="submit" class="btn btn-primary">Create</button>
-        <button th:if="${kanban.id} != null" type="submit" class="btn btn-primary">Update</button>
-    </form>
-</div>
-
+<th:block th:fragment="kanbanTitle">
+    <section th:if="${editKanbanTitle}"
+             class="grid p-4">
+        <form name="kanbanTitleForm" hx-post="">
+            <fieldset class="fieldset">
+                <label class="fieldset-legend text-2xl" for="kanbanTitle">Kanban Title</label>
+                <input th:value="${kanban.title}" name="title" type="text" id="kanbanTitle"
+                       class="input input-bordered text-2xl"/>
+            </fieldset>
+            <input type="submit" value="Save" class="btn btn-primary text-2xl"/>
+        </form>
+    </section>
+    <section th:if="!${editKanbanTitle}"
+             class="group flex p-4 gap-4">
+        <h1 class="text-2xl">Title goes here</h1>
+        <button class="btn btn-xs btn-dash border-accent hover:bg-base-100 hidden group-hover:block"
+                hx-post="edit" hx-target="closest section">Edit
+        </button>
+    </section>
+</th:block>
 </body>
 </html>
