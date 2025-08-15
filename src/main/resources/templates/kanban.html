@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${kanban.id} == null ? 'New Kanban Board' : kanban.title ">Kanban Board</title>
+    <title th:text="${kanban.id} == null ? 'New Kanban Board' : 'Kanban: ' + ${kanban.title}">Kanban Board</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <script th:src="@{/js/main.js}" defer></script>
 </head>
@@ -19,24 +19,24 @@
     </div>
 </nav>
 <th:block th:fragment="kanbanTitle">
-    <section th:if="${editKanbanTitle}"
-             class="grid p-4">
-        <form name="kanbanTitleForm" hx-post="">
-            <fieldset class="fieldset">
-                <label class="fieldset-legend text-2xl" for="kanbanTitle">Kanban Title</label>
-                <input th:value="${kanban.title}" name="title" type="text" id="kanbanTitle"
-                       class="input input-bordered text-2xl"/>
-            </fieldset>
-            <input type="submit" value="Save" class="btn btn-primary text-2xl"/>
-        </form>
-    </section>
-    <section th:if="!${editKanbanTitle}"
-             class="group flex p-4 gap-4">
-        <h1 class="text-2xl">Title goes here</h1>
-        <button class="btn btn-xs btn-dash border-accent hover:bg-base-100 hidden group-hover:block"
-                hx-post="edit" hx-target="closest section">Edit
-        </button>
-    </section>
+    <form name="kanbanTitleForm"
+          hx-post="/kanban"
+          hx-target="this">
+        <input th:value="${kanban.id}" type="hidden" name="id">
+        <fieldset th:if="${editKanbanTitle}"
+                  class="fieldset flex items-center justify-center p-4">
+            <label for="kanbanTitle" class="text-3xl">Title</label>
+            <input th:value="${kanban.title}" type="text" name="title" id="kanbanTitle"
+                   class="input input-info w-2xl text-3xl">
+            <button class="btn btn-primary btn-md">Create New Kanban</button>
+        </fieldset>
+        <section th:if="!${editKanbanTitle}"
+                 class="group flex items-center justify-center relative p-4 gap-2">
+            <h1 th:text="${kanban.title}" class="text-3xl"></h1>
+            <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit</button>
+        </section>
+        <input th:each="column : ${kanban.columns}" th:value="${column}" type="hidden" name="columns">
+    </form>
 </th:block>
 </body>
 </html>
