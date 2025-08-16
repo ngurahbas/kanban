@@ -6,6 +6,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 
 
 @Controller
@@ -16,26 +17,38 @@ class KanbanController(
     @GetMapping("/kanban")
     fun board(model: Model): String {
         model.addAttribute("editKanbanTitle", true)
-        model.addAttribute("kanban", KanbanWeb(null, "", defaultColumns ))
+        model.addAttribute("kanban", KanbanWeb(null, "" ))
         return "kanban"
     }
 
-    @PostMapping("/kanban")
+    @PostMapping("/kanban/title")
     fun saveKanban(kanban: KanbanWeb, model: Model, response: HttpServletResponse): String {
-        val columns = kanban.columns ?: listOf("To do", "In Progress", "Done")
-        val returnedId = service.saveBoard(kanban.id, kanban.title, columns)
+        var id : Long? = kanban.id
+        if (kanban.id == null) {
+            val columns =  defaultColumns
+            id = service.createBoard(kanban.title, columns)
+        } else {
+            service.updateBoardTitle(kanban.id, kanban.title)
+        }
         model.addAttribute("editKanbanTitle", false)
-        model.addAttribute("kanban", KanbanWeb(returnedId, kanban.title, columns))
-        response.addHeader("HX-PUSH", "/kanban/${returnedId}")
+        model.addAttribute("kanban", KanbanWeb(id, kanban.title))
+        response.addHeader("HX-PUSH", "/kanban/${id}")
         return "kanban :: kanbanTitle"
     }
 
     @GetMapping("/kanban/{id}")
-    fun board(@PathVariable id: Long, model: Model): String {
+    fun getKanbanById(@PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
         model.addAttribute("editKanbanTitle", false)
-        model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title, kanbanDb.columns))
+        model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
         return "kanban"
+    }
+
+    @GetMapping("/kanban/{id}/edit")
+    fun editKanbanById(@PathVariable id: Long, kanban: KanbanWeb, model: Model): String {
+        model.addAttribute("editKanbanTitle", true)
+        model.addAttribute("kanban", kanban)
+        return "kanban :: kanbanTitle"
     }
 }
 
@@ -44,6 +57,4 @@ val defaultColumns = listOf("To do", "In progress", "Done")
 data class KanbanWeb(
     val id: Long?,
     val title: String,
-    val columns: List<String>?,
-    val editKanbanTitle: Boolean = false
 )

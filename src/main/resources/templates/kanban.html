@@ -20,7 +20,7 @@
 </nav>
 <th:block th:fragment="kanbanTitle">
     <form name="kanbanTitleForm"
-          hx-post="/kanban"
+          hx-post="/kanban/title"
           hx-target="this">
         <input th:value="${kanban.id}" type="hidden" name="id">
         <fieldset th:if="${editKanbanTitle}"
@@ -28,14 +28,17 @@
             <label for="kanbanTitle" class="text-3xl">Title</label>
             <input th:value="${kanban.title}" type="text" name="title" id="kanbanTitle"
                    class="input input-info w-2xl text-3xl">
-            <button class="btn btn-primary btn-md">Create New Kanban</button>
+            <button th:text="${kanban.id} == null ? 'Create' : 'Update'" class="btn btn-primary btn-md"></button>
         </fieldset>
         <section th:if="!${editKanbanTitle}"
                  class="group flex items-center justify-center relative p-4 gap-2">
             <h1 th:text="${kanban.title}" class="text-3xl"></h1>
-            <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit</button>
+            <input th:value="${kanban.title}" type="hidden" name="title">
+            <button th:hx-get="'/kanban/'+${kanban.id}+'/edit'"
+                    hx-target="closest form"
+                    class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit
+            </button>
         </section>
-        <input th:each="column : ${kanban.columns}" th:value="${column}" type="hidden" name="columns">
     </form>
 </th:block>
 </body>

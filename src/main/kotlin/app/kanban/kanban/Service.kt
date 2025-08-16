@@ -1,14 +1,13 @@
 package app.kanban.kanban
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.Repository
 import org.springframework.stereotype.Service
-import java.io.Serializable
 import java.time.Instant
 
 @Table
@@ -42,13 +41,13 @@ class KanbanService(
     private val kanbanBoardRepository: KanbanBoardRepository,
     private val kanbanCardRepository: KanbanCardRepository
 ) {
-    fun saveBoard(id: Long?, title: String, columns: List<String>): Long {
+    fun createBoard(title: String, columns: List<String>): Long {
         val columnsAsArray = columns.toTypedArray()
-        return if (id == null) {
-            kanbanBoardRepository.create(title, columnsAsArray)
-        } else {
-            kanbanBoardRepository.update(id, title, columnsAsArray)
-        }
+        return kanbanBoardRepository.create(title, columnsAsArray)
+    }
+
+    fun updateBoardTitle(id: Long, title: String) {
+        kanbanBoardRepository.updateTitle(id, title)
     }
 
     fun addCard(boardId: Long, title: String, description: String, column: String): Int {
@@ -63,6 +62,7 @@ class KanbanService(
 
     fun mapColumnToCards(kanbanBoard: KanbanBoard) =
         kanbanBoard.cards.groupBy { it.column }.mapValues { (_, cards) -> cards.sortedBy { it.index } }
+
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -74,6 +74,10 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
 
     @Query("UPDATE kanban_board SET title = :title, columns = :columns WHERE id = :id RETURNING id")
     fun update(id: Long, title: String, columns: Array<String>): Long
+
+    @Query("UPDATE kanban_board SET title = :title WHERE id = :id")
+    @Modifying
+    fun updateTitle(id: Long, title: String)
 
     fun findById(id: Long): KanbanBoard
 }
