@@ -17,16 +17,15 @@ class KanbanController(
     @GetMapping("/kanban")
     fun board(model: Model): String {
         model.addAttribute("editKanbanTitle", true)
-        model.addAttribute("kanban", KanbanWeb(null, "" ))
+        model.addAttribute("kanban", KanbanWeb(null, ""))
         return "kanban"
     }
 
     @PostMapping("/kanban/title")
     fun saveKanban(kanban: KanbanWeb, model: Model, response: HttpServletResponse): String {
-        var id : Long? = kanban.id
+        var id: Long? = kanban.id
         if (kanban.id == null) {
-            val columns =  defaultColumns
-            id = service.createBoard(kanban.title, columns)
+            id = service.createBoard(kanban.title, defaultColumns)
         } else {
             service.updateBoardTitle(kanban.id, kanban.title)
         }
@@ -39,8 +38,12 @@ class KanbanController(
     @GetMapping("/kanban/{id}")
     fun getKanbanById(@PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
+        val columnCards = service.mapColumnToCards(kanbanDb).mapValues { (_, cards) ->
+            cards.map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
+        }
         model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
+        model.addAttribute("columnCards", columnCards)
         return "kanban"
     }
 
@@ -57,4 +60,11 @@ val defaultColumns = listOf("To do", "In progress", "Done")
 data class KanbanWeb(
     val id: Long?,
     val title: String,
+)
+
+data class KanbanCardWeb(
+    val id: Int,
+    val index: Int,
+    val title: String,
+    val description: String,
 )

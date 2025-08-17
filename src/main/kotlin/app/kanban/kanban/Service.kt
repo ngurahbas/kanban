@@ -60,8 +60,11 @@ class KanbanService(
 
     fun getCards(boardId: Long, column: String) = kanbanCardRepository.findKanbanCards(boardId, column)
 
-    fun mapColumnToCards(kanbanBoard: KanbanBoard) =
-        kanbanBoard.cards.groupBy { it.column }.mapValues { (_, cards) -> cards.sortedBy { it.index } }
+    fun mapColumnToCards(kanbanBoard: KanbanBoard): Map<String, List<KanbanCard>> {
+        val cardsByColumn = kanbanBoard.cards.groupBy { it.column }
+            .mapValues { (_, cards) -> cards.sortedBy { it.index } }
+        return kanbanBoard.columns.associateWith { column -> cardsByColumn.getOrDefault(column, emptyList()) }
+    }
 
 }
 
