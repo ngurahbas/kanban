@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${kanban.id} == null ? 'New Kanban Board' : 'Kanban: ' + ${kanban.title}">Kanban Board</title>
+    <title th:text="${kanban.id == null ? 'New Kanban Board' : 'Kanban: ' + kanban.title}">Kanban Board</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <script th:src="@{/js/main.js}" defer></script>
 </head>
@@ -18,29 +18,51 @@
         </button>
     </div>
 </nav>
-<th:block th:fragment="kanbanTitle">
-    <form name="kanbanTitleForm"
-          hx-post="/kanban/title"
-          hx-target="this">
-        <input th:value="${kanban.id}" type="hidden" name="id">
-        <fieldset th:if="${editKanbanTitle}"
-                  class="fieldset flex items-center justify-center p-4">
+
+<section th:fragment="kanbanTitle" id="kanbanTitleSection" class="p-4">
+    <form th:if="${editKanbanTitle}"
+          hx-post="/kanban/title" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
+        <fieldset class="fieldset flex items-center justify-center">
             <label for="kanbanTitle" class="text-3xl">Title</label>
+            <input th:value="${kanban.id}" type="hidden" name="id"  >
             <input th:value="${kanban.title}" type="text" name="title" id="kanbanTitle"
                    class="input input-info w-2xl text-3xl">
-            <button th:text="${kanban.id} == null ? 'Create' : 'Update'" class="btn btn-primary btn-md"></button>
+            <button th:text="${kanban.id} == null ? 'Create' : 'Update'"
+                    class="btn btn-primary btn-md"></button>
         </fieldset>
-        <section th:if="!${editKanbanTitle}"
-                 class="group flex items-center justify-center relative p-4 gap-2">
+    </form>
+    <form th:if="!${editKanbanTitle}" th:hx-get="'/kanban/'+1000+'/edit'"
+          hx-target="#kanbanTitleSection" hx-swap="outerHTML">
+        <fieldset class="fieldset flex items-center justify-center group">
             <h1 th:text="${kanban.title}" class="text-3xl"></h1>
             <input th:value="${kanban.title}" type="hidden" name="title">
-            <button th:hx-get="'/kanban/'+${kanban.id}+'/edit'"
-                    hx-target="closest form"
-                    class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit
+            <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit
             </button>
-        </section>
+        </fieldset>
     </form>
-</th:block>
+</section>
+
+
+<section id="kanbanColumns" class="flex flex-nowrap items-center justify-center overflow-x-auto gap-2 p-4">
+    <div th:if="${columnCards} != null" th:each="colEntry : ${columnCards.entrySet()}" class="flex-none w-80">
+        <div class="card shadow hover:shadow-lg">
+            <div class="card-body p-4">
+                <h2 class="card-title text-lg" th:text="${colEntry.key}">Column</h2>
+                <div class="mt-2 space-y-2">
+                    <div th:each="card : ${colEntry.value}" class="card bg-base-100 shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="font-semibold" th:text="${card.title}">Card title</div>
+                            <p class="text-sm opacity-80" th:text="${card.description}">Card description</p>
+                        </div>
+                    </div>
+                    <div th:if="${#lists.isEmpty(colEntry.value)}" class="text-sm opacity-50 italic">
+                        No cards
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 </body>
 </html>
