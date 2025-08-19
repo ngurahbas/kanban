@@ -48,8 +48,8 @@
 
 <section th:fragment="kanbanColumns" th:attr="hx-swap-oob=${kanbanCreated} ? 'true' : null"
          id="kanbanColumns" class="flex flex-nowrap items-center justify-center overflow-x-auto gap-2 p-4">
-    <div th:if="${columnCards} != null" th:each="colEntry : ${columnCards.entrySet()}" class="flex-none w-80">
-        <div class="card shadow hover:shadow-lg">
+    <div th:if="${columnCards} != null" th:each="colEntry : ${columnCards.entrySet()}" class="flex-none w-100">
+        <div class="card border-2 shadow hover:shadow-lg">
             <div class="card-body p-4">
                 <h2 class="card-title text-lg" th:text="${colEntry.key}">Column</h2>
                 <div class="mt-2 space-y-2">
@@ -59,9 +59,18 @@
                             <p class="text-sm opacity-80" th:text="${card.description}">Card description</p>
                         </div>
                     </div>
-                    <div th:if="${#lists.isEmpty(colEntry.value)}" class="text-sm opacity-50 italic">
-                        No cards
-                    </div>
+                    <form class="card bg-base-200 shadow-sm p-3 mt-2"
+                          th:hx-post="@{/kanban/{kanbanId}/column/{column}/card(kanbanId=${kanban.id},column=${colEntry.key})}"
+                          hx-swap="beforeend"
+                          hx-target="closest .space-y-2">
+                        <div class="form-control w-full">
+                            <input type="text" placeholder="Card title" name="title"
+                                   class="input input-sm input-bordered w-full mb-2" required>
+                            <textarea placeholder="Card description" name="description"
+                                      class="textarea textarea-bordered textarea-sm w-full mb-2" required></textarea>
+                            <button type="submit" class="btn btn-primary btn-sm w-full">Add Card</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
