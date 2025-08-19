@@ -17,6 +17,7 @@ class KanbanController(
     fun board(model: Model): String {
         model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", KanbanWeb(null, ""))
+        model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
         return "kanban"
     }
 
