@@ -56,6 +56,13 @@ class KanbanController(
         model.addAttribute("kanban", kanban)
         return "kanban :: kanbanTitle"
     }
+
+    @PostMapping("/kanban/{kanbanId}/column/{column}/card")
+    fun saveCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
+        val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
+        model.addAttribute("card", KanbanCardWeb(cardIdIndex.first, cardIdIndex.second, card.title, card.description))
+        return "kanban :: card"
+    }
 }
 
 val defaultColumns = listOf("To do", "In progress", "Done")
@@ -66,8 +73,8 @@ data class KanbanWeb(
 )
 
 data class KanbanCardWeb(
-    val id: Int,
-    val index: Int,
+    val id: Int?,
+    val index: Int?,
     val title: String,
     val description: String,
 )

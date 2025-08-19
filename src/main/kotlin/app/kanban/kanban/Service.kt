@@ -50,7 +50,7 @@ class KanbanService(
         kanbanBoardRepository.updateTitle(id, title)
     }
 
-    fun addCard(boardId: Long, title: String, description: String, column: String): Int {
+    fun addCard(boardId: Long, title: String, description: String, column: String): Pair<Int, Int> {
         return kanbanCardRepository.addCard(boardId, title, description, column)
     }
 
@@ -97,10 +97,10 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
             :description, 
             (SELECT coalesce(max(index), 0) + 1 FROM kanban_card WHERE board_id = :boardId),
             :column) 
-        RETURNING id
+        RETURNING id, index
     """
     )
-    fun addCard(boardId: Long, title: String, description: String, column: String): Int
+    fun addCard(boardId: Long, title: String, description: String, column: String): Pair<Int, Int>
 
     @Query("SELECT * FROM kanban_card WHERE board_id = :boardId AND \"column\" = :column ORDER BY index")
     fun findKanbanCards(boardId: Long, column: String): List<KanbanCard>
