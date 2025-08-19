@@ -24,14 +24,14 @@
           hx-post="/kanban/title" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
         <fieldset class="fieldset flex items-center justify-center">
             <label for="kanbanTitle" class="text-3xl">Title</label>
-            <input th:value="${kanban.id}" type="hidden" name="id"  >
+            <input th:value="${kanban.id}" type="hidden" name="id">
             <input th:value="${kanban.title}" type="text" name="title" id="kanbanTitle"
                    class="input input-info w-2xl text-3xl">
             <button th:text="${kanban.id} == null ? 'Create' : 'Update'"
                     class="btn btn-primary btn-md"></button>
         </fieldset>
     </form>
-    <form th:if="!${editKanbanTitle}" th:hx-get="'/kanban/'+1000+'/edit'"
+    <form th:if="!${editKanbanTitle}" th:hx-get="'/kanban/'+${kanban.id}+'/edit'"
           hx-target="#kanbanTitleSection" hx-swap="outerHTML">
         <fieldset class="fieldset flex items-center justify-center group">
             <h1 th:text="${kanban.title}" class="text-3xl"></h1>
@@ -40,10 +40,14 @@
             </button>
         </fieldset>
     </form>
+    <th:block th:if="${kanbanCreated}">
+        <section th:replace=":: kanbanColumns"></section>
+    </th:block>
 </section>
 
 
-<section id="kanbanColumns" class="flex flex-nowrap items-center justify-center overflow-x-auto gap-2 p-4">
+<section th:fragment="kanbanColumns" th:attr="hx-swap-oob=${kanbanCreated} ? 'true' : null"
+         id="kanbanColumns" class="flex flex-nowrap items-center justify-center overflow-x-auto gap-2 p-4">
     <div th:if="${columnCards} != null" th:each="colEntry : ${columnCards.entrySet()}" class="flex-none w-80">
         <div class="card shadow hover:shadow-lg">
             <div class="card-body p-4">

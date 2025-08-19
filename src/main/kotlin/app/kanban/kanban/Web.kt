@@ -26,6 +26,8 @@ class KanbanController(
         var id: Long? = kanban.id
         if (kanban.id == null) {
             id = service.createBoard(kanban.title, defaultColumns)
+            model.addAttribute("kanbanCreated", true)
+            model.addAttribute("columnCards", defaultColumns.associateWith { listOf<KanbanCardWeb>() })
         } else {
             service.updateBoardTitle(kanban.id, kanban.title)
         }
@@ -41,6 +43,7 @@ class KanbanController(
         val columnCards = service.mapColumnToCards(kanbanDb).mapValues { (_, cards) ->
             cards.map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
         }
+        model.addAttribute("kanbanCreated", false)
         model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
         model.addAttribute("columnCards", columnCards)
