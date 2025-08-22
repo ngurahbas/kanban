@@ -61,7 +61,9 @@ class KanbanController(
     fun saveCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.first, cardIdIndex.second, card.title, card.description))
-        return "kanban :: card"
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("column", column)
+        return "kanban :: addCardFormAndNewCard"
     }
 }
 
