@@ -8,6 +8,7 @@ import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.Repository
 import org.springframework.stereotype.Service
+import org.thymeleaf.expression.Objects
 import java.time.Instant
 
 @Table
@@ -16,8 +17,6 @@ data class KanbanBoard(
     val id: Long,
     val title: String,
     val columns: List<String>,
-    @MappedCollection(idColumn = "board_id", keyColumn = "index")
-    val cards: List<KanbanCard>,
     val createdAt: Instant?,
     val updatedAt: Instant?
 )
@@ -34,7 +33,7 @@ data class KanbanCard(
     val updatedAt: Instant?
 )
 
-class KanbanCardId(val boardId: Long, val id: Int)
+data class CardInsertResult(val id: Int, val index: Int)
 
 @Service
 class KanbanService(
@@ -50,7 +49,7 @@ class KanbanService(
         kanbanBoardRepository.updateTitle(id, title)
     }
 
-    fun addCard(boardId: Long, title: String, description: String, column: String): Pair<Int, Int> {
+    fun addCard(boardId: Long, title: String, description: String, column: String): CardInsertResult {
         return kanbanCardRepository.addCard(boardId, title, description, column)
     }
 
@@ -60,12 +59,7 @@ class KanbanService(
 
     fun getCards(boardId: Long, column: String) = kanbanCardRepository.findKanbanCards(boardId, column)
 
-    fun mapColumnToCards(kanbanBoard: KanbanBoard): Map<String, List<KanbanCard>> {
-        val cardsByColumn = kanbanBoard.cards.groupBy { it.column }
-            .mapValues { (_, cards) -> cards.sortedBy { it.index } }
-        return kanbanBoard.columns.associateWith { column -> cardsByColumn.getOrDefault(column, emptyList()) }
-    }
-
+    fun getCards(boardId: Long) = kanbanCardRepository.findKanbanCards(boardId)
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -100,10 +94,13 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
         RETURNING id, index
     """
     )
-    fun addCard(boardId: Long, title: String, description: String, column: String): Pair<Int, Int>
+    fun addCard(boardId: Long, title: String, description: String, column: String): CardInsertResult
 
     @Query("SELECT * FROM kanban_card WHERE board_id = :boardId AND \"column\" = :column ORDER BY index")
     fun findKanbanCards(boardId: Long, column: String): List<KanbanCard>
+
+    @Query("SELECT * FROM kanban_card WHERE board_id = :boardId")
+    fun findKanbanCards(boardId: Long): List<KanbanCard>
 
     @Query("SELECT * FROM kanban_card WHERE board_id = :boardId AND id = :id")
     fun findById(boardId: Long, id: Int): KanbanCard

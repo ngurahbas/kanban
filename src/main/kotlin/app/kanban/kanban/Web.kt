@@ -40,9 +40,9 @@ class KanbanController(
     @GetMapping("/kanban/{id}")
     fun getKanbanById(@PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
-        val columnCards = service.mapColumnToCards(kanbanDb).mapValues { (_, cards) ->
-            cards.map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
-        }
+        val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
+            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) } }
+        val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
         model.addAttribute("kanbanCreated", false)
         model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
@@ -60,7 +60,7 @@ class KanbanController(
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
     fun saveCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
-        model.addAttribute("card", KanbanCardWeb(cardIdIndex.first, cardIdIndex.second, card.title, card.description))
+        model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
         return "kanban :: addCardFormAndNewCard"
