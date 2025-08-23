@@ -14,4 +14,5 @@ logging:
   level:
     org.springframework.jdbc.core: TRACE
 
-gg.jte.development-mode: true
+gg.jte:
+  development-mode: true

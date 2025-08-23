@@ -18,6 +18,7 @@ class KanbanController(
         model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", KanbanWeb(null, ""))
         model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
+        model.addAttribute("kanbanCreated", false)
         return "kanban"
     }
 
@@ -30,11 +31,12 @@ class KanbanController(
             model.addAttribute("columnCards", defaultColumns.associateWith { listOf<KanbanCardWeb>() })
         } else {
             service.updateBoardTitle(kanban.id, kanban.title)
+            model.addAttribute("kanbanCreated", false)
         }
         model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(id, kanban.title))
         response.addHeader("HX-PUSH", "/kanban/${id}")
-        return "kanban :: kanbanTitle"
+        return "kanban/kanbanTitle"
     }
 
     @GetMapping("/kanban/{id}")
@@ -54,7 +56,8 @@ class KanbanController(
     fun editKanbanById(@PathVariable id: Long, kanban: KanbanWeb, model: Model): String {
         model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", kanban)
-        return "kanban :: kanbanTitle"
+        model.addAttribute("kanbanCreated", false)
+        return "kanban/kanbanTitle"
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
@@ -63,7 +66,7 @@ class KanbanController(
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        return "kanban :: card"
+        return "kanban/card"
     }
 }
 

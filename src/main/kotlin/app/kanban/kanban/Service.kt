@@ -3,12 +3,10 @@ package app.kanban.kanban
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.Repository
 import org.springframework.stereotype.Service
-import org.thymeleaf.expression.Objects
 import java.time.Instant
 
 @Table
