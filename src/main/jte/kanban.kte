@@ -22,26 +22,7 @@
     </div>
 </nav>
 
-<section id="kanbanTitleSection" class="p-4">
-    @if (editKanbanTitle)
-        <form hx-post="/kanban/title" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
-            <fieldset class="fieldset flex items-center justify-center">
-                <label for="kanbanTitle" class="text-3xl">Title</label>
-                <input value="${kanban.id?.toString() ?: ""}" type="hidden" name="id">
-                <input value="${kanban.title}" type="text" name="title" id="kanbanTitle" class="input input-info w-2xl text-3xl">
-                <button class="btn btn-primary btn-md">${if (kanban.id == null) "Create" else "Update"}</button>
-            </fieldset>
-        </form>
-    @else
-        <form hx-get="/kanban/${kanban.id}/edit" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
-            <fieldset class="fieldset flex items-center justify-center group">
-                <h1 class="text-3xl">${kanban.title}</h1>
-                <input value="${kanban.title}" type="hidden" name="title">
-                <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit</button>
-            </fieldset>
-        </form>
-    @endif
-</section>
+@template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban, kanbanCreated=false, columnCards=columnCards)
 
 @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, includeCards=true, swapOob=false)
 
