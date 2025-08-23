@@ -16,3 +16,4 @@ logging:
 
 gg.jte:
   development-mode: true
+  template-suffix: .kte
