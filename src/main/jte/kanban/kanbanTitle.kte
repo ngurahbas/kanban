@@ -24,17 +24,6 @@
     @endif
 
     @if (kanbanCreated)
-        <section hx-swap-oob="true" id="kanbanColumns" class="flex flex-nowrap justify-center overflow-x-auto gap-2 p-4">
-            @for ((column, _) in columnCards)
-                <div class="flex-none w-100">
-                    <div class="card border-2 shadow hover:shadow-lg">
-                        <div class="card-body p-4">
-                            <h2 class="card-title text-lg">${column}</h2>
-                            <button class="btn btn-sm btn-primary w-fit self-end" onclick="document.getElementById('addCardModal').showModal()">add</button>
-                        </div>
-                    </div>
-                </div>
-            @endfor
-        </section>
+        @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, includeCards=false, swapOob=true)
     @endif
 </section>
