@@ -22,9 +22,9 @@
     </div>
 </nav>
 
-@template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban, kanbanCreated=false, columnCards=columnCards)
+@template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban)
 
-@template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, includeCards=true, swapOob=false)
+@template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, swapOob=false)
 
 <!-- Add Card Modal -->
 <dialog id="addCardModal" class="modal">

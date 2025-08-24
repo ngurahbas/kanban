@@ -1,6 +1,5 @@
 @param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
 @param kanbanId: Long?
-@param includeCards: Boolean
 @param swapOob: Boolean
 
 <section id="kanbanColumns" class="flex flex-nowrap justify-center overflow-x-auto gap-2 p-4" hx-swap-oob="${if (swapOob) "true" else null}">
@@ -10,7 +9,7 @@
                 <div class="card border-2 shadow hover:shadow-lg">
                     <div class="card-body p-4">
                         <h2 class="card-title text-lg">${column}</h2>
-                        @if (includeCards && kanbanId != null)
+                        @if (kanbanId != null)
                             @for (card in cards)
                                 @template.kanban.card(card=card, kanbanId=kanbanId!!, column=column)
                             @endfor

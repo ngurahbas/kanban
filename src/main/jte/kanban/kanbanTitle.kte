@@ -1,7 +1,5 @@
 @param editKanbanTitle: Boolean
 @param kanban: app.kanban.kanban.KanbanWeb
-@param kanbanCreated: Boolean
-@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>?
 
 <section id="kanbanTitleSection" class="p-4">
     @if (editKanbanTitle)
@@ -21,9 +19,5 @@
                 <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit</button>
             </fieldset>
         </form>
-    @endif
-
-    @if (kanbanCreated)
-        @template.kanban.columns(columnCards=columnCards!!, kanbanId=kanban.id, includeCards=false, swapOob=true)
     @endif
 </section>
