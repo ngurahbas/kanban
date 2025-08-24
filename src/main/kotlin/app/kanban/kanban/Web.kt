@@ -25,10 +25,12 @@ class KanbanController(
     @PostMapping("/kanban/title")
     fun saveKanban(kanban: KanbanWeb, model: Model, response: HttpServletResponse): String {
         var id: Long? = kanban.id
+        var page = "kanban/kanbanTitle"
         if (kanban.id == null) {
             id = service.createBoard(kanban.title, defaultColumns)
             model.addAttribute("kanbanCreated", true)
             model.addAttribute("columnCards", defaultColumns.associateWith { listOf<KanbanCardWeb>() })
+            page = "kanban/kanbanTitleWithColumns"
         } else {
             service.updateBoardTitle(kanban.id, kanban.title)
             model.addAttribute("kanbanCreated", false)
@@ -36,7 +38,7 @@ class KanbanController(
         model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(id, kanban.title))
         response.addHeader("HX-PUSH", "/kanban/${id}")
-        return "kanban/kanbanTitle"
+        return page
     }
 
     @GetMapping("/kanban/{id}")
