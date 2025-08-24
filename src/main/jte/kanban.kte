@@ -45,8 +45,11 @@
 
 <script type="text/javascript">
     function openCardModal(action) {
-        document.forms['cardForm'].action = action;
-        document.getElementById('cardModal').showModal()
+        const form = document.forms['cardForm'];
+        if (!form) return;
+        form.removeAttribute('action');
+        form.setAttribute('hx-post', action);
+        document.getElementById('cardModal').showModal();
     }
 </script>
 
