@@ -63,7 +63,7 @@ class KanbanController(
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
-    fun saveCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
+    fun addCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
