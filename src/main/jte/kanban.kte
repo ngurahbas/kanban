@@ -30,7 +30,7 @@
 <dialog id="cardModal" class="modal">
     <div class="modal-box">
         <h3 class="font-bold text-lg">Add Card</h3>
-        <form id="addCardForm">
+        <form name="cardForm">
             <fieldset class="fieldset w-full">
                 <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title" />
                 <textarea name="description" class="textarea textarea-bordered w-full mt-3" placeholder="Enter card description"></textarea>
@@ -42,6 +42,13 @@
         </form>
     </div>
 </dialog>
+
+<script type="text/javascript">
+    function openCardModal(action) {
+        document.forms['cardForm'].action = action;
+        document.getElementById('cardModal').showModal()
+    }
+</script>
 
 </body>
 </html>
