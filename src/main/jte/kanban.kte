@@ -27,7 +27,7 @@
 @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, swapOob=false)
 
 <!-- Add Card Modal -->
-<dialog id="addCardModal" class="modal">
+<dialog id="cardModal" class="modal">
     <div class="modal-box">
         <h3 class="font-bold text-lg">Add Card</h3>
         <form id="addCardForm">
@@ -37,9 +37,7 @@
             </fieldset>
             <div class="modal-action">
                 <button type="submit" form="addCardForm" class="btn btn-primary">Submit</button>
-                <form method="dialog">
-                    <button class="btn">Close</button>
-                </form>
+                <button type="button" class="btn" onclick="document.getElementById('cardModal').close()">Close</button>
             </div>
         </form>
     </div>
