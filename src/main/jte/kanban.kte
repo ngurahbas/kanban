@@ -1,6 +1,6 @@
 @param editKanbanTitle: Boolean
 @param kanban: app.kanban.kanban.KanbanWeb
-@param columnCards: kotlin.collections.Map<kotlin.String, kotlin.collections.List<app.kanban.kanban.KanbanCardWeb>>
+@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
 
 <!DOCTYPE html>
 <html lang="en">

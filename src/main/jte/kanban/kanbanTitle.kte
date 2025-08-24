@@ -1,7 +1,7 @@
 @param editKanbanTitle: Boolean
 @param kanban: app.kanban.kanban.KanbanWeb
 @param kanbanCreated: Boolean
-@param columnCards: kotlin.collections.Map<kotlin.String, kotlin.collections.List<app.kanban.kanban.KanbanCardWeb>>?
+@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>?
 
 <section id="kanbanTitleSection" class="p-4">
     @if (editKanbanTitle)
