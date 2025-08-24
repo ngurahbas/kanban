@@ -14,7 +14,9 @@
                                 @template.kanban.card(card=card, kanbanId=kanbanId!!, column=column)
                             @endfor
                         @endif
-                        <button class="btn btn-sm btn-primary w-fit self-end" onclick="openCardModal('todo pass action here')">add</button>
+                        @if (kanbanId != null)
+                            <button class="btn btn-sm btn-primary w-fit self-end" onclick="openCardModal('/kanban/${kanbanId!!}/column/${column}/card')">add</button>
+                        @endif
                     </div>
                 </div>
             </div>
