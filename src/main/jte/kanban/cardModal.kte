@@ -6,7 +6,8 @@
         <h3 class="font-bold text-lg">Add Card</h3>
         <form name="cardForm"
               hx-post="/kanban/${kanbanId}/column/${column}/card"
-              hx-target="#column${column.replace(' ', '-')} .cardInColumn:last-of-type">
+              hx-target="#column${column.replace(' ', '-')} .cardInColumn:last-of-type"
+              hx-swap="afterend">
             <fieldset class="fieldset w-full">
                 <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title" />
                 <textarea name="description" class="textarea textarea-bordered w-full mt-3" placeholder="Enter card description"></textarea>

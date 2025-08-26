@@ -75,6 +75,7 @@ class KanbanController(
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
+        model.addAttribute("closeModal", true)
         return "kanban/card"
     }
 }
