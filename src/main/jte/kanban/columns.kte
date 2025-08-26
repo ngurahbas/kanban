@@ -11,7 +11,7 @@
                         <h2 class="card-title text-lg">${column}</h2>
                         @if (kanbanId != null)
                             @for (card in cards)
-                                @template.kanban.card(card=card, kanbanId=kanbanId!!, column=column)
+                                @template.kanban.card(card=card, kanbanId=kanbanId!!, column=column, columns=columnCards.keys)
                             @endfor
                         @endif
                         @if (kanbanId != null)
