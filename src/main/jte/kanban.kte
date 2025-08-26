@@ -36,7 +36,7 @@
                 <textarea name="description" class="textarea textarea-bordered w-full mt-3" placeholder="Enter card description"></textarea>
             </fieldset>
             <div class="modal-action">
-                <button type="submit" form="addCardForm" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
                 <button type="button" class="btn" onclick="document.getElementById('cardModal').close()">Close</button>
             </div>
         </form>
@@ -44,11 +44,15 @@
 </dialog>
 
 <script type="text/javascript">
-    function openCardModal(action) {
+    function openCardModal(kanbanId, column) {
         const form = document.forms['cardForm'];
         if (!form) return;
+        let actionValue = '/kanban/' + kanbanId + '/column/' + column + '/card';
         form.removeAttribute('action');
-        form.setAttribute('hx-post', action);
+        form.setAttribute('hx-post', actionValue);
+        form.setAttribute('hx-target', '#column' + column.replaceAll(' ', '-') + ' .cardInColumn:last-of-type');
+        form.setAttribute('hx-swap', 'afterend');
+        htmx.process(form);
         document.getElementById('cardModal').showModal();
     }
 </script>

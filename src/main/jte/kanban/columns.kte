@@ -6,7 +6,7 @@
     @if (columnCards != null)
         @for ((column, cards) in columnCards)
             <div class="flex-none w-100">
-                <div class="card border-2 shadow hover:shadow-lg">
+                <div id="column${column.replace(" ", "-")}"  class="card border-2 shadow">
                     <div class="card-body p-4">
                         <h2 class="card-title text-lg">${column}</h2>
                         @if (kanbanId != null)
@@ -15,7 +15,7 @@
                             @endfor
                         @endif
                         @if (kanbanId != null)
-                            <button class="btn btn-sm btn-primary w-fit self-end" onclick="openCardModal('/kanban/${kanbanId!!}/column/${column}/card')">add</button>
+                            <button class="btn btn-sm btn-primary w-fit self-end" onclick="openCardModal('${kanbanId}', '${column}')">add</button>
                         @endif
                     </div>
                 </div>
