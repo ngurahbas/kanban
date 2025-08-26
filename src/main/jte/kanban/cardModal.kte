@@ -1,0 +1,23 @@
+@param kanbanId: Long
+@param column: String
+
+<dialog id="cardModal" class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Add Card</h3>
+        <form name="cardForm"
+              hx-post="/kanban/${kanbanId}/column/${column}/card"
+              hx-target="#column${column.replace(' ', '-')} .cardInColumn:last-of-type">
+            <fieldset class="fieldset w-full">
+                <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title" />
+                <textarea name="description" class="textarea textarea-bordered w-full mt-3" placeholder="Enter card description"></textarea>
+            </fieldset>
+            <div class="modal-action">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn" onclick="document.getElementById('cardModal').close()">Close</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('cardModal').showModal()
+    </script>
+</dialog>

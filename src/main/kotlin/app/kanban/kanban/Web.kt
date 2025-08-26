@@ -62,6 +62,13 @@ class KanbanController(
         return "kanban/kanbanTitle"
     }
 
+    @GetMapping("/kanban/{kanbanId}/column/{column}/card")
+    fun addCard(@PathVariable kanbanId: Long, @PathVariable column: String, model: Model): String {
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("column", column)
+        return "kanban/cardModal"
+    }
+
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
     fun addCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)

@@ -15,7 +15,10 @@
                             @endfor
                         @endif
                         @if (kanbanId != null)
-                            <button class="btn btn-sm btn-primary w-fit self-end" onclick="openCardModal('${kanbanId}', '${column}')">add</button>
+                            <button class="btn btn-sm btn-primary w-fit self-end"
+                                    hx-get="/kanban/${kanbanId}/column/${column}/card"
+                                    hx-target="#cardModal"
+                                    hx-swap="outerHTML">add</button>
                         @endif
                     </div>
                 </div>
