@@ -6,6 +6,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 
 @Controller
@@ -63,18 +64,31 @@ class KanbanController(
     }
 
     @GetMapping("/kanban/{kanbanId}/column/{column}/card")
-    fun addCard(@PathVariable kanbanId: Long, @PathVariable column: String, model: Model): String {
+    fun addCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        @RequestParam columns: Set<String>,
+        model: Model
+    ): String {
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
+        model.addAttribute("columns", columns)
         return "kanban/cardModal"
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
-    fun addCard(@PathVariable kanbanId: Long, @PathVariable column: String, card: KanbanCardWeb, model: Model): String {
+    fun addCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        @RequestParam columns: Set<String>,
+        card: KanbanCardWeb,
+        model: Model
+    ): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
+        model.addAttribute("columns", columns)
         model.addAttribute("closeModal", true)
         return "kanban/card"
     }

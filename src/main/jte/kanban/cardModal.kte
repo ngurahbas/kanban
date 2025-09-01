@@ -1,13 +1,17 @@
 @param kanbanId: Long
 @param column: String
+@param columns: Set<String>
 
 <dialog id="cardModal" class="modal">
     <div class="modal-box">
         <h3 class="font-bold text-lg">Add Card</h3>
         <form name="cardForm"
               hx-post="/kanban/${kanbanId}/column/${column}/card"
-              hx-target="#column${column.replace(' ', '-')} .cardInColumn:last-of-type"
-              hx-swap="afterend">
+              hx-target="#column${column.replace(' ', '-')} .card-body form"
+              hx-swap="beforebegin">
+            @for (c in columns)
+                <input type="hidden" name="columns" value="${c}">
+            @endfor
             <fieldset class="fieldset w-full">
                 <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title" />
                 <textarea name="description" class="textarea textarea-bordered w-full mt-3" placeholder="Enter card description"></textarea>
@@ -20,5 +24,6 @@
     </div>
     <script type="text/javascript">
         document.getElementById('cardModal').showModal()
+        htmx.process(document.forms['cardForm'])
     </script>
 </dialog>

@@ -87,7 +87,7 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
              (SELECT coalesce(max(id), 0) + 1 FROM kanban_card WHERE board_id = :boardId),
             :title, 
             :description, 
-            (SELECT coalesce(max(index), 0) + 1 FROM kanban_card WHERE board_id = :boardId),
+            (SELECT coalesce(max(index), 0) + 1 FROM kanban_card WHERE board_id = :boardId AND "column" = :column),
             :column) 
         RETURNING id, index
     """

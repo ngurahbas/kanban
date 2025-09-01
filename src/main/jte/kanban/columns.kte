@@ -2,11 +2,12 @@
 @param kanbanId: Long?
 @param swapOob: Boolean
 
-<section id="kanbanColumns" class="flex flex-nowrap justify-center overflow-x-auto gap-2 p-4" hx-swap-oob="${if (swapOob) "true" else null}">
+<section id="kanbanColumns" class="flex flex-nowrap justify-center overflow-x-auto gap-2 p-4"
+         hx-swap-oob="${if (swapOob) "true" else null}">
     @if (columnCards != null)
         @for ((column, cards) in columnCards)
             <div class="flex-none w-100">
-                <div id="column${column.replace(" ", "-")}"  class="card border-2 shadow">
+                <div id="column${column.replace(" ", "-")}" class="card border-2 shadow">
                     <div class="card-body p-4">
                         <h2 class="card-title text-lg">${column}</h2>
                         @if (kanbanId != null)
@@ -15,10 +16,16 @@
                             @endfor
                         @endif
                         @if (kanbanId != null)
-                            <button class="btn btn-sm btn-primary w-fit self-end"
-                                    hx-get="/kanban/${kanbanId}/column/${column}/card"
-                                    hx-target="#cardModal"
-                                    hx-swap="outerHTML">add</button>
+                            <form class="self-end"
+                                  hx-get="/kanban/${kanbanId}/column/${column}/card"
+                                  hx-target="#cardModal"
+                                  hx-swap="outerHTML">
+                                @for (c in columnCards.keys)
+                                    <input type="hidden" name="columns" value="${c}">
+                                @endfor
+                                <button class="btn btn-sm btn-primary w-fit">add</button>
+                            </form>
+
                         @endif
                     </div>
                 </div>

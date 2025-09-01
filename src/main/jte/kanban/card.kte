@@ -12,7 +12,7 @@
             <button class="btn btn-sm">edit</button>
             <select class="select select-sm w-fit">
                 @for(columnOption in columns)
-                    @if (columnOption == column)
+                    @if(columnOption == column)
                         <option value="${columnOption}" selected>${columnOption}</option>
                     @else
                         <option value="${columnOption}">${columnOption}</option>
