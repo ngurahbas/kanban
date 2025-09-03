@@ -1,0 +1,28 @@
+@param column: String
+@param cards: List<app.kanban.kanban.KanbanCardWeb>
+@param columns: Set<String>
+@param kanbanId: Long?
+
+<div class="flex-none w-100">
+    <div id="column${column.replace(" ", "-")}" class="card border-2 shadow">
+        <div class="card-body p-4">
+            <h2 class="card-title text-lg">${column}</h2>
+            @if (kanbanId != null)
+                @for (card in cards)
+                    @template.kanban.card(card=card, kanbanId=kanbanId!!, column=column, columns=columns)
+                @endfor
+            @endif
+            @if (kanbanId != null)
+                <form class="self-end"
+                      hx-get="/kanban/${kanbanId}/column/${column}/card"
+                      hx-target="#cardModal"
+                      hx-swap="outerHTML">
+                    @for (c in columns)
+                        <input type="hidden" name="columns" value="${c}">
+                    @endfor
+                    <button class="btn btn-sm btn-primary w-fit">add</button>
+                </form>
+            @endif
+        </div>
+    </div>
+</div>

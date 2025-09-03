@@ -1,26 +1,42 @@
 @param kanbanId: Long
 @param column: String
 @param columns: Set<String>
+@param card: app.kanban.kanban.KanbanCardWeb?
 
 <dialog id="cardModal" class="modal">
     <div class="modal-box">
-        <h3 class="font-bold text-lg">Add Card</h3>
+        <h3 class="font-bold text-lg">${if (card == null) "Add Card" else "Edit Card"}</h3>
+
+        @if (card == null)
         <form name="cardForm"
               hx-post="/kanban/${kanbanId}/column/${column}/card"
-              hx-target="#column${column.replace(' ', '-')} .card-body form"
+              hx-target="#column${column.replace(' ', '-')} .card-body > form"
               hx-swap="beforebegin">
+        @else
+        <form name="cardForm"
+              hx-put="/kanban/${kanbanId}/column/${column}/card/${card.id}"
+              hx-target="#card-${card.id}"
+              hx-swap="outerHTML">
+        @endif
             @for (c in columns)
                 <input type="hidden" name="columns" value="${c}">
             @endfor
             <fieldset class="fieldset w-full">
-                <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title" />
-                <textarea name="description" class="textarea textarea-bordered w-full mt-3" placeholder="Enter card description"></textarea>
+                <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title"
+                       value="${card?.title}"/>
+                <textarea name="description" class="textarea textarea-bordered w-full mt-3"
+                          placeholder="Enter card description">${card?.description}</textarea>
             </fieldset>
             <div class="modal-action">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn" onclick="document.getElementById('cardModal').close()">Close</button>
+                <button type="button" class="btn" onclick="document.getElementById('cardModal').close()">Close
+                </button>
             </div>
+        @if (card == null)
         </form>
+        @else
+        </form>
+        @endif
     </div>
     <script type="text/javascript">
         document.getElementById('cardModal').showModal()

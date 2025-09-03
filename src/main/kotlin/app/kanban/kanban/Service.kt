@@ -58,6 +58,10 @@ class KanbanService(
     fun getCards(boardId: Long, column: String) = kanbanCardRepository.findKanbanCards(boardId, column)
 
     fun getCards(boardId: Long) = kanbanCardRepository.findKanbanCards(boardId)
+
+    fun updateCard(kanbanId: Long, cardId: Int, title: String, description: String) {
+        kanbanCardRepository.update(kanbanId, cardId, title, description)
+    }
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -102,4 +106,8 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
 
     @Query("SELECT * FROM kanban_card WHERE board_id = :boardId AND id = :id")
     fun findById(boardId: Long, id: Int): KanbanCard
+
+    @Modifying
+    @Query("UPDATE kanban_card SET title = :title, description = :description WHERE board_id = :boardId AND id = :cardId")
+    fun update(boardId: Long, cardId: Int, title: String, description: String)
 }

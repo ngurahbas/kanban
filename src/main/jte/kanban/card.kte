@@ -4,12 +4,19 @@
 @param columns: Set<String>
 @param closeModal: Boolean = false
 
-<div class="card bg-base-100 shadow-sm relative border-1 cardInColumn">
+<div id="card-${card.id}" class="card bg-base-100 shadow-sm relative border-1 cardInColumn">
     <div class="card-body p-3">
         <div class="card-title font-semibold">${card.title}</div>
         <p>${card.description}</p>
         <div class="flex justify-end gap-1">
-            <button class="btn btn-sm">edit</button>
+            <form hx-get="/kanban/${kanbanId}/column/${column}/card/${card.id}"
+                  hx-target="#cardModal"
+                  hx-swap="outerHTML">
+                @for (c in columns)
+                    <input type="hidden" name="columns" value="${c}">
+                @endfor
+                <button class="btn btn-sm">edit</button>
+            </form>
             <select class="select select-sm w-fit">
                 @for(columnOption in columns)
                     @if(columnOption == column)

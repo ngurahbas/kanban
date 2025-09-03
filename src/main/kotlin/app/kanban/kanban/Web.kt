@@ -6,6 +6,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 
@@ -46,7 +47,7 @@ class KanbanController(
     fun getKanbanById(@PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
         val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
-            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) } }
+            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
         val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
         model.addAttribute("kanbanCreated", false)
         model.addAttribute("editKanbanTitle", false)
@@ -86,6 +87,40 @@ class KanbanController(
     ): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("column", column)
+        model.addAttribute("columns", columns)
+        model.addAttribute("closeModal", true)
+        return "kanban/card"
+    }
+
+    @GetMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    fun editCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        @PathVariable cardId: Int,
+        @RequestParam columns: Set<String>,
+        model: Model
+    ): String {
+        val card = service.getCard(kanbanId, cardId)
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("column", column)
+        model.addAttribute("columns", columns)
+        model.addAttribute("card", KanbanCardWeb(card.id, card.index, card.title, card.description))
+        return "kanban/cardModal"
+    }
+
+    @PutMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    fun editCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        @PathVariable cardId: Int,
+        @RequestParam columns: Set<String>,
+        card: KanbanCardWeb,
+        model: Model
+    ): String {
+        service.updateCard(kanbanId, cardId, card.title, card.description)
+        model.addAttribute("card", card)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
         model.addAttribute("columns", columns)
