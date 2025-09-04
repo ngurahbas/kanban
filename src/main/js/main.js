@@ -4,3 +4,9 @@ import Alpine from 'alpinejs';
 window.htmx = htmx;
 window.Alpine = Alpine;
 Alpine.start();
+
+document.body.addEventListener("htmx:afterSwap", function(evt) {
+    if (evt.detail.target) {
+        htmx.process(evt.detail.target);
+    }
+});

@@ -21,6 +21,8 @@
             @for (c in columns)
                 <input type="hidden" name="columns" value="${c}">
             @endfor
+            <input type="hidden" value="${card?.id}" name="id">
+            <input type="hidden" value="${card?.index}" name="index">
             <fieldset class="fieldset w-full">
                 <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title"
                        value="${card?.title}"/>
@@ -40,6 +42,5 @@
     </div>
     <script type="text/javascript">
         document.getElementById('cardModal').showModal()
-        htmx.process(document.forms['cardForm'])
     </script>
 </dialog>

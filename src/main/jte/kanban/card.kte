@@ -17,12 +17,17 @@
                 @endfor
                 <button class="btn btn-sm">edit</button>
             </form>
-            <select class="select select-sm w-fit">
+            <select name="changeColumn" class="select select-sm w-fit"
+                    hx-trigger="change"
+                    hx-swap="outerHTML"
+                    hx-on:htmx:before-request="document.getElementById('card-${card.id}').remove()">
                 @for(columnOption in columns)
                     @if(columnOption == column)
                         <option value="${columnOption}" selected>${columnOption}</option>
                     @else
-                        <option value="${columnOption}">${columnOption}</option>
+                        <option value="${columnOption}"
+                                hx-put="/kanban/move/${kanbanId}/${card.id}/${columnOption}"
+                                hx-target="#column${columnOption.replace(' ', '-')}">${columnOption}</option>
                     @endif
                 @endfor
             </select>

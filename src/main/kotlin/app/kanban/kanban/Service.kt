@@ -14,7 +14,7 @@ data class KanbanBoard(
     @Id
     val id: Long,
     val title: String,
-    val columns: List<String>,
+    val columns: Set<String>,
     val createdAt: Instant?,
     val updatedAt: Instant?
 )
@@ -38,7 +38,7 @@ class KanbanService(
     private val kanbanBoardRepository: KanbanBoardRepository,
     private val kanbanCardRepository: KanbanCardRepository
 ) {
-    fun createBoard(title: String, columns: List<String>): Long {
+    fun createBoard(title: String, columns: Set<String>): Long {
         val columnsAsArray = columns.toTypedArray()
         return kanbanBoardRepository.create(title, columnsAsArray)
     }
@@ -62,6 +62,13 @@ class KanbanService(
     fun updateCard(kanbanId: Long, cardId: Int, title: String, description: String) {
         kanbanCardRepository.update(kanbanId, cardId, title, description)
     }
+
+    fun moveCard(kanbanId: Long, cardId: Int, column: String): List<KanbanCard> {
+        kanbanCardRepository.move(kanbanId, cardId, column)
+        return getCards(kanbanId, column)
+    }
+
+    fun getColumns(kanbanId: Long) = kanbanBoardRepository.findColumns(kanbanId)
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -79,6 +86,9 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
     fun updateTitle(id: Long, title: String)
 
     fun findById(id: Long): KanbanBoard
+
+    @Query("SELECT unnest(columns) FROM kanban_board WHERE id = :id")
+    fun findColumns(id: Long): Set<String>
 }
 
 interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
@@ -110,4 +120,14 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
     @Modifying
     @Query("UPDATE kanban_card SET title = :title, description = :description WHERE board_id = :boardId AND id = :cardId")
     fun update(boardId: Long, cardId: Int, title: String, description: String)
+
+    @Modifying
+    @Query(
+        """
+        UPDATE kanban_card 
+        SET "column" = :column, index = (SELECT coalesce(max(index), 0) FROM kanban_card WHERE board_id = :kanbanId AND "column" = :column) 
+        WHERE board_id = :kanbanId AND id = :cardId
+    """
+    )
+    fun move(kanbanId: Long, cardId: Int, column: String)
 }

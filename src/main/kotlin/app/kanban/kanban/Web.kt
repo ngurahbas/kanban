@@ -127,9 +127,26 @@ class KanbanController(
         model.addAttribute("closeModal", true)
         return "kanban/card"
     }
+
+    @PutMapping("/kanban/move/{kanbanId}/{cardId}/{column}")
+    fun moveCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable cardId: Int,
+        @PathVariable column: String,
+        model: Model
+    ): String {
+        val cards = service.moveCard(kanbanId, cardId, column)
+            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
+        val columns = service.getColumns(kanbanId)
+        model.addAttribute("cards", cards)
+        model.addAttribute("column", column)
+        model.addAttribute("columns", columns)
+        model.addAttribute("kanbanId", kanbanId)
+        return "kanban/column"
+    }
 }
 
-val defaultColumns = listOf("To do", "In progress", "Done")
+val defaultColumns = setOf("To do", "In progress", "Done")
 
 data class KanbanWeb(
     val id: Long?,
