@@ -1,6 +1,10 @@
 @param editKanbanTitle: Boolean
 @param kanban: app.kanban.kanban.KanbanWeb
 
+@if (!editKanbanTitle)
+<title id="page-title" hx-swap-oob="true">Kanban: ${kanban.title}</title>
+@endif
+
 <section id="kanbanTitleSection" class="p-4">
     @if (editKanbanTitle)
         <form hx-post="/kanban/title" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
