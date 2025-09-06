@@ -14,7 +14,7 @@
     @else
         <form hx-get="/kanban/${kanban.id}/edit" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
             <fieldset class="fieldset flex items-center justify-center group">
-                <h1 class="text-3xl">${kanban.title}</h1>
+                <h1 class="text-3xl font-semibold">${kanban.title}</h1>
                 <input value="${kanban.title}" type="hidden" name="title">
                 <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit</button>
             </fieldset>

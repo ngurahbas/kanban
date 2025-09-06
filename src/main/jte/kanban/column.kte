@@ -5,8 +5,10 @@
 
 <div id="column${column.replace(" ", "-")}" class="flex-none w-100">
     <div class="card border-2 shadow">
-        <div class="card-body p-4">
-            <h2 class="card-title text-lg">${column}</h2>
+        <div class="card-body">
+            <h2 class="card-title text-2xl">${column}</h2>
+        </div>
+        <div class="card-body">
             @if (kanbanId != null)
                 @for (card in cards)
                     @template.kanban.card(card=card, kanbanId=kanbanId!!, column=column, columns=columns)
