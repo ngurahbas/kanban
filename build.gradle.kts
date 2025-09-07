@@ -105,3 +105,13 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmCompileJs") {
     args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--outfile=src/main/resources/static/js/main.js"))
     workingDir.set(file("${project.projectDir}"))
 }
+
+tasks.named<Delete>("clean") {
+    delete(
+        file("${project.projectDir}/node_modules"),
+        file("${project.projectDir}/package.json"),
+        file("${project.projectDir}/package-lock.json"),
+        file("${project.projectDir}/src/main/resources/static/css/main.css"),
+        file("${project.projectDir}/src/main/resources/static/js/main.js")
+    )
+}
