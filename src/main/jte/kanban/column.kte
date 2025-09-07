@@ -3,7 +3,7 @@
 @param columns: Set<String>
 @param kanbanId: Long?
 
-<div id="column${column.replace(" ", "-")}" class="flex-none flex flex-col gap-2 w-100 p-4 shadow bg-base-300">
+<div id="column${column.replace(" ", "-")}" class="group flex-none flex flex-col gap-2 w-100 p-4 shadow bg-base-300">
     <div class="flex-none">
         <h2 class="card-title text-2xl">${column}</h2>
     </div>
@@ -20,7 +20,7 @@
             @for (c in columns)
                 <input type="hidden" name="columns" value="${c}">
             @endfor
-            <button class="btn btn-sm btn-primary w-fit self-end">add</button>
+            <button class="add-btn btn btn-sm btn-primary w-fit self-end opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity">add</button>
         </form>
     @endif
 </div>
