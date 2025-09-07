@@ -10,7 +10,7 @@
         @if (card == null)
         <form name="cardForm"
               hx-post="/kanban/${kanbanId}/column/${column}/card"
-              hx-target="#column${column.replace(' ', '-')} .card-body > form"
+              hx-target="#newCardAnchor${column.replace(" ", "-")}"
               hx-swap="beforebegin">
         @else
         <form name="cardForm"
