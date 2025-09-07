@@ -68,6 +68,10 @@ class KanbanService(
         return getCards(kanbanId, column)
     }
 
+    fun deleteCard(kanbanId: Long, cardId: Int) {
+        kanbanCardRepository.delete(kanbanId, cardId)
+    }
+
     fun getColumns(kanbanId: Long) = kanbanBoardRepository.findColumns(kanbanId)
 }
 
@@ -130,4 +134,8 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
     """
     )
     fun move(kanbanId: Long, cardId: Int, column: String)
+
+    @Modifying
+    @Query("DELETE FROM kanban_card WHERE board_id = :boardId AND id = :cardId")
+    fun delete(boardId: Long, cardId: Int)
 }

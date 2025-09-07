@@ -32,6 +32,11 @@
                     @endif
                 @endfor
             </select>
+            <form hx-delete="/kanban/${kanbanId}/column/${column}/card/${card.id}"
+                  hx-target="#card-${card.id}"
+                  hx-swap="outerHTML">
+                <button class="btn btn-sm btn-error">delete</button>
+            </form>
         </div>
     </div>
 </div>

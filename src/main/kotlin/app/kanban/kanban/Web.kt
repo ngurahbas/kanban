@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
 
 @Controller
@@ -136,13 +138,24 @@ class KanbanController(
         model: Model
     ): String {
         val cards = service.moveCard(kanbanId, cardId, column)
-            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
+        .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
         val columns = service.getColumns(kanbanId)
         model.addAttribute("cards", cards)
         model.addAttribute("column", column)
         model.addAttribute("columns", columns)
         model.addAttribute("kanbanId", kanbanId)
         return "kanban/column"
+    }
+
+    @DeleteMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    @ResponseBody
+    fun deleteCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        @PathVariable cardId: Int
+    ): String {
+        service.deleteCard(kanbanId, cardId)
+        return ""
     }
 }
 
