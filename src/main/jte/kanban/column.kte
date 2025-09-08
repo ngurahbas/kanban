@@ -24,8 +24,9 @@
             !{
                 val opacityClasses = if (isFirst) "opacity-100 pointer-events-auto"
                         else "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+                val btnClasses = if (isFirst) "btn-primary" else "btn-dash hover:btn-primary"
             }
-            <button class="add-btn btn btn-sm btn-primary w-fit self-end transition-opacity ${opacityClasses}">add</button>
+            <button class="add-btn btn btn-sm ${btnClasses} w-fit self-end transition-opacity ${opacityClasses}">add</button>
         </form>
     @endif
 </div>
