@@ -2,6 +2,7 @@
 @param cards: List<app.kanban.kanban.KanbanCardWeb>
 @param columns: Set<String>
 @param kanbanId: Long?
+@param isFirst: Boolean = false
 
 <div id="column${column.replace(" ", "-")}" class="group flex-none flex flex-col gap-2 w-100 p-4 shadow bg-base-300">
     <div class="flex-none">
@@ -20,7 +21,11 @@
             @for (c in columns)
                 <input type="hidden" name="columns" value="${c}">
             @endfor
-            <button class="add-btn btn btn-sm btn-primary w-fit self-end opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity">add</button>
+            !{
+                val opacityClasses = if (isFirst) "opacity-100 pointer-events-auto"
+                        else "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+            }
+            <button class="add-btn btn btn-sm btn-primary w-fit self-end transition-opacity ${opacityClasses}">add</button>
         </form>
     @endif
 </div>

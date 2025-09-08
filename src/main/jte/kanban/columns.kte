@@ -2,14 +2,11 @@
 @param kanbanId: Long?
 @param swapOob: Boolean
 
-<style>
-#kanbanColumns > div:first-child .add-btn { opacity: 1 !important; }
-</style>
 <section id="kanbanColumns" class="flex flex-nowrap justify-center overflow-x-auto gap-2 p-4"
          hx-swap-oob="${if (swapOob) "true" else null}">
     @if (columnCards != null)
         @for ((column, cards) in columnCards)
-            @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys)
+            @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys, isFirst=column==columnCards.keys.first())
         @endfor
     @endif
 </section>

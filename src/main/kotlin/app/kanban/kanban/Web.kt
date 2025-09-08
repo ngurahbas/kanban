@@ -144,6 +144,7 @@ class KanbanController(
         model.addAttribute("column", column)
         model.addAttribute("columns", columns)
         model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("isFirst", column == columns.first())
         return "kanban/column"
     }
 
