@@ -20,7 +20,8 @@
             <select name="changeColumn" class="select select-sm w-fit"
                     hx-trigger="change"
                     hx-swap="outerHTML"
-                    hx-on:htmx:before-request="document.getElementById('card-${card.id}').remove()">
+                    hx-on::before-request="document.getElementById('card-${card.id}').setAttribute('id', 'card-${card.id}-loading')"
+                    hx-on::after-request="if(event.detail.successful){document.getElementById('card-${card.id}-loading').remove()}">
                 @for(columnOption in columns)
                     @if(columnOption == column)
                         <option value="${columnOption}" selected>${columnOption}</option>
