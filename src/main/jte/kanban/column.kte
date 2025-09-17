@@ -22,11 +22,9 @@
                 <input type="hidden" name="columns" value="${c}">
             @endfor
             !{
-                val opacityClasses = if (isFirst) "opacity-100 pointer-events-auto"
-                        else "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
-                val btnClasses = if (isFirst) "btn-primary" else "btn-dash hover:btn-primary"
+                val btnClass = if (isFirst) "btn-primary" else "btn-dash"
             }
-            <button class="add-btn btn btn-sm ${btnClasses} w-fit self-end transition-opacity ${opacityClasses}">add</button>
+            <button class="advOpt add-btn btn btn-sm ${btnClass} w-fit self-end">add</button>
         </form>
     @endif
 </div>

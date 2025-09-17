@@ -20,7 +20,7 @@
             <fieldset class="fieldset flex items-center justify-center group">
                 <h1 class="text-3xl font-semibold">${kanban.title}</h1>
                 <input value="${kanban.title}" type="hidden" name="title">
-                <button class="btn btn-dash opacity-0 group-hover:opacity-100 transition-opacity duration-200">Edit</button>
+                <button class="advOpt btn btn-dash">Edit</button>
             </fieldset>
         </form>
     @endif
