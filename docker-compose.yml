@@ -19,18 +19,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    command:
-      - postgres
-      - -c
-      - shared_buffers=32MB
-      - -c
-      - max_connections=50
-      - -c
-      - effective_cache_size=64MB
-      - -c
-      - work_mem=2MB
-      - -c
-      - maintenance_work_mem=16MB
+    command: ["postgres", "-c", "shared_buffers=32MB", "-c", "max_connections=50", "-c", "effective_cache_size=64MB", "-c", "work_mem=2MB", "-c", "maintenance_work_mem=16MB"]
 
   valkey:
     image: valkey/valkey:latest
