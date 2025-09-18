@@ -1,0 +1,18 @@
+@param kanbanId: Long
+@param refColumn: String
+
+<dialog id="columnModal" class="modal">
+    <div class="modal-box">
+        <form hx-post="/kanban/${kanbanId}/new-column-after/${refColumn}"
+              hx-target="#kanbanColumns"
+              hx-swap="outerHTML">
+            <div class="join w-full flex">
+                <input type="text" name="newColumn" class="join-item grow input" placeholder="New Column">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('columnModal').showModal()
+    </script>
+</dialog>

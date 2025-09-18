@@ -1,6 +1,7 @@
 @param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
 @param kanbanId: Long?
 @param swapOob: Boolean
+@param closeModal: Boolean = false
 
 <section id="kanbanColumns" class="flex flex-nowrap justify-center overflow-x-auto gap-2 p-4"
          hx-swap-oob="${if (swapOob) "true" else null}">
@@ -9,10 +10,17 @@
             @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys, isFirst=column==columnCards.keys.first())
             @if (column!=columnCards.keys.last())
                 <div class="flex items-center">
-                    <button type="button" class="advOpt btn btn-circle btn-dash" title="Add column" aria-label="Add column">+
-                    </button>
+                    <button type="button" class="advOpt btn btn-circle btn-dash" title="Add column"
+                            hx-get="/kanban/${kanbanId}/new-column-after/${column}"
+                            hx-target="#columnModal"
+                            hx-swap="outerHTML">+</button>
                 </div>
             @endif
         @endfor
     @endif
 </section>
+
+@if(closeModal)
+    <dialog id="columnModal" class="hidden" hx-swap-oob="true">
+    </dialog>
+@endif

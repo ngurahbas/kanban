@@ -73,6 +73,8 @@ class KanbanService(
     }
 
     fun getColumns(kanbanId: Long) = kanbanBoardRepository.findColumns(kanbanId)
+
+    fun updateColumns(kanbanId: Long, columns: Set<String>) = kanbanBoardRepository.updateColumns(kanbanId, columns.toTypedArray())
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -93,6 +95,10 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
 
     @Query("SELECT unnest(columns) FROM kanban_board WHERE id = :id")
     fun findColumns(id: Long): Set<String>
+
+    @Modifying
+    @Query("UPDATE kanban_board SET columns = :columns WHERE id = :kanbanId")
+    fun updateColumns(kanbanId: Long, columns: Array<String>)
 }
 
 interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {

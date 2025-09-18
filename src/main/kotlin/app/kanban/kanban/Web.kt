@@ -158,6 +158,46 @@ class KanbanController(
         service.deleteCard(kanbanId, cardId)
         return ""
     }
+    
+    @GetMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
+    fun addColumn(
+        @PathVariable kanbanId: Long,
+        @PathVariable refColumn: String,
+        model: Model
+    ): String {
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("refColumn", refColumn)
+        return "kanban/columnModal"
+    }
+
+    @PostMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
+    fun addColumn(
+        @PathVariable kanbanId: Long,
+        @PathVariable refColumn: String,
+        @RequestParam newColumn: String,
+        model: Model
+    ): String {
+        val columns = service.getColumns(kanbanId)
+        val newColumns = arrayListOf<String>()
+
+        for (column in columns) {
+            newColumns.add(column)
+            if (refColumn == column) {
+                newColumns.add(newColumn)
+            }
+        }
+        service.updateColumns(kanbanId, newColumns.toSet())
+
+        val kanbanCardByColumn = service.getCards(kanbanId).groupBy { it.column }
+            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
+        val columnCards = newColumns.associateWith { kanbanCardByColumn[it] ?: listOf() }
+
+        model.addAttribute("columnCards", columnCards)
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("swapOob", false)
+        model.addAttribute("closeModal", true)
+        return "kanban/columns"
+    }
 }
 
 val defaultColumns = setOf("To do", "In progress", "Done")

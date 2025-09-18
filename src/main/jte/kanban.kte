@@ -21,5 +21,8 @@
 <dialog id="cardModal" class="hidden">
 </dialog>
 
+<dialog id="columnModal" class="hidden">
+</dialog>
+
 </body>
 </html>
