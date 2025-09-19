@@ -10,7 +10,7 @@
             @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys, isFirst=column==columnCards.keys.first())
             @if (column!=columnCards.keys.last())
                 <div class="flex items-center">
-                    <button type="button" class="advOpt btn btn-circle btn-dash" title="Add column"
+                    <button type="button" class="advOpt hidden btn btn-circle btn-dash" title="Add column"
                             hx-get="/kanban/${kanbanId}/new-column-after/${column}"
                             hx-target="#columnModal"
                             hx-swap="outerHTML">+</button>

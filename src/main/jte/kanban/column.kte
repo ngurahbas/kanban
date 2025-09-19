@@ -24,7 +24,7 @@
             !{
                 val btnClass = if (isFirst) "btn-primary" else "btn-dash"
             }
-            <button class="advOpt add-btn btn btn-sm ${btnClass} w-fit self-end">add</button>
+            <button class="advOpt hidden add-btn btn btn-sm ${btnClass} w-fit self-end">add</button>
         </form>
     @endif
 </div>
