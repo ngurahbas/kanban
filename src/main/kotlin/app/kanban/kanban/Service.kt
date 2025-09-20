@@ -1,5 +1,7 @@
 package app.kanban.kanban
 
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
@@ -72,8 +74,10 @@ class KanbanService(
         kanbanCardRepository.delete(kanbanId, cardId)
     }
 
+    @Cacheable(cacheNames = ["kanbanColumns"], key = "#kanbanId")
     fun getColumns(kanbanId: Long) = kanbanBoardRepository.findColumns(kanbanId)
 
+    @CacheEvict(cacheNames = ["kanbanColumns"], key = "#kanbanId")
     fun updateColumns(kanbanId: Long, columns: Set<String>) = kanbanBoardRepository.updateColumns(kanbanId, columns.toTypedArray())
 }
 
