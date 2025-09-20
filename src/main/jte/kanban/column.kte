@@ -21,10 +21,12 @@
             @for (c in columns)
                 <input type="hidden" name="columns" value="${c}">
             @endfor
-            !{
-                val btnClass = if (isFirst) "btn-primary" else "btn-dash"
-            }
-            <button class="advOpt hidden add-btn btn btn-sm ${btnClass} w-fit self-end">add</button>
+            @if (isFirst)
+                <button class="add-btn btn btn-sm btn-primary w-fit self-end">add</button>
+            @else
+                <button class="add-btn btn btn-sm btn-dash w-fit self-end"
+                        x-transition x-show="advOpt">add</button>
+            @endif
         </form>
     @endif
 </div>
