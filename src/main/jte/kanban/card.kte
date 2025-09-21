@@ -12,9 +12,6 @@
             <form hx-get="/kanban/${kanbanId}/column/${column}/card/${card.id}"
                   hx-target="#cardModal"
                   hx-swap="outerHTML">
-                @for (c in columns)
-                    <input type="hidden" name="columns" value="${c}">
-                @endfor
                 <button class="btn btn-sm">edit</button>
             </form>
             <select name="changeColumn" class="select select-sm w-fit"

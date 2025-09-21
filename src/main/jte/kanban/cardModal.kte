@@ -18,9 +18,6 @@
               hx-target="#card-${card.id}"
               hx-swap="outerHTML">
         @endif
-            @for (c in columns)
-                <input type="hidden" name="columns" value="${c}">
-            @endfor
             <input type="hidden" value="${card?.id}" name="id">
             <input type="hidden" value="${card?.index}" name="index">
             <fieldset class="fieldset w-full">

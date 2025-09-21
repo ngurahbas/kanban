@@ -70,12 +70,11 @@ class KanbanController(
     fun addCard(
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
-        @RequestParam columns: Set<String>,
         model: Model
     ): String {
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        model.addAttribute("columns", columns)
+        model.addAttribute("columns", service.getColumns(kanbanId))
         return "kanban/cardModal"
     }
 
@@ -83,7 +82,6 @@ class KanbanController(
     fun addCard(
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
-        @RequestParam columns: Set<String>,
         card: KanbanCardWeb,
         model: Model
     ): String {
@@ -91,7 +89,7 @@ class KanbanController(
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        model.addAttribute("columns", columns)
+        model.addAttribute("columns", service.getColumns(kanbanId))
         model.addAttribute("closeModal", true)
         return "kanban/card"
     }
@@ -101,13 +99,11 @@ class KanbanController(
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         @PathVariable cardId: Int,
-        @RequestParam columns: Set<String>,
         model: Model
     ): String {
         val card = service.getCard(kanbanId, cardId)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        model.addAttribute("columns", columns)
         model.addAttribute("card", KanbanCardWeb(card.id, card.index, card.title, card.description))
         return "kanban/cardModal"
     }
