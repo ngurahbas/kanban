@@ -21,3 +21,9 @@ logging.level:
 gg.jte:
   development-mode: true
   template-suffix: .kte
+
+security:
+  jwt:
+    # Override in env/secret config
+    # secret: ${JWT_SECRET}
+    # ttl-seconds: 86400

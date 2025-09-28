@@ -27,7 +27,6 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation ("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation ("org.jetbrains.kotlin:kotlin-reflect")
-	implementation ("org.springframework.session:spring-session-data-redis")
 	implementation ("org.flywaydb:flyway-core")
 	implementation ("org.flywaydb:flyway-database-postgresql")
     implementation("gg.jte:jte-spring-boot-starter-3:3.1.16")
