@@ -1,6 +1,7 @@
 package app.kanban.kanban
 
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,15 +11,20 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import java.security.Principal
 
 
 @Controller
 class KanbanController(
     private val service: KanbanService
 ) {
+    companion object {
+        private val logger = LoggerFactory.getLogger(KanbanController::class.java)
+    }
 
     @GetMapping("/kanban")
-    fun board(model: Model): String {
+    fun board(model: Model, principal: Principal?): String {
+        logger.info("Current object, class: {}, {}", principal, principal?.javaClass)
         model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", KanbanWeb(null, ""))
         model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())

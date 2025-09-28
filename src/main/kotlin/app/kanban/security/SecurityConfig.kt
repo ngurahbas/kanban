@@ -13,6 +13,9 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .csrf { csrf ->
+                csrf.ignoringRequestMatchers("/kanban/**")//TODO make csrf works
+            }
             .authorizeHttpRequests { authorize ->
                 authorize
                     .requestMatchers("/login", "/oauth2/**", "/css/**", "/js/**").permitAll()
