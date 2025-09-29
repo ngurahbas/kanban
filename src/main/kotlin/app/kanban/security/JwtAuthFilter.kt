@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthFilter(
-    private val jwtService: JwtService
+    private val jwtDecoder: org.springframework.security.oauth2.jwt.JwtDecoder
 ) : OncePerRequestFilter() {
 
     private val log = LoggerFactory.getLogger(JwtAuthFilter::class.java)
@@ -27,12 +27,19 @@ class JwtAuthFilter(
         if (SecurityContextHolder.getContext().authentication == null) {
             val token = extractJwtFromCookie(request)
             if (!token.isNullOrBlank()) {
-                val principal = jwtService.parseAndValidate(token)
-                if (principal != null) {
-                    val authorities = principal.authorities.map { SimpleGrantedAuthority(it) }
-                    val auth = UsernamePasswordAuthenticationToken(principal.subject, null, authorities)
+                try {
+                    val jwt = jwtDecoder.decode(token)
+                    val authoritiesClaim = jwt.claims["authorities"]
+                    val authorities = when (authoritiesClaim) {
+                        is Collection<*> -> authoritiesClaim.mapNotNull { it?.toString() }
+                        is String -> authoritiesClaim.split(',').map { it.trim() }.filter { it.isNotEmpty() }
+                        else -> emptyList()
+                    }.map { SimpleGrantedAuthority(it) }
+                    val auth = UsernamePasswordAuthenticationToken(jwt.subject, null, authorities)
                     auth.details = WebAuthenticationDetailsSource().buildDetails(request)
                     SecurityContextHolder.getContext().authentication = auth
+                } catch (ex: Exception) {
+                    log.debug("JWT decoding failed: {}", ex.message)
                 }
             }
         }

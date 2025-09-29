@@ -14,7 +14,9 @@ import java.time.Duration
 
 @Component
 class OAuth2LoginSuccessHandler(
-    private val jwtService: JwtService
+    private val jwtEncoder: org.springframework.security.oauth2.jwt.JwtEncoder,
+    @org.springframework.beans.factory.annotation.Value("\${security.jwt.ttl-seconds:86400}")
+    private val ttlSeconds: Long
 ) : AuthenticationSuccessHandler {
 
     @Throws(IOException::class, ServletException::class)
@@ -33,12 +35,22 @@ class OAuth2LoginSuccessHandler(
             else -> authentication.name to authentication.name
         }
         val authorities = authentication.authorities.map(GrantedAuthority::getAuthority)
-        val token = jwtService.generate(subject, name, authorities)
+
+        val now = java.time.Instant.now()
+        val claims = org.springframework.security.oauth2.jwt.JwtClaimsSet.builder()
+            .subject(subject)
+            .claim("name", name)
+            .claim("authorities", authorities)
+            .issuedAt(now)
+            .expiresAt(now.plusSeconds(ttlSeconds))
+            .build()
+        val token = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).tokenValue
+
         val cookie = Cookie("AUTH_TOKEN", token)
         cookie.isHttpOnly = true
         cookie.secure = request.isSecure
         cookie.path = "/"
-        cookie.maxAge = Duration.ofDays(1).seconds.toInt()
+        cookie.maxAge = ttlSeconds.toInt()
         response.addCookie(cookie)
         val header = buildString {
             append("AUTH_TOKEN=").append(token)
