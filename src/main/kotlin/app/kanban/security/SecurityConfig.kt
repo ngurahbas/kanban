@@ -28,12 +28,6 @@ class SecurityConfig(
             .oauth2Login { oauth2Login ->
                 oauth2Login.successHandler(oAuth2LoginSuccessHandler)
             }
-            .logout { logout ->
-                logout.logoutUrl("/logout")
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID", "AUTH_TOKEN")
-                    .logoutSuccessUrl("/login")
-            }
         return http.build()
     }
 }
