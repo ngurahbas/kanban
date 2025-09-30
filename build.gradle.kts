@@ -32,6 +32,11 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("gg.jte:jte-spring-boot-starter-3:3.1.16")
     implementation("gg.jte:jte-kotlin:3.1.16")
+
+    // Redis/Valkey session storage
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.session:spring-session-data-redis")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
