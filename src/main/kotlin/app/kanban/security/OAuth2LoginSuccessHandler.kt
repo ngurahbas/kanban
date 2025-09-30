@@ -7,10 +7,12 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.oauth2.core.user.OAuth2User
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm
+import org.springframework.security.oauth2.jwt.JwsHeader
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 import java.io.IOException
-import java.time.Duration
 
 @Component
 class OAuth2LoginSuccessHandler(
@@ -44,7 +46,8 @@ class OAuth2LoginSuccessHandler(
             .issuedAt(now)
             .expiresAt(now.plusSeconds(ttlSeconds))
             .build()
-        val token = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).tokenValue
+        val jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build()
+        val token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
 
         val cookie = Cookie("AUTH_TOKEN", token)
         cookie.isHttpOnly = true

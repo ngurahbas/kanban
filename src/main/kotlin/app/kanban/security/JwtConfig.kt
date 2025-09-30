@@ -10,11 +10,10 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder
 import javax.crypto.spec.SecretKeySpec
 import com.nimbusds.jose.jwk.source.ImmutableSecret
-import com.nimbusds.jose.proc.SecurityContext
 
 @Configuration
 class JwtConfig(
-    @Value("\${security.jwt.secret:changeit-changeit-changeit}")
+    @Value("\${security.jwt.secret:changeit-changeit-changeit-changeit-changeit}")
     private val secret: String
 ) {
 
@@ -22,8 +21,7 @@ class JwtConfig(
 
     @Bean
     fun jwtEncoder(): JwtEncoder {
-        val jwkSource = ImmutableSecret<SecurityContext>(secretKey())
-        return NimbusJwtEncoder(jwkSource)
+        return NimbusJwtEncoder(ImmutableSecret(secretKey()))
     }
 
     @Bean
