@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -30,13 +31,7 @@ class JwtAuthFilter(
             if (!token.isNullOrBlank()) {
                 try {
                     val jwt = jwtDecoder.decode(token)
-                    val authoritiesClaim = jwt.claims["authorities"]
-                    val authorities = when (authoritiesClaim) {
-                        is Collection<*> -> authoritiesClaim.mapNotNull { it?.toString() }
-                        is String -> authoritiesClaim.split(',').map { it.trim() }.filter { it.isNotEmpty() }
-                        else -> emptyList()
-                    }.map { SimpleGrantedAuthority(it) }
-                    val auth = object : AbstractAuthenticationToken(authorities) {
+                    val auth = object : AbstractAuthenticationToken(listOf<GrantedAuthority>()) {
                         override fun getCredentials() = null
                         override fun getPrincipal() = jwt.subject
                     }.apply { isAuthenticated = true }
