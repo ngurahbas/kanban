@@ -37,6 +37,21 @@ services:
       retries: 5
     command: ["valkey-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.0
+    container_name: kanban-keycloak
+    restart: unless-stopped
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "9080:8080"
+    mem_limit: 500m
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pgdata:
   valkeydata:
