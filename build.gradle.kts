@@ -85,7 +85,7 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstallPackages") {
     description = "Install npm packages"
     dependsOn("npmSetup")
 
-    args.set(listOf("install", "--save-dev", "tailwindcss", "@tailwindcss/cli", "daisyui", "alpinejs", "esbuild", "htmx.org"))
+    args.set(listOf("install", "--save-dev", "tailwindcss", "daisyui", "alpinejs", "esbuild", "htmx.org"))
     workingDir.set(file("${project.projectDir}"))
 }
 
@@ -97,7 +97,7 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmCompileCss") {
     description = "Compile CSS"
     dependsOn("npmInstallPackages")
 
-    args.set(listOf("exec", "npx", "@tailwindcss/cli", "--", "-i", "src/main/css/main.css", "-o", "src/main/resources/static/css/main.css"))
+    args.set(listOf("exec", "tailwindcss", "--", "-i", "src/main/css/main.css", "-o", "src/main/resources/static/css/main.css"))
     workingDir.set(file("${project.projectDir}"))
 }
 
