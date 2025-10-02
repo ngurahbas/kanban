@@ -1,5 +1,6 @@
 package app.kanban.security
 
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -12,6 +13,8 @@ class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler
 ) {
+
+    private val log = LoggerFactory.getLogger(SecurityConfig::class.java)
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -28,6 +31,8 @@ class SecurityConfig(
             .oauth2Login { oauth2Login ->
                 oauth2Login.successHandler(oAuth2LoginSuccessHandler)
             }
-        return http.build()
+        val securityFilterChain = http.build()
+        log.info("Active filters: {}", securityFilterChain.filters.joinToString(separator = "\n- ", prefix = "\n- ") { it.javaClass.name })
+        return securityFilterChain
     }
 }
