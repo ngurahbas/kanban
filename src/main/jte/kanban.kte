@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <script src="/js/main.js" defer></script>
 </head>
-<body x-data='{"advOpt": false, "columns": ${app.kanban.core.toJsonString(columnCards.keys)}}'>
+<body x-data='{"advOpt": false}'>
 @template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban)
 
 @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, swapOob=false)
