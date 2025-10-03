@@ -30,6 +30,8 @@ class SecurityConfig(
             .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter::class.java)
             .oauth2Login { oauth2Login ->
                 oauth2Login.successHandler(oAuth2LoginSuccessHandler)
+            }.logout {
+                it.clearAuthentication(true).invalidateHttpSession(true)
             }
         val securityFilterChain = http.build()
         log.info("Active filters: {}", securityFilterChain.filters.joinToString(separator = "\n- ", prefix = "\n- ") { it.javaClass.name })

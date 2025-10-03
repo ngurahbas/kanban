@@ -1,14 +1,11 @@
 package app.kanban.security
 
 import jakarta.servlet.FilterChain
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AbstractAuthenticationToken
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
@@ -26,17 +23,21 @@ class JwtAuthFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (SecurityContextHolder.getContext().authentication == null) {
+        val session = request.getSession(false)
+        if (session != null && !session.isNew && SecurityContextHolder.getContext().authentication == null) {
             val token = extractJwtFromCookie(request)
             if (!token.isNullOrBlank()) {
                 try {
                     val jwt = jwtDecoder.decode(token)
-                    val auth = object : AbstractAuthenticationToken(listOf<GrantedAuthority>()) {
-                        override fun getCredentials() = null
-                        override fun getPrincipal() = jwt.subject
-                    }.apply { isAuthenticated = true }
-                    auth.details = WebAuthenticationDetailsSource().buildDetails(request)
-                    SecurityContextHolder.getContext().authentication = auth
+                    val sessionIdOnClaim = jwt.getClaimAsString("sessionId")
+                    if (request.session.id == sessionIdOnClaim) {
+                        val auth = object : AbstractAuthenticationToken(listOf<GrantedAuthority>()) {
+                            override fun getCredentials() = null
+                            override fun getPrincipal() = jwt.subject
+                        }.apply { isAuthenticated = true }
+                        auth.details = WebAuthenticationDetailsSource().buildDetails(request)
+                        SecurityContextHolder.getContext().authentication = auth
+                    }
                 } catch (ex: Exception) {
                     log.debug("JWT decoding failed: {}", ex.message)
                 }

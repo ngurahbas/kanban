@@ -40,6 +40,7 @@ class OAuth2LoginSuccessHandler(
         val claims = org.springframework.security.oauth2.jwt.JwtClaimsSet.builder()
             .subject(subject)
             .claim("name", name)
+            .claim("sessionId", request.session.id)
             .issuedAt(now)
             .expiresAt(now.plusSeconds(ttlSeconds))
             .build()
