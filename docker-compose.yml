@@ -36,15 +36,15 @@ services:
     command: ["valkey-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.4.0
+    build:
+      context: ./src/main/resources/keycloak
+      dockerfile: keycloak.Dockerfile
     container_name: kanban-keycloak
     restart: unless-stopped
     command: start-dev --import-realm
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-    volumes:
-      - ./src/main/resources/keycloak:/opt/keycloak/data/import
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
     ports:
       - "9080:8080"
     mem_limit: 1024m
