@@ -39,13 +39,15 @@ services:
     image: quay.io/keycloak/keycloak:26.4.0
     container_name: kanban-keycloak
     restart: unless-stopped
-    command: start-dev
+    command: start-dev --import-realm
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./src/main/resources/keycloak:/opt/keycloak/data/import
     ports:
       - "9080:8080"
-    mem_limit: 500m
+    mem_limit: 1024m
 
 volumes:
   pgdata:
