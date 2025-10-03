@@ -26,8 +26,6 @@ spring:
         issuer-uri: http://localhost:9080/realms/kanban
   session:
     store-type: redis
-    redis:
-      namespace: kanban:sessions
   data:
     redis:
       host: ${VALKEY_HOST:localhost}
