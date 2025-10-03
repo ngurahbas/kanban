@@ -17,8 +17,8 @@ spring:
         client-secret: ${GOOGLE_CLIENT_SECRET}
         scope: openid, email, profile
       keycloak:
-        client-id: kanbanclient
-        client-secret: 9fmNEtqh5YOPrjSrGrJSENmtY52QTonw
+        client-id: kanban-app
+        client-secret: JQUoD1jz2U18cnyllrmO7RSBP5igfDhh
         redirect-uri: "http://localhost:8080/login/oauth2/code/keycloak"
         scope: openid, email, profile
     provider:
