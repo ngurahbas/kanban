@@ -1,6 +1,5 @@
 @param kanbanId: Long
 @param column: String
-@param columns: Set<String>
 @param card: app.kanban.kanban.KanbanCardWeb?
 
 <dialog id="cardModal" class="modal">

@@ -119,7 +119,6 @@ class KanbanController(
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         @PathVariable cardId: Int,
-        @RequestParam columns: Set<String>,
         card: KanbanCardWeb,
         model: Model
     ): String {
@@ -127,7 +126,7 @@ class KanbanController(
         model.addAttribute("card", card)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        model.addAttribute("columns", columns)
+        model.addAttribute("columns", service.getColumns(kanbanId))
         model.addAttribute("closeModal", true)
         return "kanban/card"
     }
