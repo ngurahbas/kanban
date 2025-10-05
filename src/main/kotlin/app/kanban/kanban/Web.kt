@@ -131,12 +131,13 @@ class KanbanController(
         return "kanban/card"
     }
 
-    @PutMapping("/kanban/move/{kanbanId}/{cardId}/{column}")
+    @PutMapping("/kanban/move/{kanbanId}/{cardId}")
     fun moveCard(
         @PathVariable kanbanId: Long,
         @PathVariable cardId: Int,
-        @PathVariable column: String,
-        model: Model
+        @RequestParam("changeColumn") column: String,
+        model: Model,
+        response: HttpServletResponse
     ): String {
         val cards = service.moveCard(kanbanId, cardId, column)
         .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
@@ -146,6 +147,7 @@ class KanbanController(
         model.addAttribute("columns", columns)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("isFirst", column == columns.first())
+        response.addHeader("HX-Retarget", "#column${column.replace(" ", "-")}")
         return "kanban/column"
     }
 

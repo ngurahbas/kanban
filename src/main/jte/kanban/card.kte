@@ -15,6 +15,8 @@
                 <button class="btn btn-sm">edit</button>
             </form>
             <select name="changeColumn" class="select select-sm w-fit"
+                    @change="console.log(cards);cards--"
+                    hx-put="/kanban/move/${kanbanId}/${card.id}"
                     hx-trigger="change"
                     hx-swap="outerHTML"
                     hx-on::before-request="document.getElementById('card-${card.id}').setAttribute('id', 'card-${card.id}-loading')"
@@ -23,9 +25,7 @@
                     @if(columnOption == column)
                         <option value="${columnOption}" selected>${columnOption}</option>
                     @else
-                        <option value="${columnOption}"
-                                hx-put="/kanban/move/${kanbanId}/${card.id}/${columnOption}"
-                                hx-target="#column${columnOption.replace(' ', '-')}">${columnOption}</option>
+                        <option value="${columnOption}">${columnOption}</option>
                     @endif
                 @endfor
             </select>
