@@ -79,6 +79,14 @@ class KanbanService(
 
     @CacheEvict(cacheNames = ["kanbanColumns"], key = "#kanbanId")
     fun updateColumns(kanbanId: Long, columns: Set<String>) = kanbanBoardRepository.updateColumns(kanbanId, columns.toTypedArray())
+
+    @CacheEvict(cacheNames = ["kanbanColumns"], key = "#kanbanId")
+    fun deleteColumn(kanbanId: Long, column: String): Set<String> {
+        val columns = kanbanBoardRepository.findColumns(kanbanId)
+        val updatedColumns = columns.minus(column)
+        kanbanBoardRepository.updateColumns(kanbanId, updatedColumns.toTypedArray())
+        return updatedColumns;
+    }
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {

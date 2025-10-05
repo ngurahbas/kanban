@@ -2,6 +2,7 @@ package app.kanban.kanban
 
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -195,6 +196,24 @@ class KanbanController(
             .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
         val columnCards = newColumns.associateWith { kanbanCardByColumn[it] ?: listOf() }
 
+        model.addAttribute("columnCards", columnCards)
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("swapOob", false)
+        model.addAttribute("closeModal", true)
+        return "kanban/columns"
+    }
+
+    @DeleteMapping("/kanban/{kanbanId}/delete-column/{column}")
+    fun deleteColumn(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        model: Model
+    ): String {
+        val newColumns = service.deleteColumn(kanbanId, column)
+
+        val kanbanCardByColumn = service.getCards(kanbanId).groupBy { it.column }
+            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
+        val columnCards = newColumns.associateWith { kanbanCardByColumn[it] ?: listOf() }
         model.addAttribute("columnCards", columnCards)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("swapOob", false)
