@@ -79,7 +79,7 @@ class OAuth2LoginSuccessHandler(
         val oauth2User = authentication.principal as OAuth2User
         val now = java.time.Instant.now()
         val claims = org.springframework.security.oauth2.jwt.JwtClaimsSet.builder()
-            .subject(oauth2User.attributes["subject"] as String)
+            .subject(oauth2User.attributes["sub"] as String)
             .claim("name", oauth2User.name)
             .claim("sessionId", request.session.id)
             .issuedAt(now)
