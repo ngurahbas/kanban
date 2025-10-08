@@ -31,8 +31,6 @@ spring:
       host: ${VALKEY_HOST:localhost}
       port: ${VALKEY_PORT:6379}
       # password: ${VALKEY_PASSWORD:}
-logging.level:
-  org.springframework.jdbc.core: TRACE
 
 gg.jte:
   development-mode: true

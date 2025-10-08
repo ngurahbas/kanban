@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Component
 class SecurityConfig(
     private val trimDownSecurityContextRepository: TrimDownSecurityContextRepository
 ) {
-
     private val log = LoggerFactory.getLogger(SecurityConfig::class.java)
 
     @Bean
@@ -45,6 +46,26 @@ class TrimDownSecurityContextRepository : HttpSessionSecurityContextRepository()
         request: HttpServletRequest?,
         response: HttpServletResponse?
     ) {
+        context?.authentication = object : Authentication {
+            private var authenticated: Boolean = context.authentication?.isAuthenticated ?: false
+
+            override fun getAuthorities() = listOf<GrantedAuthority>()
+
+            override fun getCredentials() = null
+
+            override fun getDetails() = null
+
+            override fun getPrincipal() = null
+
+            override fun isAuthenticated() = authenticated
+
+            override fun setAuthenticated(authenticated: Boolean) {
+                this.authenticated = authenticated
+            }
+
+            override fun getName() = "left empty"
+        }
+
         super.saveContext(context, request, response)
     }
 }
