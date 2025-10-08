@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.jwt.JwsHeader
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -48,10 +49,7 @@ class SecurityConfig(
             }.oauth2Login { oauth2Login ->
                 oauth2Login.successHandler(oAuth2LoginSuccessHandler)
             }
-            .addFilterBefore(
-                jwtAuthFilter,
-                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter::class.java
-            )
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .logout {
                 it.clearAuthentication(true).invalidateHttpSession(true)
             }
