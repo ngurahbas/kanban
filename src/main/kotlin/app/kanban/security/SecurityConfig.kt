@@ -32,9 +32,7 @@ class SecurityConfig(
             .securityContext { it.securityContextRepository(trimDownSecurityContextRepository) }
             .logout { it.clearAuthentication(true).invalidateHttpSession(true) }
         val securityFilterChain = http.build()
-        log.info(
-            "Active filters: {}",
-            securityFilterChain.filters.joinToString(separator = "\n- ", prefix = "\n- ") { it.javaClass.name })
+        log.info("Active filters: {}", securityFilterChain.filters.joinToString("\n- ") { it.javaClass.name })
         return securityFilterChain
     }
 }
@@ -42,12 +40,12 @@ class SecurityConfig(
 @Component
 class TrimDownSecurityContextRepository : HttpSessionSecurityContextRepository() {
     override fun saveContext(
-        context: SecurityContext?,
-        request: HttpServletRequest?,
-        response: HttpServletResponse?
+        context: SecurityContext,
+        request: HttpServletRequest,
+        response: HttpServletResponse
     ) {
-        context?.authentication = object : Authentication {
-            private var authenticated: Boolean = context.authentication?.isAuthenticated ?: false
+        context.authentication = object : Authentication {
+            private var authenticated: Boolean = context.authentication.isAuthenticated
 
             override fun getAuthorities() = listOf<GrantedAuthority>()
 
