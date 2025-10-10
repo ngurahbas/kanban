@@ -41,3 +41,6 @@ security:
     # Override in env/secret config
     # secret: ${JWT_SECRET}
     # ttl-seconds: 86400
+logging.level:
+  root: OFF
+  app.kanban: INFO

@@ -1,5 +1,6 @@
 package app.kanban.security
 
+import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -7,9 +8,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.context.DeferredSecurityContext
 import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.oauth2.core.user.OAuth2User
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm
+import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository
 import org.springframework.stereotype.Component
@@ -38,32 +41,47 @@ class SecurityConfig(
 }
 
 @Component
-class TrimDownSecurityContextRepository : HttpSessionSecurityContextRepository() {
+class TrimDownSecurityContextRepository(
+    private val jwtEncoder: JwtEncoder,
+    private val jwtDecoder: JwtDecoder
+) : HttpSessionSecurityContextRepository() {
+    private val log = LoggerFactory.getLogger(TrimDownSecurityContextRepository::class.java)
+
     override fun saveContext(
         context: SecurityContext,
         request: HttpServletRequest,
         response: HttpServletResponse
     ) {
-        context.authentication = object : Authentication {
-            private var authenticated: Boolean = context.authentication.isAuthenticated
-
-            override fun getAuthorities() = listOf<GrantedAuthority>()
-
-            override fun getCredentials() = null
-
-            override fun getDetails() = null
-
-            override fun getPrincipal() = null
-
-            override fun isAuthenticated() = authenticated
-
-            override fun setAuthenticated(authenticated: Boolean) {
-                this.authenticated = authenticated
-            }
-
-            override fun getName() = "left empty"
+        if (context.authentication == null) {
+            return
         }
 
-        super.saveContext(context, request, response)
+        val oAuth2User = context.authentication.principal as OAuth2User
+        val name = oAuth2User.getAttribute<String>("name") ?: ""
+        val email = oAuth2User.getAttribute<String>("email") ?: ""
+        val sessionId = request.session.id
+        val authSource = "oauth2"
+
+        val now = java.time.Instant.now()
+        val jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build()
+        val claims = JwtClaimsSet.builder()
+            .claim("name", name)
+            .claim("email", email)
+            .claim("sessionId", sessionId)
+            .claim("authSource", authSource)
+            .expiresAt(now.plusSeconds(3600))
+            .build()
+        val encodedJwt = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
+
+        val cookie = Cookie("JWT_INFO", encodedJwt)
+        cookie.isHttpOnly = true
+        cookie.secure = request.isSecure
+        cookie.path = "/"
+        cookie.maxAge = 3600
+        response.addCookie(cookie)
+    }
+
+    override fun loadDeferredContext(request: HttpServletRequest?): DeferredSecurityContext? {
+        return super.loadDeferredContext(request)
     }
 }
