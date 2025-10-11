@@ -36,9 +36,8 @@ class SecurityConfig(
             }.oauth2Login { it.defaultSuccessUrl("/kanban", true) }
             .securityContext { it.securityContextRepository(trimDownSecurityContextRepository) }
             .logout { it.clearAuthentication(true).invalidateHttpSession(true) }
-        val securityFilterChain = http.build()
-        log.info("Active filters: {}", securityFilterChain.filters.joinToString("\n- ") { it.javaClass.name })
-        return securityFilterChain
+
+        return http.build()
     }
 }
 
@@ -105,9 +104,10 @@ class TrimDownSecurityContextRepository(
                 }
 
                 return object : SecurityContext {
-                    override fun getAuthentication() = authentication
-                    override fun setAuthentication(authentication: Authentication) {
-                        throw UnsupportedOperationException("Cannot set authentication on TrimDownSecurityContextRepository")
+                    private var authentication: Authentication? = authentication
+                    override fun getAuthentication() = this.authentication
+                    override fun setAuthentication(authentication: Authentication?) {
+                        this.authentication = authentication
                     }
                 }
             }
