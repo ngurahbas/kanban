@@ -6,8 +6,10 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.DeferredSecurityContext
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -81,7 +83,40 @@ class TrimDownSecurityContextRepository(
         response.addCookie(cookie)
     }
 
-    override fun loadDeferredContext(request: HttpServletRequest?): DeferredSecurityContext? {
-        return super.loadDeferredContext(request)
+    override fun loadDeferredContext(request: HttpServletRequest): DeferredSecurityContext {
+        val cookie = request.cookies?.find { it.name == "JWT_INFO" }
+        if (cookie == null) {
+            return super.loadDeferredContext(request)
+        }
+        val jwt = jwtDecoder.decode(cookie.value)
+        val user = KanbanUser(jwt.claims["name"]?.toString(), jwt.claims["email"]?.toString(), null)
+        return object : DeferredSecurityContext{
+            override fun isGenerated(): Boolean {
+                return true
+            }
+            override fun get(): SecurityContext {
+                val authentication = object : AbstractAuthenticationToken(listOf()) {
+                    init {
+                        isAuthenticated = true
+                    }
+
+                    override fun getCredentials() = null
+                    override fun getPrincipal() = user
+                }
+
+                return object : SecurityContext {
+                    override fun getAuthentication() = authentication
+                    override fun setAuthentication(authentication: Authentication) {
+                        throw UnsupportedOperationException("Cannot set authentication on TrimDownSecurityContextRepository")
+                    }
+                }
+            }
+        }
     }
 }
+
+data class KanbanUser(
+    val name: String?,
+    val email: String?,
+    val phoneNumber: String?
+)
