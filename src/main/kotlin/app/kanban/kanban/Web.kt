@@ -33,25 +33,6 @@ class KanbanController(
         return "kanban"
     }
 
-    @PostMapping("/kanban/title")
-    fun saveKanban(kanban: KanbanWeb, model: Model, response: HttpServletResponse): String {
-        var id: Long? = kanban.id
-        var page = "kanban/kanbanTitle"
-        if (kanban.id == null) {
-            id = service.createBoard(kanban.title, defaultColumns)
-            model.addAttribute("kanbanCreated", true)
-            model.addAttribute("columnCards", defaultColumns.associateWith { listOf<KanbanCardWeb>() })
-            page = "kanban/kanbanTitleWithColumns"
-        } else {
-            service.updateBoardTitle(kanban.id, kanban.title)
-            model.addAttribute("kanbanCreated", false)
-        }
-        model.addAttribute("editKanbanTitle", false)
-        model.addAttribute("kanban", KanbanWeb(id, kanban.title))
-        response.addHeader("HX-PUSH", "/kanban/${id}")
-        return page
-    }
-
     @GetMapping("/kanban/{id}")
     fun getKanbanById(@PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
@@ -85,6 +66,59 @@ class KanbanController(
         return "kanban/cardModal"
     }
 
+    @GetMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    fun editCard(
+        @PathVariable kanbanId: Long,
+        @PathVariable column: String,
+        @PathVariable cardId: Int,
+        model: Model
+    ): String {
+        val card = service.getCard(kanbanId, cardId)
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("column", column)
+        model.addAttribute("card", KanbanCardWeb(card.id, card.index, card.title, card.description))
+        return "kanban/cardModal"
+    }
+    
+    @GetMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
+    fun addColumn(
+        @PathVariable kanbanId: Long,
+        @PathVariable refColumn: String,
+        model: Model
+    ): String {
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("refColumn", refColumn)
+        return "kanban/columnModal"
+    }
+}
+
+@Controller
+class KanbanModifyingController(
+    private val service: KanbanService
+) {
+    companion object {
+        private val logger = LoggerFactory.getLogger(KanbanModifyingController::class.java)
+    }
+
+    @PostMapping("/kanban/title")
+    fun saveKanban(kanban: KanbanWeb, model: Model, response: HttpServletResponse): String {
+        var id: Long? = kanban.id
+        var page = "kanban/kanbanTitle"
+        if (kanban.id == null) {
+            id = service.createBoard(kanban.title, defaultColumns)
+            model.addAttribute("kanbanCreated", true)
+            model.addAttribute("columnCards", defaultColumns.associateWith { listOf<KanbanCardWeb>() })
+            page = "kanban/kanbanTitleWithColumns"
+        } else {
+            service.updateBoardTitle(kanban.id, kanban.title)
+            model.addAttribute("kanbanCreated", false)
+        }
+        model.addAttribute("editKanbanTitle", false)
+        model.addAttribute("kanban", KanbanWeb(id, kanban.title))
+        response.addHeader("HX-PUSH", "/kanban/${id}")
+        return page
+    }
+
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
     fun addCard(
         @PathVariable kanbanId: Long,
@@ -99,20 +133,6 @@ class KanbanController(
         model.addAttribute("columns", service.getColumns(kanbanId))
         model.addAttribute("closeModal", true)
         return "kanban/card"
-    }
-
-    @GetMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
-    fun editCard(
-        @PathVariable kanbanId: Long,
-        @PathVariable column: String,
-        @PathVariable cardId: Int,
-        model: Model
-    ): String {
-        val card = service.getCard(kanbanId, cardId)
-        model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("column", column)
-        model.addAttribute("card", KanbanCardWeb(card.id, card.index, card.title, card.description))
-        return "kanban/cardModal"
     }
 
     @PutMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
@@ -141,7 +161,7 @@ class KanbanController(
         response: HttpServletResponse
     ): String {
         val cards = service.moveCard(kanbanId, cardId, column)
-        .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
+            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
         val columns = service.getColumns(kanbanId)
         model.addAttribute("cards", cards)
         model.addAttribute("column", column)
@@ -161,17 +181,6 @@ class KanbanController(
     ): String {
         service.deleteCard(kanbanId, cardId)
         return ""
-    }
-    
-    @GetMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
-    fun addColumn(
-        @PathVariable kanbanId: Long,
-        @PathVariable refColumn: String,
-        model: Model
-    ): String {
-        model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("refColumn", refColumn)
-        return "kanban/columnModal"
     }
 
     @PostMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
