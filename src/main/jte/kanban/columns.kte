@@ -3,29 +3,23 @@
 @param swapOob: Boolean
 @param closeModal: Boolean = false
 
-<div class="flex relative">
-    <section id="sidebar" class="absolute flex-none flex bg-accent-content/90 w-100 gap-2 p-2">
-        <h2 class="flex-grow text-2xl">Kanbans of </h2>
-        <button class="btn btn-accent [writing-mode:vertical-rl] self-end">hide</button>
-    </section>
-    <section id="kanbanColumns" class="flex-auto flex flex-nowrap justify-center overflow-x-auto gap-2 p-2"
-             hx-swap-oob="${if (swapOob) "true" else null}">
-        @if (columnCards != null)
-            @for ((column, cards) in columnCards)
-                @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys, isFirst=column==columnCards.keys.first())
-                @if (column!=columnCards.keys.last())
-                    <div class="flex items-center">
-                        <button type="button" class="advOpt btn btn-circle btn-dash" title="Add column"
-                                x-transition x-show="advOpt"
-                                hx-get="/kanban/${kanbanId}/new-column-after/${column}"
-                                hx-target="#columnModal"
-                                hx-swap="outerHTML">+</button>
-                    </div>
-                @endif
-            @endfor
-        @endif
-    </section>
-</div>
+<section id="kanbanColumns" class="flex-auto flex flex-nowrap justify-center overflow-x-auto gap-2"
+         hx-swap-oob="${if (swapOob) "true" else null}">
+    @if (columnCards != null)
+        @for ((column, cards) in columnCards)
+            @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys, isFirst=column==columnCards.keys.first())
+            @if (column!=columnCards.keys.last())
+                <div class="flex items-center">
+                    <button type="button" class="advOpt btn btn-circle btn-dash" title="Add column"
+                            x-transition x-show="advOpt"
+                            hx-get="/kanban/${kanbanId}/new-column-after/${column}"
+                            hx-target="#columnModal"
+                            hx-swap="outerHTML">+</button>
+                </div>
+            @endif
+        @endfor
+    @endif
+</section>
 
 @if(closeModal)
     <dialog id="columnModal" class="hidden" hx-swap-oob="true">
