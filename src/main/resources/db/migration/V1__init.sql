@@ -39,7 +39,8 @@ CREATE table IF NOT EXISTS identifier (
     "type" varchar(255) NOT NULL,
     value varchar(255) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (type, value)
 );
 
 -- Triggers to maintain updated_at
