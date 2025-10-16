@@ -1,5 +1,7 @@
 package app.kanban.security
 
+import app.kanban.user.IdentifierRepository
+import app.kanban.user.IdentifierType
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -43,6 +45,7 @@ class SecurityConfig(
 
 @Component
 class TrimDownSecurityContextRepository(
+    private val identifierRepository: IdentifierRepository,
     private val jwtEncoder: JwtEncoder,
     private val jwtDecoder: JwtDecoder
 ) : HttpSessionSecurityContextRepository() {
@@ -62,6 +65,8 @@ class TrimDownSecurityContextRepository(
         val email = oAuth2User.getAttribute<String>("email") ?: ""
         val sessionId = request.session.id
         val authSource = "oauth2"
+
+        identifierRepository.insertIfNotExist(IdentifierType.EMAIL, email)
 
         val now = java.time.Instant.now()
         val jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build()
