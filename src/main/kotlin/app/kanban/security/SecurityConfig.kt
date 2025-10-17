@@ -66,7 +66,8 @@ class TrimDownSecurityContextRepository(
         val sessionId = request.session.id
         val authSource = "oauth2"
 
-        identifierRepository.insertIfNotExist(IdentifierType.EMAIL, email)
+        val id = identifierRepository.insertOrGet(IdentifierType.EMAIL, email)
+        log.info("Saved identifier id: $id")
 
         val now = java.time.Instant.now()
         val jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build()

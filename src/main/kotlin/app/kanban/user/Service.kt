@@ -1,17 +1,13 @@
 package app.kanban.user
 
 import org.springframework.data.annotation.Id
-import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
 
 @Table
 data class Identifier(
-    @Id
-    val id: Long,
-    val type: IdentifierType,
-    val value: String
+    @Id val id: Long, val type: IdentifierType, val value: String
 )
 
 enum class IdentifierType {
@@ -20,7 +16,18 @@ enum class IdentifierType {
 
 interface IdentifierRepository : CrudRepository<Identifier, Long> {
 
-    @Modifying
-    @Query("INSERT INTO identifier (type, value) VALUES (:type, :value) ON CONFLICT DO NOTHING")
-    fun insertIfNotExist(type: IdentifierType, value: String)
+    @Query(
+        """
+        WITH ins AS (
+            INSERT INTO identifier (type, value)
+                VALUES (:type, :value)
+                ON CONFLICT (type, value) DO NOTHING
+                RETURNING id)
+        SELECT COALESCE(
+                       (SELECT id FROM ins),
+                       (SELECT id FROM identifier WHERE type = :type AND value = :value)
+               ) AS id
+    """
+    )
+    fun insertOrGet(type: IdentifierType, value: String): Long
 }
