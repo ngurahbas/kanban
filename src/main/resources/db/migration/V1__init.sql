@@ -43,6 +43,15 @@ CREATE table IF NOT EXISTS identifier (
     UNIQUE (type, value)
 );
 
+-- Kanban Ownership
+CREATE TABLE IF NOT EXISTS kanban_ownership (
+    identifier_id BIGINT PRIMARY KEY,
+    board_ids BIGINT[] NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_kanban_ownership_identifier FOREIGN KEY (identifier_id) REFERENCES identifier (id) ON DELETE CASCADE
+);
+
 -- Triggers to maintain updated_at
 DROP TRIGGER IF EXISTS set_timestamp_kanban_board ON kanban_board;
 CREATE TRIGGER set_timestamp_kanban_board
@@ -56,8 +65,14 @@ BEFORE UPDATE ON kanban_card
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
-DROP TRIGGER IF EXISTS set_timestamp_identifier ON kanban_card;
+DROP TRIGGER IF EXISTS set_timestamp_identifier ON identifier;
 CREATE TRIGGER set_timestamp_identifier
     BEFORE UPDATE ON identifier
+    FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS set_timestamp_kanban_ownership ON kanban_ownership;
+CREATE TRIGGER set_timestamp_kanban_ownership
+    BEFORE UPDATE ON kanban_ownership
     FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();

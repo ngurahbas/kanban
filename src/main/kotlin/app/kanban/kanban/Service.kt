@@ -33,6 +33,11 @@ data class KanbanCard(
     val updatedAt: Instant?
 )
 
+data class KanbanOwnerShip(
+    val identifierId: Long,
+    val boardIds: Set<Long>
+)
+
 data class CardInsertResult(val id: Int, val index: Int)
 
 @Service
