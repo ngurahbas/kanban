@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
-    id("com.github.node-gradle.node") version "7.0.1"
+    id("com.github.node-gradle.node") version "7.1.0"
 }
 
 group = "app"
@@ -55,7 +55,7 @@ tasks.withType<Test> {
 }
 
 tasks.named("processResources") {
-    dependsOn("npmCompileCss", "npmCompileJs")
+    dependsOn("tailwindCompileCss", "npmCompileJs")
 }
 
 node {
@@ -85,20 +85,20 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstallPackages") {
     description = "Install npm packages"
     dependsOn("npmSetup")
 
-    args.set(listOf("install", "--save-dev", "tailwindcss", "daisyui", "alpinejs", "esbuild", "htmx.org"))
+    args.set(listOf("install", "--save-dev", "@tailwindcss/cli", "tailwindcss", "daisyui", "alpinejs", "esbuild", "htmx.org"))
     workingDir.set(file("${project.projectDir}"))
 }
 
 /**
  * compile CSS
  */
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmCompileCss") {
+tasks.register<Exec>("tailwindCompileCss") {
     group = "npm"
     description = "Compile CSS"
     dependsOn("npmInstallPackages")
 
-    args.set(listOf("exec", "tailwindcss", "--", "-i", "src/main/css/main.css", "-o", "src/main/resources/static/css/main.css"))
-    workingDir.set(file("${project.projectDir}"))
+    workingDir = file("${project.projectDir}")
+    commandLine = listOf("${project.projectDir}/node_modules/.bin/tailwindcss", "-i", "src/main/css/main.css", "-o", "src/main/resources/static/css/main.css")
 }
 
 /**
