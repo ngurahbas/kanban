@@ -101,6 +101,8 @@ class KanbanService(
         kanbanBoardRepository.updateColumns(kanbanId, updatedColumns.toTypedArray())
         return updatedColumns;
     }
+
+    fun getKanbans(identifierId: Long) = kanbanBoardRepository.findKanbansByOwnerIdentifierId(identifierId)
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -123,6 +125,14 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
     @Modifying
     @Query("UPDATE kanban_board SET columns = :columns WHERE id = :kanbanId")
     fun updateColumns(kanbanId: Long, columns: Array<String>)
+
+    @Query("""
+        SELECT k.*
+        FROM kanban_ownership o
+        JOIN kanban_board k ON k.id = ANY(o.board_ids)
+    """
+    )
+    fun findKanbansByOwnerIdentifierId(identifierId: Long): List<KanbanBoard>
 }
 
 interface KanbanCardRepository : CrudRepository<KanbanCard, Long> {

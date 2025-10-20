@@ -1,8 +1,10 @@
 package app.kanban.kanban
 
+import app.kanban.security.KanbanUser
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,21 +26,29 @@ class KanbanController(
     }
 
     @GetMapping("/kanban")
-    fun board(model: Model, principal: Principal?): String {
-        logger.info("Current object, class: {}, {}", principal, principal?.javaClass)
+    fun board(@AuthenticationPrincipal user: KanbanUser, model: Model): String {
+        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
+
+        model.addAttribute("user", user)
         model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", KanbanWeb(null, ""))
         model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
         model.addAttribute("kanbanCreated", false)
+        model.addAttribute("user", user)
+        model.addAttribute("kanbans", kanbans)
         return "kanban"
     }
 
     @GetMapping("/kanban/{id}")
-    fun getKanbanById(@PathVariable id: Long, model: Model): String {
+    fun getKanbanById(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
         val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
             .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
         val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
+        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
+
+        model.addAttribute("user", user)
+        model.addAttribute("kanbans", kanbans)
         model.addAttribute("kanbanCreated", false)
         model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))

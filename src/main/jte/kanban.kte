@@ -1,6 +1,8 @@
 @param editKanbanTitle: Boolean
 @param kanban: app.kanban.kanban.KanbanWeb
 @param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
+@param user: app.kanban.security.KanbanUser
+@param kanbans: List<app.kanban.kanban.KanbanWeb>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,13 +16,21 @@
 <body x-data='{"advOpt": false}'>
 @template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban)
 
-<div class="flex relative" x-data='{"showSidebar": true}'>
-    <section id="sidebar" class="absolute flex-none flex bg-accent-content/90 gap-2 p-2 text-accent">
+<div class="flex relative" x-data='{"showSidebar": false}'>
+    <section id="sidebar" class="absolute min-h-100 flex-none flex gap-4 p-2 bg-base-200">
         <div class="flex-grow" x-show="showSidebar">
-            <h2 class="text-2xl">Kanbans of </h2>
+            <h2 class="text-xl">Kanbans of</h2>
+            <h2>${user.email}</h2>
+            @if(!kanbans.isEmpty())
+                <ul>
+                    @for(kanban in kanbans)
+                        <li><a href="/kanban/${kanban.id}">${kanban.title}</a></li>
+                    @endfor
+                </ul>
+            @endif
         </div>
-        <button class="btn btn-accent [writing-mode:vertical-rl] self-end" x-show="!showSidebar" @click="showSidebar = !showSidebar">show</button>
-        <button class="btn btn-accent [writing-mode:vertical-rl] self-end" x-show="showSidebar" @click="showSidebar = !showSidebar">hide</button>
+        <button class="btn btn-accent [writing-mode:vertical-rl]" x-show="!showSidebar" @click="showSidebar = !showSidebar">show</button>
+        <button class="btn btn-accent [writing-mode:vertical-rl]" x-show="showSidebar" @click="showSidebar = !showSidebar">hide</button>
     </section>
 </div>
 @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, swapOob=false)
