@@ -1,5 +1,6 @@
 package app.kanban.kanban
 
+import app.kanban.security.KanbanUser
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.annotation.Id
@@ -8,6 +9,7 @@ import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.Repository
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.Instant
 
@@ -33,6 +35,7 @@ data class KanbanCard(
     val updatedAt: Instant?
 )
 
+@Table
 data class KanbanOwnerShip(
     val identifierId: Long,
     val boardIds: Set<Long>
@@ -43,11 +46,17 @@ data class CardInsertResult(val id: Int, val index: Int)
 @Service
 class KanbanService(
     private val kanbanBoardRepository: KanbanBoardRepository,
-    private val kanbanCardRepository: KanbanCardRepository
+    private val kanbanCardRepository: KanbanCardRepository,
+    private val kanbanOwnershipRepository: KanbanOwnershipRepository
 ) {
     fun createBoard(title: String, columns: Set<String>): Long {
         val columnsAsArray = columns.toTypedArray()
-        return kanbanBoardRepository.create(title, columnsAsArray)
+        val boardId = kanbanBoardRepository.create(title, columnsAsArray)
+
+        val user = SecurityContextHolder.getContext().authentication.principal as KanbanUser
+        kanbanOwnershipRepository.addToOwnershipBoardIds(user.identifierId, boardId)
+
+        return boardId
     }
 
     fun updateBoardTitle(id: Long, title: String) {
@@ -95,8 +104,6 @@ class KanbanService(
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
-    fun findAll(): List<KanbanBoard>
-    fun deleteAll()
 
     @Query("INSERT INTO kanban_board (title, columns) VALUES (:title, :columns) RETURNING id")
     fun create(title: String, columns: Array<String>): Long
@@ -118,7 +125,7 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
     fun updateColumns(kanbanId: Long, columns: Array<String>)
 }
 
-interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
+interface KanbanCardRepository : CrudRepository<KanbanCard, Long> {
 
     @Query(
         """
@@ -161,4 +168,17 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Int> {
     @Modifying
     @Query("DELETE FROM kanban_card WHERE board_id = :boardId AND id = :cardId")
     fun delete(boardId: Long, cardId: Int)
+}
+
+interface KanbanOwnershipRepository : Repository<KanbanOwnerShip, Long> {
+
+    @Modifying
+    @Query("""
+        INSERT INTO kanban_ownership (identifier_id, board_ids)
+        VALUES (:identifierId, ARRAY[:boardId])
+        ON CONFLICT (identifier_id) 
+        DO UPDATE SET 
+            board_ids = array_append(kanban_ownership.board_ids, :boardId)
+    """)
+    fun addToOwnershipBoardIds(identifierId: Long, boardId: Long)
 }

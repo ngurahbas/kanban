@@ -61,21 +61,20 @@ class TrimDownSecurityContextRepository(
         }
 
         val oAuth2User = context.authentication.principal as OAuth2User
-        val name = oAuth2User.getAttribute<String>("name") ?: ""
         val email = oAuth2User.getAttribute<String>("email") ?: ""
         val sessionId = request.session.id
         val authSource = "oauth2"
 
-        val id = identifierRepository.insertOrGet(IdentifierType.EMAIL, email)
-        log.info("Saved identifier id: $id")
+        val identifierId = identifierRepository.insertOrGet(IdentifierType.EMAIL, email)
+        log.info("Saved identifier id: $identifierId")
 
         val now = java.time.Instant.now()
         val jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build()
         val claims = JwtClaimsSet.builder()
-            .claim("name", name)
             .claim("email", email)
             .claim("sessionId", sessionId)
             .claim("authSource", authSource)
+            .claim("identifierId", identifierId)
             .expiresAt(now.plusSeconds(3600))
             .build()
         val encodedJwt = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
@@ -94,7 +93,7 @@ class TrimDownSecurityContextRepository(
             return super.loadDeferredContext(request)
         }
         val jwt = jwtDecoder.decode(cookie.value)
-        val user = KanbanUser(jwt.claims["name"]?.toString(), jwt.claims["email"]?.toString(), null)
+        val user = KanbanUser(jwt.claims["identifierId"] as Long, jwt.claims["email"]?.toString(), null)
         return object : DeferredSecurityContext{
             override fun isGenerated(): Boolean {
                 return true
@@ -122,7 +121,7 @@ class TrimDownSecurityContextRepository(
 }
 
 data class KanbanUser(
-    val name: String?,
+    val identifierId: Long,
     val email: String?,
     val phoneNumber: String?
 )
