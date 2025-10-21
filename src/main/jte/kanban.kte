@@ -16,8 +16,8 @@
 <body x-data='{"advOpt": false}'>
 @template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban)
 
-<div class="flex relative" x-data='{"showSidebar": false}'>
-    <section id="sidebar" class="absolute min-h-100 flex-none flex gap-4 p-2 bg-base-200">
+<div class="flex" x-data='{"showSidebar": false}'>
+    <section id="sidebar" class="min-h-100 flex-none flex gap-4 p-2 bg-base-200">
         <div class="flex-grow" x-show="showSidebar">
             <h2 class="text-xl">Kanbans of</h2>
             <h2>${user.email}</h2>
@@ -32,8 +32,8 @@
         <button class="btn btn-accent [writing-mode:vertical-rl]" x-show="!showSidebar" @click="showSidebar = !showSidebar">show</button>
         <button class="btn btn-accent [writing-mode:vertical-rl]" x-show="showSidebar" @click="showSidebar = !showSidebar">hide</button>
     </section>
-</div>
 @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, swapOob=false)
+</div>
 
 <!-- Add Card Modal -->
 <dialog id="cardModal" class="hidden">
