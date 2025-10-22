@@ -16,15 +16,17 @@
 <body x-data='{"advOpt": false}'>
 @template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban)
 
-<div class="flex" x-data='{"showSidebar": false}'>
-    <section id="sidebar" class="min-h-100 flex-none flex gap-4 p-2 bg-base-200">
+<div class="flex gap-2" x-data='{"showSidebar": false}'>
+    <section id="sidebar" class="min-h-100 flex-none flex gap-4 p-2 bg-accent-content/40">
         <div class="flex-grow" x-show="showSidebar">
-            <h2 class="text-xl">Kanbans of</h2>
-            <h2>${user.email}</h2>
+            <div>
+                <h2>Kanbans of</h2>
+                <h2>${user.email}</h2>
+            </div>
             @if(!kanbans.isEmpty())
-                <ul>
+                <ul class="menu rounded-box">
                     @for(kanban in kanbans)
-                        <li><a href="/kanban/${kanban.id}">${kanban.title}</a></li>
+                        <li><a href="/kanban/${kanban.id}" class="link">${kanban.title}</a></li>
                     @endfor
                 </ul>
             @endif

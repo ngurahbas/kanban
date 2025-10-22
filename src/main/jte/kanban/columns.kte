@@ -3,7 +3,7 @@
 @param swapOob: Boolean
 @param closeModal: Boolean = false
 
-<section id="kanbanColumns" class="flex flex-nowrap overflow-x-auto gap-2"
+<section id="kanbanColumns" class="flex flex-auto flex-nowrap justify-center overflow-x-auto gap-2"
          hx-swap-oob="${if (swapOob) "true" else null}">
     @if (columnCards != null)
         @for ((column, cards) in columnCards)
