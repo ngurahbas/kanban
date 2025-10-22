@@ -1,11 +1,14 @@
 import htmx from 'htmx.org';
-import Alpine from 'alpinejs'
+import Alpine from 'alpinejs';
+import persist from '@alpinejs/persist'
+
 
 window.htmx = htmx;
 window.Alpine = Alpine;
 
 htmx.config.globalViewTransitions = true;
 
+Alpine.plugin(persist)
 Alpine.start();
 
 document.body.addEventListener("htmx:afterSwap", function(evt) {
