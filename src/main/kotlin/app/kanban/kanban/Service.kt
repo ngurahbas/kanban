@@ -103,6 +103,9 @@ class KanbanService(
     }
 
     fun getKanbans(identifierId: Long) = kanbanBoardRepository.findKanbansByOwnerIdentifierId(identifierId)
+
+    fun hasKanbanAccess(identifierId: Long, kanbanId: Long) = kanbanBoardRepository.findKanbansByOwnerIdentifierId(identifierId)
+        .any { it.id == kanbanId}
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
