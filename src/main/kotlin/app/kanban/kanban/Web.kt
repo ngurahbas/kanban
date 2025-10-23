@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
@@ -38,6 +39,7 @@ class KanbanController(
     }
 
     @GetMapping("/kanban/{id}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
     fun getKanbanById(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
         val kanbanDb = service.getBoard(id)
         val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
@@ -55,7 +57,8 @@ class KanbanController(
     }
 
     @GetMapping("/kanban/{id}/edit")
-    fun editKanbanById(@PathVariable id: Long, kanban: KanbanWeb, model: Model): String {
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
+    fun editKanbanById(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, kanban: KanbanWeb, model: Model): String {
         model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", kanban)
         model.addAttribute("kanbanCreated", false)
@@ -63,7 +66,9 @@ class KanbanController(
     }
 
     @GetMapping("/kanban/{kanbanId}/column/{column}/card")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun addCard(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         model: Model
@@ -75,7 +80,9 @@ class KanbanController(
     }
 
     @GetMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun editCard(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         @PathVariable cardId: Int,
@@ -89,7 +96,9 @@ class KanbanController(
     }
     
     @GetMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun addColumn(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable refColumn: String,
         model: Model
@@ -128,7 +137,9 @@ class KanbanModifyingController(
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun addCard(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         card: KanbanCardWeb,
@@ -144,7 +155,9 @@ class KanbanModifyingController(
     }
 
     @PutMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun editCard(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         @PathVariable cardId: Int,
@@ -161,7 +174,9 @@ class KanbanModifyingController(
     }
 
     @PutMapping("/kanban/move/{kanbanId}/{cardId}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun moveCard(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable cardId: Int,
         @RequestParam("changeColumn") column: String,
@@ -181,8 +196,10 @@ class KanbanModifyingController(
     }
 
     @DeleteMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     @ResponseBody
     fun deleteCard(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         @PathVariable cardId: Int
@@ -192,7 +209,9 @@ class KanbanModifyingController(
     }
 
     @PostMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun addColumn(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable refColumn: String,
         @RequestParam newColumn: String,
@@ -221,7 +240,9 @@ class KanbanModifyingController(
     }
 
     @DeleteMapping("/kanban/{kanbanId}/delete-column/{column}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun deleteColumn(
+        @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         model: Model

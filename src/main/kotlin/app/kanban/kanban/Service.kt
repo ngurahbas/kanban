@@ -132,7 +132,8 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
     @Query("""
         SELECT k.*
         FROM kanban_ownership o
-        JOIN kanban_board k ON k.id = ANY(o.board_ids)
+        JOIN kanban_board k 
+        ON o.identifier_id = :identifierId AND k.id = ANY(o.board_ids)
     """
     )
     fun findKanbansByOwnerIdentifierId(identifierId: Long): List<KanbanBoard>
