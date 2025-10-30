@@ -66,10 +66,14 @@ class KanbanServiceCacheTest {
         fun kanbanCardRepository(): KanbanCardRepository = Mockito.mock(KanbanCardRepository::class.java)
 
         @Bean
+        fun kanbanOwnershipRepository(): KanbanOwnershipRepository = Mockito.mock(KanbanOwnershipRepository::class.java)
+
+        @Bean
         fun kanbanService(
             boardRepository: KanbanBoardRepository,
-            cardRepository: KanbanCardRepository
-        ): KanbanService = KanbanService(boardRepository, cardRepository)
+            cardRepository: KanbanCardRepository,
+            ownershipRepository: KanbanOwnershipRepository
+        ): KanbanService = KanbanService(boardRepository, cardRepository, ownershipRepository)
 
         @Bean
         fun cacheManager(): CacheManager = ConcurrentMapCacheManager("kanbanColumns")
