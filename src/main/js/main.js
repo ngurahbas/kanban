@@ -15,7 +15,7 @@ document.body.addEventListener("htmx:afterSwap", function(evt) {
     if (evt.detail && evt.detail.target) {
         htmx.process(evt.detail.target);
         try {
-            Alpine.initTree(target);
+            Alpine.initTree(evt.detail.target);
         } catch (e) {
             console.error("Error initializing Alpine tree after htmx swap.", e);
         }
