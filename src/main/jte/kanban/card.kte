@@ -4,16 +4,13 @@
 @param columns: Set<String>
 @param closeModal: Boolean = false
 
-<div id="card-${card.id}" class="card bg-base-100 shadow-sm relative border-1 cardInColumn">
+<div id="card-${card.id}" class="card bg-base-100 shadow-sm relative border-1 cardInColumn" x-data>
     <div class="card-body p-3">
         <div class="card-title font-semibold">${card.title}</div>
         <p>${card.description}</p>
         <div class="flex justify-end gap-1">
-            <form hx-get="/kanban/${kanbanId}/column/${column}/card/${card.id}"
-                  hx-target="#cardModal"
-                  hx-swap="outerHTML">
-                <button class="btn btn-sm">edit</button>
-            </form>
+            <button class="btn btn-sm"
+                    @click="$refs.cardDialog.showModal()">edit</button>
             <select name="changeColumn" class="select select-sm w-fit"
                     @change="console.log(cards);cards--"
                     hx-put="/kanban/move/${kanbanId}/${card.id}"
@@ -36,6 +33,29 @@
             </form>
         </div>
     </div>
+    <dialog class="modal" x-ref="cardDialog">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Edit Card</h3>
+            <form hx-put="/kanban/${kanbanId}/column/${column}/card/${card.id}"
+                  hx-target="#card-${card.id}"
+                  hx-swap="outerHTML">
+                <input type="hidden" value="${card?.id}" name="id">
+                <input type="hidden" value="${card?.index}" name="index">
+                <fieldset class="fieldset w-full">
+                    <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title"
+                           value="${card?.title}"/>
+                    <textarea name="description" class="textarea textarea-bordered w-full mt-3"
+                              placeholder="Enter card description">${card?.description}</textarea>
+                </fieldset>
+                <div class="modal-action">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn"
+                            @click="$refs.cardDialog.close()">Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 </div>
 
 @if(closeModal)
