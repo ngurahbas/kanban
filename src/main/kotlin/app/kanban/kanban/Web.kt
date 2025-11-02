@@ -64,36 +64,6 @@ class KanbanController(
         model.addAttribute("kanbanCreated", false)
         return "kanban/kanbanTitle"
     }
-
-    @GetMapping("/kanban/{kanbanId}/column/{column}/card")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
-    fun addCard(
-        @AuthenticationPrincipal user: KanbanUser,
-        @PathVariable kanbanId: Long,
-        @PathVariable column: String,
-        model: Model
-    ): String {
-        model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("column", column)
-        model.addAttribute("columns", service.getColumns(kanbanId))
-        return "kanban/cardModal"
-    }
-
-    @GetMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
-    fun editCard(
-        @AuthenticationPrincipal user: KanbanUser,
-        @PathVariable kanbanId: Long,
-        @PathVariable column: String,
-        @PathVariable cardId: Int,
-        model: Model
-    ): String {
-        val card = service.getCard(kanbanId, cardId)
-        model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("column", column)
-        model.addAttribute("card", KanbanCardWeb(card.id, card.index, card.title, card.description))
-        return "kanban/cardModal"
-    }
     
     @GetMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
