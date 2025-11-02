@@ -9,12 +9,21 @@
         @for ((column, cards) in columnCards)
             @template.kanban.column(column=column, cards=cards, kanbanId=kanbanId, columns=columnCards.keys, isFirst=column==columnCards.keys.first())
             @if (column!=columnCards.keys.last())
-                <div class="flex items-center">
+                <div class="flex items-center" x-data>
                     <button type="button" class="advOpt btn btn-circle btn-dash" title="Add column"
-                            x-transition x-show="advOpt"
-                            hx-get="/kanban/${kanbanId}/new-column-after/${column}"
-                            hx-target="#columnModal"
-                            hx-swap="outerHTML">+</button>
+                            x-transition x-show="advOpt" @click="$refs.columnModal.showModal()">+</button>
+                    <dialog class="modal" x-ref="columnModal">
+                        <div class="modal-box">
+                            <form hx-post="/kanban/${kanbanId}/new-column-after/${column}"
+                                  hx-target="#kanbanColumns"
+                                  hx-swap="outerHTML">
+                                <div class="join w-full flex">
+                                    <input type="text" name="newColumn" class="join-item grow input" placeholder="New Column">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </dialog>
                 </div>
             @endif
         @endfor
