@@ -1,7 +1,6 @@
 @param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
 @param kanbanId: Long?
 @param swapOob: Boolean
-@param closeModal: Boolean = false
 
 <section id="kanbanColumns" class="flex flex-auto flex-nowrap justify-center overflow-x-auto gap-2"
          hx-swap-oob="${if (swapOob) "true" else null}">
@@ -29,8 +28,3 @@
         @endfor
     @endif
 </section>
-
-@if(closeModal)
-    <dialog id="columnModal" class="hidden" hx-swap-oob="true">
-    </dialog>
-@endif

@@ -49,12 +49,5 @@
 @template.kanban.columns(columnCards=columnCards, kanbanId=kanban.id, swapOob=false)
 </div>
 
-<!-- Add Card Modal -->
-<dialog id="cardModal" class="hidden">
-</dialog>
-
-<dialog id="columnModal" class="hidden">
-</dialog>
-
 </body>
 </html>

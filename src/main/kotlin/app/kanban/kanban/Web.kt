@@ -107,7 +107,6 @@ class KanbanModifyingController(
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
         model.addAttribute("columns", service.getColumns(kanbanId))
-        model.addAttribute("closeModal", true)
         return "kanban/card"
     }
 
@@ -126,7 +125,6 @@ class KanbanModifyingController(
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
         model.addAttribute("columns", service.getColumns(kanbanId))
-        model.addAttribute("closeModal", true)
         return "kanban/card"
     }
 
@@ -192,7 +190,6 @@ class KanbanModifyingController(
         model.addAttribute("columnCards", columnCards)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("swapOob", false)
-        model.addAttribute("closeModal", true)
         return "kanban/columns"
     }
 
@@ -212,7 +209,6 @@ class KanbanModifyingController(
         model.addAttribute("columnCards", columnCards)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("swapOob", false)
-        model.addAttribute("closeModal", true)
         return "kanban/columns"
     }
 }

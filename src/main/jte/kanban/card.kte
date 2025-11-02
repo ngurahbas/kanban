@@ -2,7 +2,6 @@
 @param kanbanId: Long
 @param column: String
 @param columns: Set<String>
-@param closeModal: Boolean = false
 
 <div id="card-${card.id}" class="card bg-base-100 shadow-sm relative border-1 cardInColumn" x-data>
     <div class="card-body p-3">
@@ -57,8 +56,3 @@
         </div>
     </dialog>
 </div>
-
-@if(closeModal)
-    <dialog id="cardModal" class="hidden" hx-swap-oob="true">
-    </dialog>
-@endif
