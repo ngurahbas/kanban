@@ -16,8 +16,9 @@
 <body x-data='{"advOpt": false}'>
 @template.kanban.kanbanTitle(editKanbanTitle=editKanbanTitle, kanban=kanban)
 
-<div class="flex gap-2" x-data='{"showSidebar": $persist(false)}'>
-    <section id="sidebar" class="min-h-100 flex-none flex gap-4 p-2 bg-accent-content/40">
+<div class="flex gap-2">
+    <section id="sidebar" class="min-h-100 flex-none flex gap-4 p-2 bg-accent-content/40"
+             x-data='{"showSidebar": $persist(false)}'>
         <div class="menu flex-grow" x-show="showSidebar">
             <div>
                 <h2>Kanbans of</h2>
