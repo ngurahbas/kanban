@@ -64,19 +64,6 @@ class KanbanController(
         model.addAttribute("kanbanCreated", false)
         return "kanban/kanbanTitle"
     }
-    
-    @GetMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
-    fun addColumn(
-        @AuthenticationPrincipal user: KanbanUser,
-        @PathVariable kanbanId: Long,
-        @PathVariable refColumn: String,
-        model: Model
-    ): String {
-        model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("refColumn", refColumn)
-        return "kanban/columnModal"
-    }
 }
 
 @Controller
