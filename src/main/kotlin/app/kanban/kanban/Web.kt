@@ -30,7 +30,6 @@ class KanbanController(
         val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
 
         model.addAttribute("user", user)
-        model.addAttribute("editKanbanTitle", true)
         model.addAttribute("kanban", KanbanWeb(null, ""))
         model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
         model.addAttribute("kanbanCreated", false)
@@ -51,19 +50,9 @@ class KanbanController(
         model.addAttribute("user", user)
         model.addAttribute("kanbans", kanbans)
         model.addAttribute("kanbanCreated", false)
-        model.addAttribute("editKanbanTitle", false)
         model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
         model.addAttribute("columnCards", columnCards)
         return "kanban"
-    }
-
-    @GetMapping("/kanban/{id}/edit")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
-    fun editKanbanById(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, kanban: KanbanWeb, model: Model): String {
-        model.addAttribute("editKanbanTitle", true)
-        model.addAttribute("kanban", kanban)
-        model.addAttribute("kanbanCreated", false)
-        return "kanban/kanbanTitle"
     }
 }
 
