@@ -3,6 +3,7 @@ package app.kanban.kanban
 import app.kanban.security.KanbanUser
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -75,22 +76,12 @@ class KanbanModifyingController(
     }
 
     @PostMapping("/kanban/title")
-    fun saveKanban(kanban: KanbanWeb, model: Model, response: HttpServletResponse): String {
+    fun saveKanban(kanban: KanbanWeb): ResponseEntity<String> {
         var id: Long? = kanban.id
-        var page = "kanban/kanbanTitle"
         if (kanban.id == null) {
             id = service.createBoard(kanban.title, defaultColumns)
-            model.addAttribute("kanbanCreated", true)
-            model.addAttribute("columnCards", defaultColumns.associateWith { listOf<KanbanCardWeb>() })
-            page = "kanban/kanbanTitleWithColumns"
-        } else {
-            service.updateBoardTitle(kanban.id, kanban.title)
-            model.addAttribute("kanbanCreated", false)
         }
-        model.addAttribute("editKanbanTitle", false)
-        model.addAttribute("kanban", KanbanWeb(id, kanban.title))
-        response.addHeader("HX-PUSH", "/kanban/${id}")
-        return page
+        return ResponseEntity.ok().header("HX-Redirect", "/kanban/${id}").build()
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")

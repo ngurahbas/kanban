@@ -1,6 +1,0 @@
-@param kanban: app.kanban.kanban.KanbanWeb
-@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
-
-@template.kanban.kanbanTitle(editKanbanTitle=false, kanban=kanban)
-
-@template.kanban.columns(columnCards = columnCards, kanbanId = kanban.id, swapOob = true)
