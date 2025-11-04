@@ -73,6 +73,18 @@ class KanbanModifyingController(
         return ResponseEntity.ok().header("HX-Redirect", "/kanban/${id}").build()
     }
 
+    @PutMapping("/kanban/title")
+    fun updateTitle(@AuthenticationPrincipal user: KanbanUser, kanban: KanbanWeb, model: Model): String {
+        service.updateBoardTitle(kanban.id!!, kanban.title)
+
+        model.addAttribute("user", user)
+        model.addAttribute("kanban", kanban)
+        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
+        model.addAttribute("kanbans", kanbans)
+
+        return "kanban/kanbanTitleUpdate"
+    }
+
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun addCard(

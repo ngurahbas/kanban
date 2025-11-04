@@ -1,0 +1,38 @@
+@param user: app.kanban.security.KanbanUser
+@param kanbans: List<app.kanban.kanban.KanbanWeb>
+@param swapOob: Boolean
+
+<section id="sidebar" class="min-h-100 flex-none flex gap-4 p-2 bg-accent-content/40"
+         hx-swap-oob="${if (swapOob) "true" else null}"
+         x-data='{"showSidebar": $persist(false)}'>
+    <div class="menu flex-grow" x-show="showSidebar">
+        <div>
+            <h2>Kanbans of</h2>
+            <h2>${user.email}</h2>
+        </div>
+        @if(!kanbans.isEmpty())
+            <ul class="menu rounded-box">
+                @for(kanban in kanbans)
+                    <li><a href="/kanban/${kanban.id}" class="link">${kanban.title}</a></li>
+                @endfor
+            </ul>
+        @endif
+    </div>
+    <button class="btn btn-circle btn-sm"
+            x-show="!showSidebar"
+            @click="showSidebar = !showSidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+        </svg>
+    </button>
+    <button class="btn btn-circle btn-sm"
+            x-show="showSidebar"
+            @click="showSidebar = !showSidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+</section>

@@ -27,7 +27,7 @@
                     x-show="advOpt"
                     @click="editMode = !editMode">Edit</button>
         </fieldset>
-        <form x-show="editMode" hx-put="/kanban/${kanban.id}/title" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
+        <form x-show="editMode" hx-put="/kanban/title" hx-target="#kanbanTitleSection" hx-swap="outerHTML">
             <fieldset class="fieldset flex items-center justify-center">
                 <label for="kanbanTitle" class="text-3xl">Title</label>
                 <input value="${kanban.id}" type="hidden" name="id">
