@@ -6,7 +6,9 @@
             <fieldset class="fieldset flex items-center justify-center">
                 <label for="kanbanTitle" class="text-3xl">Title</label>
                 <input value="" type="hidden" name="id">
-                <input value="${kanban.title}" type="text" name="title" id="kanbanTitle" class="input input-info w-2xl text-3xl">
+                <input value="${kanban.title}" type="text" name="title"
+                       required minlength="4" maxlength="128"
+                       id="kanbanTitle" class="input input-info w-2xl text-3xl">
                 <button class="btn btn-primary btn-md">${if (kanban.id == null) "Create" else "Update"}</button>
             </fieldset>
         </form>
@@ -31,7 +33,9 @@
             <fieldset class="fieldset flex items-center justify-center">
                 <label for="kanbanTitle" class="text-3xl">Title</label>
                 <input value="${kanban.id}" type="hidden" name="id">
-                <input value="${kanban.title}" type="text" name="title" id="kanbanTitle" class="input input-info w-2xl text-3xl">
+                <input value="${kanban.title}" type="text" name="title"
+                       required minlength="4" maxlength="128"
+                       id="kanbanTitle" class="input input-info w-2xl text-3xl">
                 <button class="btn btn-primary btn-md">${if (kanban.id == null) "Create" else "Update"}</button>
             </fieldset>
         </form>
