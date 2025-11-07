@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository
 import org.springframework.stereotype.Component
+import java.io.Serializable
 
 @Configuration
 @EnableWebSecurity
@@ -64,29 +65,35 @@ class TrimDownSecurityContextRepository(
 
         val initialAuthenticated = context.authentication.isAuthenticated
 
-        context.authentication = object : Authentication {
-            private var authenticated = initialAuthenticated
-
-            override fun getAuthorities() = listOf<GrantedAuthority>()
-
-            override fun getCredentials() = null
-
-            override fun getDetails() = null
-
-            override fun getPrincipal() = KanbanUser(identifierId, email, null)
-
-            override fun isAuthenticated(): Boolean {
-                return authenticated;
-            }
-
-            override fun setAuthenticated(authenticated: Boolean) {
-                this.authenticated = authenticated
-            }
-
-            override fun getName() = ""
-        }
+        context.authentication = trim(initialAuthenticated, identifierId, email)
 
         super.saveContext(context, request, response)
+    }
+
+    private fun trim(
+        initialAuthenticated: Boolean,
+        identifierId: Long,
+        email: String
+    ) = object : Authentication {
+        private var authenticated = initialAuthenticated
+        private val authorities = emptyList<GrantedAuthority>()
+        private var principal = KanbanUser(identifierId, email, null)
+
+        override fun getAuthorities() = authorities
+
+        override fun getCredentials() = null
+
+        override fun getDetails() = null
+
+        override fun getPrincipal() = principal
+
+        override fun isAuthenticated() = authenticated
+
+        override fun setAuthenticated(authenticated: Boolean) {
+            this.authenticated = authenticated
+        }
+
+        override fun getName() = ""
     }
 }
 
@@ -94,4 +101,4 @@ data class KanbanUser(
     val identifierId: Long,
     val email: String?,
     val phoneNumber: String?
-)
+) : Serializable
