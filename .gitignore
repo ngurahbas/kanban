@@ -50,3 +50,6 @@ src/main/resources/static/js/main.js
 
 #jte
 jte-classes
+
+#mockup generated
+/mockup/output.css
