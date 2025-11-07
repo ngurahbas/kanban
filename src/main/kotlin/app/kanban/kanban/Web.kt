@@ -2,6 +2,9 @@ package app.kanban.kanban
 
 import app.kanban.security.KanbanUser
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Size
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -91,7 +94,7 @@ class KanbanModifyingController(
         @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
-        card: KanbanCardWeb,
+        @Valid card: KanbanCardWeb,
         model: Model
     ): String {
         val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
@@ -109,7 +112,7 @@ class KanbanModifyingController(
         @PathVariable kanbanId: Long,
         @PathVariable column: String,
         @PathVariable cardId: Int,
-        card: KanbanCardWeb,
+        @Valid card: KanbanCardWeb,
         model: Model
     ): String {
         service.updateCard(kanbanId, cardId, card.title, card.description)
@@ -215,6 +218,10 @@ data class KanbanWeb(
 data class KanbanCardWeb(
     val id: Int?,
     val index: Int?,
+    @field:NotBlank
+    @field:Size(min = 4, max = 256)
     val title: String,
+    @field:NotBlank
+    @field:Size(min = 4, max = 1024)
     val description: String,
 )
