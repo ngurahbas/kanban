@@ -1,5 +1,3 @@
-import org.gradle.internal.impldep.org.bouncycastle.asn1.cms.CMSAttributes.contentType
-
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
