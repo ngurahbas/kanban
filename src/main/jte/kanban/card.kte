@@ -41,9 +41,11 @@
                 <input type="hidden" value="${card?.id}" name="id">
                 <input type="hidden" value="${card?.index}" name="index">
                 <fieldset class="fieldset w-full">
-                    <input type="text" name="title" class="input input-bordered w-full" placeholder="Enter card title"
+                    <input type="text" name="title" required minlength="4" maxlength="256"
+                           class="input input-bordered w-full" placeholder="Enter card title"
                            value="${card?.title}"/>
-                    <textarea name="description" class="textarea textarea-bordered w-full mt-3"
+                    <textarea name="description" required minlength="4" maxlength="1024"
+                              class="textarea textarea-bordered w-full mt-3"
                               placeholder="Enter card description">${card?.description}</textarea>
                 </fieldset>
                 <div class="modal-action">
