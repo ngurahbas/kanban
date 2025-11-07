@@ -1,1 +1,0 @@
-package app.kanban.core
