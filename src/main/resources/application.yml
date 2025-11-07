@@ -30,17 +30,8 @@ spring:
     redis:
       host: ${VALKEY_HOST:localhost}
       port: ${VALKEY_PORT:6379}
-      # password: ${VALKEY_PASSWORD:}
 
 gg.jte:
-  development-mode: true
+  development-mode: false
+  use-precompiled-templates: true
   template-suffix: .kte
-
-security:
-  jwt:
-    # Override in env/secret config
-    # secret: ${JWT_SECRET}
-    # ttl-seconds: 86400
-logging.level:
-  root: ERROR
-  app.kanban: INFO

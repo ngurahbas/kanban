@@ -1,9 +1,12 @@
+import org.gradle.internal.impldep.org.bouncycastle.asn1.cms.CMSAttributes.contentType
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.github.node-gradle.node") version "7.1.0"
+    id("gg.jte.gradle") version "3.1.16"
 }
 
 group = "app"
@@ -113,6 +116,19 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmCompileJs") {
 
     args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--outfile=src/main/resources/static/js/main.js"))
     workingDir.set(file("${project.projectDir}"))
+}
+
+jte {
+    precompile()
+    sourceDirectory.set(file("src/main/jte").toPath())
+    targetDirectory.set(file("build/jte-classes").toPath())
+    contentType.set(gg.jte.ContentType.Html)
+    kotlinCompileArgs.set(arrayOf("-jvm-target", "21"))
+    generate()
+}
+
+tasks.named("bootJar") {
+    dependsOn("precompileJte")
 }
 
 tasks.named<Delete>("clean") {
