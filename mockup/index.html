@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Responsive Web App</title>
     <link rel="stylesheet" href="./output.css">
+    <script src="./output.js"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50" x-data="{ sidebarOpen: false }">
     <!-- Top Navbar -->
     <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div class="flex items-center justify-between px-4 py-3">
             <div class="flex items-center gap-4">
-                <button id="sidebarToggle" class="lg:hidden text-gray-600 hover:text-gray-900">
+                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-600 hover:text-gray-900">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -32,14 +33,14 @@
     </nav>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed left-0 top-[57px] bottom-0 w-64 bg-white shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    <aside :class="sidebarOpen ? '' : '-translate-x-full'" class="fixed left-0 top-[57px] bottom-0 w-64 bg-white shadow-lg transform lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
         <nav class="p-4 space-y-2">
             <!-- Sidebar content will be added here -->
         </nav>
     </aside>
 
     <!-- Overlay for mobile -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+    <div @click="sidebarOpen = false" :class="sidebarOpen ? '' : 'hidden'" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
 
     <!-- Main Content -->
     <main class="pt-[57px] lg:pl-64 min-h-screen">
@@ -47,18 +48,4 @@
             <!-- Content will be added here -->
         </div>
     </main>
-
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const overlay = document.getElementById('overlay');
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
-
-        sidebarToggle.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
-    </script>
 </body>
