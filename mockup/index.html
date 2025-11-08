@@ -17,7 +17,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
-                <h1 class="text-xl font-bold text-gray-900">My App</h1>
+                <h1 class="text-xl font-bold text-gray-900">Kanban Board 1</h1>
             </div>
             <div class="flex items-center gap-4">
                 <button class="text-gray-600 hover:text-gray-900">
@@ -43,9 +43,65 @@
     <div @click="sidebarOpen = false" :class="sidebarOpen ? '' : 'hidden'" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
 
     <!-- Main Content -->
-    <main class="pt-[57px] lg:pl-64 min-h-screen">
+    <script>
+        function kanbanApp() {
+            return {
+                columns: [
+                    {
+                        id: 1,
+                        title: 'To Do',
+                        cards: [
+                            { id: 1, title: 'Design Homepage', description: 'Create mockups for the new homepage design' },
+                            { id: 2, title: 'Setup Database', description: 'Initialize PostgreSQL database with required tables' }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: 'In Progress',
+                        cards: [
+                            { id: 3, title: 'Implement Authentication', description: 'Add user login and registration functionality' },
+                            { id: 4, title: 'API Development', description: 'Create RESTful endpoints for the application' }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: 'Review',
+                        cards: [
+                            { id: 5, title: 'Code Review', description: 'Review pull requests from team members' }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: 'Done',
+                        cards: [
+                            { id: 6, title: 'Project Setup', description: 'Initialize project with required dependencies' }
+                        ]
+                    }
+                ]
+            }
+        }
+    </script>
+    <main class="pt-[57px] lg:pl-64 min-h-screen" x-data="kanbanApp()">
         <div class="p-6">
-            <!-- Content will be added here -->
+            <!-- Kanban Board -->
+            <div class="flex gap-4 overflow-x-auto pb-4">
+                <template x-for="column in columns" :key="column.id">
+                    <div class="flex-shrink-0 w-80 bg-gray-100 rounded-lg p-4">
+                        <h2 class="font-semibold text-gray-800 mb-4" x-text="column.title"></h2>
+                        <div class="space-y-3">
+                            <template x-for="card in column.cards" :key="card.id">
+                                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                                    <h3 class="font-medium text-gray-900 mb-2" x-text="card.title"></h3>
+                                    <p class="text-sm text-gray-600" x-text="card.description"></p>
+                                </div>
+                            </template>
+                        </div>
+                        <button class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                            + Add Card
+                        </button>
+                    </div>
+                </template>
+            </div>
         </div>
     </main>
 </body>
