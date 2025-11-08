@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "js:build": "esbuild ./input.js --bundle --minify --outfile=./output.js",
     "css:watch": "tailwindcss -i ./input.css -o ./output.css --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@tailwindcss/cli": "^4.1.17",
+    "alpinejs": "^3.15.1",
+    "esbuild": "^0.25.12",
     "tailwindcss": "^4.1.17"
   }
 }
