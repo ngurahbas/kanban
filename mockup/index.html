@@ -19,7 +19,12 @@
                 </button>
             </div>
             <div class="relative">
-                <h1 @click="showTitleButtons = !showTitleButtons" class="text-xl font-bold text-gray-900 text-center cursor-pointer hover:text-blue-600 transition-colors">Kanban Board 1</h1>
+                <h1 @click="showTitleButtons = !showTitleButtons" class="text-xl font-bold text-gray-900 text-center cursor-pointer py-1 px-2 rounded flex items-center justify-center gap-1">
+                    Kanban Board 1
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </h1>
                 <div x-show="showTitleButtons" x-transition class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50">
                     <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
                         Edit Title
