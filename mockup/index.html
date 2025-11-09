@@ -124,9 +124,9 @@
     <main class="pt-[57px] lg:pl-64 min-h-screen" x-data="columns()">
         <div class="p-6">
             <!-- Kanban Board -->
-            <div class="flex gap-4 overflow-x-auto pb-4">
+            <div class="flex flex-col lg:flex-row gap-4 overflow-x-auto lg:overflow-x-visible pb-4">
                 <template x-for="column in columns" :key="column.id">
-                    <div class="flex-shrink-0 w-80 bg-gray-100 rounded-lg p-4">
+                    <div class="flex-shrink-0 lg:w-80 w-full bg-gray-100 rounded-lg p-4">
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="font-semibold text-gray-800" x-text="column.title"></h2>
                             <span class="bg-gray-300 text-gray-700 text-sm font-medium px-2.5 py-0.5 rounded-full" x-text="column.cards.length"></span>
