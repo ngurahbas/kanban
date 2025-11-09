@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./output.css">
     <script src="./output.js"></script>
 </head>
-<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false }">
+<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false, editingTitle: false, tempTitle: 'Kanban Board 1' }">
     <!-- Top Navbar -->
     <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div class="flex items-center justify-between px-4 py-3">
@@ -19,14 +19,36 @@
                 </button>
             </div>
             <div class="relative">
-                <h1 @click="showTitleButtons = !showTitleButtons" class="text-xl font-bold text-gray-900 text-center cursor-pointer py-1 px-2 rounded flex items-center justify-center gap-1">
-                    Kanban Board 1
-                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </h1>
+                <!-- Title Display Mode -->
+                <template x-if="!editingTitle">
+                    <h1 @click="showTitleButtons = !showTitleButtons" class="text-xl font-bold text-gray-900 text-center cursor-pointer py-1 px-2 rounded flex items-center justify-center gap-1">
+                        Kanban Board 1
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </h1>
+                </template>
+
+                <!-- Title Edit Mode -->
+                <template x-if="editingTitle">
+                    <div class="flex items-center gap-2">
+                        <input type="text"
+                               value="Kanban Board 1"
+                               class="text-xl font-bold text-gray-900 text-center bg-white border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               autofocus>
+                        <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                            Save
+                        </button>
+                        <button @click="editingTitle = false; showTitleButtons = false"
+                                class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </template>
+
                 <div x-show="showTitleButtons" x-transition class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50">
-                    <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
+                    <button @click="editingTitle = true;"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
                         Edit Title
                     </button>
                     <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
