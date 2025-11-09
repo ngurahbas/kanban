@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./output.css">
     <script src="./output.js"></script>
 </head>
-<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}] }">
+<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '' }">
     <!-- Top Navbar -->
     <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div class="flex items-center justify-between px-4 py-3">
@@ -47,14 +47,35 @@
                 </a>
             </template>
             
-            <!-- Add New Kanban Button -->
-            <button @click="const newTitle = prompt('Enter new kanban name:'); if (newTitle) { kanbans.push({id: kanbans.length + 1, title: newTitle}); kanbanId = kanbans.length; sidebarOpen = false; }"
-                    class="w-full mt-4 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Add New Kanban
-            </button>
+            <!-- Add New Kanban Button/Form -->
+            <template x-if="!showNewKanbanForm">
+                <button @click="showNewKanbanForm = true"
+                        class="w-full mt-4 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add New Kanban
+                </button>
+            </template>
+            
+            <template x-if="showNewKanbanForm">
+                <div class="mt-4 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
+                    <input type="text"
+                           x-model="newKanbanTitle"
+                           placeholder="Enter kanban name..."
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                           autofocus>
+                    <div class="flex gap-2">
+                        <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
+                            Add
+                        </button>
+                        <button @click="newKanbanTitle = ''; showNewKanbanForm = false;"
+                                class="flex-1 px-3 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </template>
         </nav>
     </aside>
 
