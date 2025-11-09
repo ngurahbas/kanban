@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./output.css">
     <script src="./output.js"></script>
 </head>
-<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false, editingTitle: false, tempTitle: 'Kanban Board 1' }">
+<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false, editingTitle: false, tempTitle: 'Kanban Board 1', configuringColumns: false }">
     <!-- Top Navbar -->
     <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div class="flex items-center justify-between px-4 py-3">
@@ -51,8 +51,9 @@
                             class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
                         Edit Title
                     </button>
-                    <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
-                        Configure Column
+                    <button @click="configuringColumns = true; showTitleButtons = false" 
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
+                        Configure Columns
                     </button>
                 </div>
             </div>
@@ -161,30 +162,51 @@
             }
         }
     </script>
-    <main class="pt-[57px] lg:pl-64 min-h-screen" x-data="columns()">
-        <div class="p-6">
-            <!-- Kanban Board -->
-            <div class="flex flex-col lg:flex-row gap-4 overflow-x-auto lg:overflow-x-visible pb-4">
-                <template x-for="column in columns" :key="column.id">
-                    <div class="flex-shrink-0 lg:w-80 w-full bg-gray-100 rounded-lg p-4">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="font-semibold text-gray-800" x-text="column.title"></h2>
-                            <span class="bg-gray-300 text-gray-700 text-sm font-medium px-2.5 py-0.5 rounded-full" x-text="column.cards.length"></span>
+    <!-- Kanban Board View -->
+    <template x-if="!configuringColumns">
+        <main class="pt-[57px] lg:pl-64 min-h-screen" x-data="columns()">
+            <div class="p-6">
+                <!-- Kanban Board -->
+                <div class="flex flex-col lg:flex-row gap-4 overflow-x-auto lg:overflow-x-visible pb-4">
+                    <template x-for="column in columns" :key="column.id">
+                        <div class="flex-shrink-0 lg:w-80 w-full bg-gray-100 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="font-semibold text-gray-800" x-text="column.title"></h2>
+                                <span class="bg-gray-300 text-gray-700 text-sm font-medium px-2.5 py-0.5 rounded-full" x-text="column.cards.length"></span>
+                            </div>
+                            <div class="space-y-3">
+                                <template x-for="card in column.cards" :key="card.id">
+                                    <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                                        <h3 class="font-medium text-gray-900 mb-2" x-text="card.title"></h3>
+                                        <p class="text-sm text-gray-600" x-text="card.description"></p>
+                                    </div>
+                                </template>
+                            </div>
+                            <button class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                                + Add Card
+                            </button>
                         </div>
-                        <div class="space-y-3">
-                            <template x-for="card in column.cards" :key="card.id">
-                                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                                    <h3 class="font-medium text-gray-900 mb-2" x-text="card.title"></h3>
-                                    <p class="text-sm text-gray-600" x-text="card.description"></p>
-                                </div>
-                            </template>
-                        </div>
-                        <button class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
-                            + Add Card
-                        </button>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </template>
+
+    <!-- Column Configuration View -->
+    <template x-if="configuringColumns">
+        <main class="pt-[57px] lg:pl-64 min-h-screen">
+            <div class="p-6">
+                <div class="mb-6">
+                    <button @click="configuringColumns = false" 
+                            class="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Back to Boards
+                    </button>
+                </div>
+
+            </div>
+        </main>
+    </template>
 </body>
