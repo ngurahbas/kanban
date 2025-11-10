@@ -47,7 +47,7 @@
                 </template>
 
                 <div x-show="showTitleButtons" x-transition class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50">
-                    <button @click="editingTitle = true;"
+                    <button @click="editingTitle = true; showTitleButtons = false"
                             class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded transition-colors">
                         Edit Title
                     </button>
@@ -158,50 +158,7 @@
                             { id: 6, title: 'Project Setup', description: 'Initialize project with required dependencies' }
                         ]
                     }
-                ],
-                nextColumnId: 5,
-                newColumnTitle: '',
-                editingColumnId: null,
-                tempColumnTitle: '',
-                
-                addColumn(afterIndex = -1) {
-                    const newColumn = {
-                        id: this.nextColumnId++,
-                        title: this.newColumnTitle || 'New Column',
-                        cards: []
-                    };
-                    
-                    if (afterIndex === -1) {
-                        this.columns.push(newColumn);
-                    } else {
-                        this.columns.splice(afterIndex + 1, 0, newColumn);
-                    }
-                    
-                    this.newColumnTitle = '';
-                },
-                
-                removeColumn(columnId) {
-                    this.columns = this.columns.filter(col => col.id !== columnId);
-                },
-                
-                startEditColumn(column) {
-                    this.editingColumnId = column.id;
-                    this.tempColumnTitle = column.title;
-                },
-                
-                saveColumnEdit() {
-                    const column = this.columns.find(col => col.id === this.editingColumnId);
-                    if (column) {
-                        column.title = this.tempColumnTitle;
-                    }
-                    this.editingColumnId = null;
-                    this.tempColumnTitle = '';
-                },
-                
-                cancelColumnEdit() {
-                    this.editingColumnId = null;
-                    this.tempColumnTitle = '';
-                }
+                ]
             }
         }
     </script>
@@ -252,17 +209,17 @@
                 <!-- Column Boxes -->
                 <div class="flex flex-wrap gap-4">
                     <div x-data="{showAddColumnForm: false}"
-                         class="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-400 transition-colors cursor-pointer flex-shrink-0">
-                        <div x-show="!showAddColumnForm" @click="showAddColumnForm = true">
-                            <span class="text-gray-400 font-light">New  Column</span>
+                         class="bg-white border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 transition-colors cursor-pointer flex-shrink-0">
+                        <div x-show="!showAddColumnForm" @click="showAddColumnForm = true" class="p-4">
+                            <span class="text-gray-400 font-light">+</span>
                         </div>
-                        <form x-show="showAddColumnForm">
+                        <div x-show="showAddColumnForm" class="p-4">
                             <input type="text" placeholder="Enter column names"
                                    class="px-2 py-1 border rounded">
                             <button class="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">add</button>
                             <button @click="showAddColumnForm = false"
                                     class="px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">cancel</button>
-                        </form>
+                        </div>
                     </div>
                     <template x-for="column in columns">
                         <div class="bg-white border-2 border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors cursor-pointer flex-shrink-0">
