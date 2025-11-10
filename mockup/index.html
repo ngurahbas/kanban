@@ -252,9 +252,17 @@
                 <!-- Column Boxes -->
                 <div class="flex flex-wrap gap-4">
                     <div x-data="{showAddColumnForm: false}"
-                         @click="showAddColumnForm = !showAddColumnForm"
                          class="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-400 transition-colors cursor-pointer flex-shrink-0">
-                        <span x-show="!showAddColumnForm" class="text-gray-400 font-light">New  Column</span>
+                        <div x-show="!showAddColumnForm" @click="showAddColumnForm = true">
+                            <span class="text-gray-400 font-light">New  Column</span>
+                        </div>
+                        <form x-show="showAddColumnForm">
+                            <input type="text" placeholder="Enter column names"
+                                   class="px-2 py-1 border rounded">
+                            <button class="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">add</button>
+                            <button @click="showAddColumnForm = false"
+                                    class="px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">cancel</button>
+                        </form>
                     </div>
                     <template x-for="column in columns">
                         <div class="bg-white border-2 border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors cursor-pointer flex-shrink-0">
