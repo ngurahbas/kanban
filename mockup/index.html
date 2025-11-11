@@ -9,11 +9,11 @@
 </head>
 <body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false, editingTitle: false, tempTitle: 'Kanban Board 1', configuringColumns: false }">
     <!-- Top Navbar -->
-    <nav class="fixed bg-white h-16 left-0 right-0 shadow-md top-0 z-50">
-        <div class="flex items-center justify-between px-4 py-3">
-            <div class="flex items-center gap-4">
-                <button @click="sidebarOpen = !sidebarOpen" class="hover:text-gray-900 lg:hidden text-gray-600">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <nav class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
+        <div class="flex justify-between items-center py-3 px-4">
+            <div class="flex gap-4 items-center">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 lg:hidden hover:text-gray-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
@@ -21,9 +21,9 @@
             <div class="relative">
                 <!-- Title Display Mode -->
                 <h1 x-show="!editingTitle" x-transition
-                        @click="showTitleButtons = !showTitleButtons" class="cursor-pointer flex font-bold gap-1 items-center justify-center px-2 py-1 rounded text-center text-gray-900 text-xl">
+                        @click="showTitleButtons = !showTitleButtons" class="flex gap-1 justify-center items-center py-1 px-2 text-xl font-bold text-center text-gray-900 rounded cursor-pointer">
                     Kanban Board 1
-                    <svg class="h-4 text-gray-500 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </h1>
@@ -31,38 +31,38 @@
 
                 <!-- Title Edit Mode (mobile-friendly) -->
                 <div x-show="editingTitle" x-transition
-                     class="absolute -translate-x-5/12 bg-blue-50 border-2 border-blue-300 border-dashed flex flex-col gap-2 max-w-md p-3 rounded-md sm:flex-row sm:items-center sm:max-w-none sm:w-auto w-[calc(100vw-2rem)]">
+                     class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none -translate-x-5/12 w-[calc(100vw-2rem)]">
                     <input type="text"
                            value="Kanban Board 1"
-                           class="bg-white border border-gray-300 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold min-w-0 px-3 py-2 rounded sm:text-xl sm:w-64 text-center text-gray-900 text-lg w-full"
+                           class="flex-1 py-2 px-3 w-full min-w-0 text-lg font-bold text-center text-gray-900 bg-white rounded border border-gray-300 sm:w-64 sm:text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
                            autofocus>
-                    <button class="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded sm:w-auto text-white transition-colors w-full">
+                    <button class="py-2 px-3 w-full text-white bg-blue-600 rounded transition-colors sm:w-auto hover:bg-blue-700">
                         Save
                     </button>
                     <button @click="editingTitle = false; showTitleButtons = false"
-                            class="bg-gray-300 hover:bg-gray-400 px-3 py-2 rounded sm:w-auto text-gray-700 transition-colors w-full">
+                            class="py-2 px-3 w-full text-gray-700 bg-gray-300 rounded transition-colors sm:w-auto hover:bg-gray-400">
                         Cancel
                     </button>
                 </div>
 
-                <div x-show="showTitleButtons" x-transition class="-translate-x-1/2 absolute border border-gray-200 bg-white left-1/2 mt-2 p-2 rounded-lg shadow-lg top-full transform z-50">
+                <div x-show="showTitleButtons" x-transition class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
                     <button @click="editingTitle = true; showTitleButtons = false"
-                            class="block hover:bg-gray-100 px-4 py-2 rounded text-gray-700 text-left text-sm transition-colors w-full">
+                            class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                         Edit Title
                     </button>
                     <button @click="configuringColumns = true; showTitleButtons = false" 
-                            class="block hover:bg-gray-100 px-4 py-2 rounded text-gray-700 text-left text-sm transition-colors w-full">
+                            class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                         Configure Columns
                     </button>
                 </div>
             </div>
             <div class="flex gap-4 items-center">
-                <button class="hover:text-gray-900 text-gray-600">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="text-gray-600 hover:text-gray-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                     </svg>
                 </button>
-                <div class="bg-blue-500 flex font-semibold h-8 items-center justify-center rounded-full text-white w-8">
+                <div class="flex justify-center items-center w-8 h-8 font-semibold text-white bg-blue-500 rounded-full">
                     U
                 </div>
             </div>
@@ -71,15 +71,15 @@
 
     <!-- Sidebar -->
 
-    <aside :class="sidebarOpen ? '' : '-translate-x-full'" class="bg-white bottom-0 duration-300 ease-in-out fixed left-0 lg:translate-x-0 shadow-lg top-16 transform transition-transform w-64 z-40">
+    <aside :class="sidebarOpen ? '' : '-translate-x-full'" class="fixed bottom-0 left-0 top-16 z-40 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out transform lg:translate-x-0">
         <nav class="p-4 space-y-2">
-            <h2 class="font-semibold mb-4 text-gray-800 text-lg">My Kanbans</h2>
+            <h2 class="mb-4 text-lg font-semibold text-gray-800">My Kanbans</h2>
             
             <!-- Kanban List -->
             <template x-for="kanban in kanbans" :key="kanban.id">
                 <a href="#"
                    :class="kanbanId === kanban.id ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-700' : 'text-gray-700 hover:bg-gray-100'"
-                   class="block duration-200 px-3 py-2 rounded-md transition-colors">
+                   class="block py-2 px-3 rounded-md transition-colors duration-200">
                     <span x-text="kanban.title"></span>
                 </a>
             </template>
@@ -87,7 +87,7 @@
             <!-- Add New Kanban Button/Form -->
             <template x-if="!showNewKanbanForm">
                 <button @click="showNewKanbanForm = true"
-                        class="bg-blue-600 duration-200 flex gap-2 hover:bg-blue-700 items-center justify-center mt-4 px-3 py-2 rounded-md text-white transition-colors w-full">
+                        class="flex gap-2 justify-center items-center py-2 px-3 mt-4 w-full text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -95,18 +95,18 @@
                 </button>
             </template>
             
-            <div x-show="showNewKanbanForm" x-transition class="bg-blue-50 border-2 border-blue-300 border-dashed mt-4 p-3 rounded-md">
+            <div x-show="showNewKanbanForm" x-transition class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
                 <input type="text"
                        x-model="newKanbanTitle"
                        placeholder="Enter kanban name..."
-                       class="border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2 px-3 py-2 rounded-md w-full"
+                       class="py-2 px-3 mb-2 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                        autofocus>
                 <div class="flex gap-2">
-                    <button class="bg-blue-600 duration-200 flex-1 hover:bg-blue-700 px-3 py-2 rounded-md text-white transition-colors">
+                    <button class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
                         Add
                     </button>
                     <button @click="newKanbanTitle = ''; showNewKanbanForm = false;"
-                            class="bg-gray-300 duration-200 flex-1 hover:bg-gray-400 px-3 py-2 rounded-md text-gray-700 transition-colors">
+                            class="flex-1 py-2 px-3 text-gray-700 bg-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-400">
                         Cancel
                     </button>
                 </div>
@@ -115,7 +115,7 @@
     </aside>
 
     <!-- Overlay for mobile -->
-    <div @click="sidebarOpen = false" :class="sidebarOpen ? '' : 'hidden'" class="bg-black bg-opacity-50 fixed inset-0 lg:hidden z-30"></div>
+    <div @click="sidebarOpen = false" :class="sidebarOpen ? '' : 'hidden'" class="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"></div>
     
     <!-- Overlay for title buttons dropdown -->
     <div @click="showTitleButtons = false" x-show="showTitleButtons" class="fixed inset-0 z-40"></div>
@@ -161,37 +161,37 @@
     </script>
     <!-- Kanban Board View -->
     <template x-if="!configuringColumns">
-        <main class="lg:pl-64 min-h-screen pt-16" x-data="columns()">
+        <main class="pt-16 min-h-screen lg:pl-64" x-data="columns()">
             <div class="p-6">
                 <!-- Kanban Board -->
-                <div class="flex flex-col gap-4 md:flex-row md:overflow-x-visible overflow-x-auto pb-4">
+                <div class="flex overflow-x-auto flex-col gap-4 pb-4 md:overflow-x-visible md:flex-row">
                     <template x-for="column in columns" :key="column.id">
-                        <div class="bg-gray-100 flex-shrink-0 p-4 rounded-lg md:w-80 w-full">
-                            <div class="flex items-center justify-between mb-4">
+                        <div class="flex-shrink-0 p-4 w-full bg-gray-100 rounded-lg md:w-80">
+                            <div class="flex justify-between items-center mb-4">
                                 <h2 class="font-semibold text-gray-800" x-text="column.title"></h2>
-                                <span class="bg-gray-300 font-medium px-2.5 py-0.5 rounded-full text-gray-700 text-sm" x-text="column.cards.length"></span>
+                                <span class="py-0.5 px-2.5 text-sm font-medium text-gray-700 bg-gray-300 rounded-full" x-text="column.cards.length"></span>
                             </div>
                             <div class="space-y-3">
                                 <template x-for="card in column.cards" :key="card.id">
-                                    <div class="bg-white cursor-pointer hover:shadow-md p-4 rounded-lg shadow-sm transition-shadow">
-                                        <h3 class="font-medium mb-2 text-gray-900" x-text="card.title"></h3>
-                                        <p class="text-gray-600 text-sm" x-text="card.description"></p>
-                                        <div class="border-t flex gap-1 items-center justify-end mt-3 pt-2">
+                                    <div class="p-4 bg-white rounded-lg shadow-sm transition-shadow cursor-pointer hover:shadow-md">
+                                        <h3 class="mb-2 font-medium text-gray-900" x-text="card.title"></h3>
+                                        <p class="text-sm text-gray-600" x-text="card.description"></p>
+                                        <div class="flex gap-1 justify-end items-center pt-2 mt-3 border-t">
                                             <button title="Move to previous column"
-                                                    class="active:scale-95 bg-white border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 group hover:bg-gray-50 hover:shadow-sm hover:text-gray-700 inline-flex items-center justify-center p-2 rounded-md shadow-xs text-gray-500 transition" aria-label="Move to previous column">
-                                                <svg class="group-hover:scale-110 h-5 transition-transform w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs" aria-label="Move to previous column">
+                                                <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                                 </svg>
                                             </button>
                                             <button title="Edit card"
-                                                    class="active:scale-95 bg-white border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 group hover:bg-gray-50 hover:shadow-sm hover:text-gray-700 inline-flex items-center justify-center p-2 rounded-md shadow-xs text-gray-500 transition" aria-label="Edit card">
-                                                <svg class="group-hover:scale-110 h-5 transition-transform w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs" aria-label="Edit card">
+                                                <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4l10.5-10.5a2.5 2.5 0 10-3.536-3.536L4.464 16.464a2 2 0 00-.464.828L3 21l3.708-.928a2 2 0 00.828-.464L15.232 5.232z"></path>
                                                 </svg>
                                             </button>
                                             <button title="Move to next column"
-                                                    class="active:scale-95 bg-white border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 group hover:bg-gray-50 hover:shadow-sm hover:text-gray-700 inline-flex items-center justify-center p-2 rounded-md shadow-xs text-gray-500 transition" aria-label="Move to next column">
-                                                <svg class="group-hover:scale-110 h-5 transition-transform w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs" aria-label="Move to next column">
+                                                <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                                 </svg>
                                             </button>
@@ -200,23 +200,23 @@
                                 </template>
                             </div>
                             <!-- Add Card Form (shown when clicked) -->
-                            <div x-show="column.showAddCardForm" x-transition class="bg-blue-50 border-2 border-blue-300 border-dashed mt-4 p-3 rounded-md">
+                            <div x-show="column.showAddCardForm" x-transition class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
                                 <input type="text"
                                        x-model="column.newCardTitle"
                                        placeholder="Card title..."
-                                       class="border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2 px-3 py-2 rounded-md w-full"
+                                       class="py-2 px-3 mb-2 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                        autofocus>
                                 <textarea x-model="column.newCardDescription"
                                           placeholder="Card description..."
-                                          class="border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3 px-3 py-2 rounded-md w-full"
+                                          class="py-2 px-3 mb-3 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                           rows="3"></textarea>
                                 <div class="flex gap-2">
                                     <button @click="addCard(column)"
-                                            class="bg-blue-600 duration-200 flex-1 hover:bg-blue-700 px-3 py-2 rounded-md text-white transition-colors">
+                                            class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
                                         Add Card
                                     </button>
                                     <button @click="column.showAddCardForm = false"
-                                            class="bg-gray-300 duration-200 flex-1 hover:bg-gray-400 px-3 py-2 rounded-md text-gray-700 transition-colors">
+                                            class="flex-1 py-2 px-3 text-gray-700 bg-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-400">
                                         Cancel
                                     </button>
                                 </div>
@@ -225,7 +225,7 @@
                             <!-- Add Card Button (hidden when form is shown) -->
                             <button x-show="!column.showAddCardForm" 
                                     @click="column.showAddCardForm = true"
-                                    class="bg-gray-200 hover:bg-gray-300 mt-4 px-4 py-2 rounded text-gray-700 transition-colors w-full">
+                                    class="py-2 px-4 mt-4 w-full text-gray-700 bg-gray-200 rounded transition-colors hover:bg-gray-300">
                                 + Add Card
                             </button>
                         </div>
@@ -237,40 +237,40 @@
 
     <!-- Column Configuration View -->
     <template x-if="configuringColumns" x-data="{columns: ['To Do', 'In Progress', 'Review', 'Done']}">
-        <main class="md:pl-64 min-h-screen pt-16">
+        <main class="pt-16 min-h-screen md:pl-64">
             <div class="p-6">
                 <div class="mb-6">
                     <button @click="configuringColumns = false"
-                            class="flex gap-2 hover:text-blue-800 items-center text-blue-600 transition-colors">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="flex gap-2 items-center text-blue-600 transition-colors hover:text-blue-800">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
                         Back to Boards
                     </button>
                 </div>
-                <h2 class="font-semibold mb-6 text-gray-900 text-lg">Configure Columns</h2>
+                <h2 class="mb-6 text-lg font-semibold text-gray-900">Configure Columns</h2>
                 <!-- Column Boxes -->
                 <div class="flex flex-wrap gap-4">
                     <div x-data="{showAddColumnForm: false}"
-                         class="bg-white border-2 border-dashed border-gray-300 cursor-pointer flex-shrink-0 hover:border-blue-400 rounded-lg transition-colors">
+                         class="flex-shrink-0 bg-white rounded-lg border-2 border-gray-300 border-dashed transition-colors cursor-pointer hover:border-blue-400">
                         <div x-show="!showAddColumnForm" @click="showAddColumnForm = true" class="p-4">
-                            <span class="text-gray-400 font-light">+</span>
+                            <span class="font-light text-gray-400">+</span>
                         </div>
                         <div x-show="showAddColumnForm" class="p-4">
                             <input type="text" placeholder="Enter column names"
-                                   class="border border-gray-300 px-2 py-1 rounded">
-                            <button class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white">add</button>
+                                   class="py-1 px-2 rounded border border-gray-300">
+                            <button class="py-1 px-2 text-white bg-blue-600 rounded hover:bg-blue-700">add</button>
                             <button @click="showAddColumnForm = false"
-                                    class="bg-gray-300 hover:bg-gray-400 px-2 py-1 rounded text-gray-700">cancel</button>
+                                    class="py-1 px-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">cancel</button>
                         </div>
                     </div>
                     <template x-for="column in columns">
-                        <div class="bg-white border-2 border-gray-200 flex-shrink-0 hover:border-blue-300 p-4 rounded-lg transition-colors">
-                            <div class="flex gap-1 items-center justify-between">
+                        <div class="flex-shrink-0 p-4 bg-white rounded-lg border-2 border-gray-200 transition-colors hover:border-blue-300">
+                            <div class="flex gap-1 justify-between items-center">
                                 <h3 class="font-semibold text-gray-800" x-text="column"></h3>
-                                <button class="cursor-pointer hover:text-gray-700 text-gray-500 transition-colors"
+                                <button class="text-gray-500 transition-colors cursor-pointer hover:text-gray-700"
                                         title="Delete column">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </svg>
