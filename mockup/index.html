@@ -20,31 +20,30 @@
             </div>
             <div class="relative">
                 <!-- Title Display Mode -->
-                <template x-if="!editingTitle">
-                    <h1 @click="showTitleButtons = !showTitleButtons" class="text-xl font-bold text-gray-900 text-center cursor-pointer py-1 px-2 rounded flex items-center justify-center gap-1">
-                        Kanban Board 1
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </h1>
-                </template>
+                <h1 x-show="!editingTitle" x-transition
+                        @click="showTitleButtons = !showTitleButtons" class="text-xl font-bold text-gray-900 text-center cursor-pointer py-1 px-2 rounded flex items-center justify-center gap-1">
+                    Kanban Board 1
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </h1>
+
 
                 <!-- Title Edit Mode -->
-                <template x-if="editingTitle">
-                    <div class="flex items-center gap-2">
-                        <input type="text"
-                               value="Kanban Board 1"
-                               class="text-xl font-bold text-gray-900 text-center bg-white border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                               autofocus>
-                        <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                            Save
-                        </button>
-                        <button @click="editingTitle = false; showTitleButtons = false"
-                                class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                </template>
+                <div x-show="editingTitle" x-transition
+                     class="flex items-center gap-2 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
+                    <input type="text"
+                           value="Kanban Board 1"
+                           class="text-xl font-bold text-gray-900 text-center bg-white border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           autofocus>
+                    <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        Save
+                    </button>
+                    <button @click="editingTitle = false; showTitleButtons = false"
+                            class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                        Cancel
+                    </button>
+                </div>
 
                 <div x-show="showTitleButtons" x-transition class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50">
                     <button @click="editingTitle = true; showTitleButtons = false"
@@ -57,7 +56,7 @@
                     </button>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 py-3">
                 <button class="text-gray-600 hover:text-gray-900">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
@@ -96,24 +95,22 @@
                 </button>
             </template>
             
-            <template x-if="showNewKanbanForm">
-                <div class="mt-4 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
-                    <input type="text"
-                           x-model="newKanbanTitle"
-                           placeholder="Enter kanban name..."
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-                           autofocus>
-                    <div class="flex gap-2">
-                        <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
-                            Add
-                        </button>
-                        <button @click="newKanbanTitle = ''; showNewKanbanForm = false;"
-                                class="flex-1 px-3 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
-                            Cancel
-                        </button>
-                    </div>
+            <div x-show="showNewKanbanForm" x-transition class="mt-4 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
+                <input type="text"
+                       x-model="newKanbanTitle"
+                       placeholder="Enter kanban name..."
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                       autofocus>
+                <div class="flex gap-2">
+                    <button class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
+                        Add
+                    </button>
+                    <button @click="newKanbanTitle = ''; showNewKanbanForm = false;"
+                            class="flex-1 px-3 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
+                        Cancel
+                    </button>
                 </div>
-            </template>
+            </div>
         </nav>
     </aside>
 
@@ -182,7 +179,33 @@
                                     </div>
                                 </template>
                             </div>
-                            <button class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                            <!-- Add Card Form (shown when clicked) -->
+                            <div x-show="column.showAddCardForm" x-transition class="mt-4 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
+                                <input type="text"
+                                       x-model="column.newCardTitle"
+                                       placeholder="Card title..."
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                                       autofocus>
+                                <textarea x-model="column.newCardDescription"
+                                          placeholder="Card description..."
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+                                          rows="3"></textarea>
+                                <div class="flex gap-2">
+                                    <button @click="addCard(column)"
+                                            class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
+                                        Add Card
+                                    </button>
+                                    <button @click="column.showAddCardForm = false"
+                                            class="flex-1 px-3 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Add Card Button (hidden when form is shown) -->
+                            <button x-show="!column.showAddCardForm" 
+                                    @click="column.showAddCardForm = true"
+                                    class="mt-4 w-full py-2 px-4 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
                                 + Add Card
                             </button>
                         </div>
@@ -241,3 +264,4 @@
         </main>
     </template>
 </body>
+</html>
