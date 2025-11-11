@@ -29,18 +29,18 @@
                 </h1>
 
 
-                <!-- Title Edit Mode -->
+                <!-- Title Edit Mode (mobile-friendly) -->
                 <div x-show="editingTitle" x-transition
-                     class="absolute -translate-x-1/2 flex items-center gap-2 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
+                     class="absolute -translate-x-5/12 w-[calc(100vw-2rem)] max-w-md sm:w-auto sm:max-w-none flex flex-col sm:flex-row sm:items-center gap-2 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
                     <input type="text"
                            value="Kanban Board 1"
-                           class="text-xl font-bold text-gray-900 text-center bg-white border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           class="flex-1 min-w-0 w-full sm:w-64 text-lg sm:text-xl font-bold text-gray-900 text-center bg-white border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                            autofocus>
-                    <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    <button class="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
                         Save
                     </button>
                     <button @click="editingTitle = false; showTitleButtons = false"
-                            class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                            class="w-full sm:w-auto px-3 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
                         Cancel
                     </button>
                 </div>
