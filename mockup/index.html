@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false, editingTitle: false, tempTitle: 'Kanban Board 1', configuringColumns: false }">
     <!-- Top Navbar -->
-    <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <nav class="bg-white shadow-md fixed h-16 top-0 left-0 right-0 z-50">
         <div class="flex items-center justify-between px-4 py-3">
             <div class="flex items-center gap-4">
                 <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-600 hover:text-gray-900">
@@ -31,7 +31,7 @@
 
                 <!-- Title Edit Mode -->
                 <div x-show="editingTitle" x-transition
-                     class="flex items-center gap-2 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
+                     class="absolute -translate-x-1/2 flex items-center gap-2 p-3 border-2 border-dashed border-blue-300 rounded-md bg-blue-50">
                     <input type="text"
                            value="Kanban Board 1"
                            class="text-xl font-bold text-gray-900 text-center bg-white border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -71,7 +71,7 @@
 
     <!-- Sidebar -->
 
-    <aside :class="sidebarOpen ? '' : '-translate-x-full'" class="fixed left-0 top-[57px] bottom-0 w-64 bg-white shadow-lg transform lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    <aside :class="sidebarOpen ? '' : '-translate-x-full'" class="fixed left-0 top-16 bottom-0 w-64 bg-white shadow-lg transform lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
         <nav class="p-4 space-y-2">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">My Kanbans</h2>
             
@@ -161,7 +161,7 @@
     </script>
     <!-- Kanban Board View -->
     <template x-if="!configuringColumns">
-        <main class="pt-[57px] lg:pl-64 min-h-screen" x-data="columns()">
+        <main class="pt-16 lg:pl-64 min-h-screen" x-data="columns()">
             <div class="p-6">
                 <!-- Kanban Board -->
                 <div class="flex flex-col lg:flex-row gap-4 overflow-x-auto lg:overflow-x-visible pb-4">
@@ -237,7 +237,7 @@
 
     <!-- Column Configuration View -->
     <template x-if="configuringColumns" x-data="{columns: ['To Do', 'In Progress', 'Review', 'Done']}">
-        <main class="pt-[57px] lg:pl-64 min-h-screen">
+        <main class="pt-16 lg:pl-64 min-h-screen">
             <div class="p-6">
                 <div class="mb-6">
                     <button @click="configuringColumns = false"
