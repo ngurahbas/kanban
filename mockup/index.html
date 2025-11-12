@@ -196,7 +196,8 @@
                             <div class="space-y-3">
                                 <template x-for="card in column.cards" :key="card.id">
                                     <div x-data="{showEditCardForm: false}">
-                                        <div class="p-4 bg-white rounded-lg shadow-sm transition-shadow cursor-pointer hover:shadow-md">
+                                        <!-- Card Display Mode -->
+                                        <div x-show="!showEditCardForm" x-transition @click="showEditCardForm = true" class="p-4 bg-white rounded-lg shadow-sm transition-shadow cursor-pointer hover:shadow-md">
                                             <h3 class="mb-2 font-medium text-gray-900" x-text="card.title"></h3>
                                             <p class="text-sm text-gray-600" x-text="card.description"></p>
                                             <div class="flex gap-1 justify-end items-center pt-2 mt-3 border-t">
@@ -207,6 +208,7 @@
                                                     </svg>
                                                 </button>
                                                 <button title="Edit card"
+                                                        @click.stop="showEditCardForm = true"
                                                         class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs" aria-label="Edit card">
                                                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4l10.5-10.5a2.5 2.5 0 10-3.536-3.536L4.464 16.464a2 2 0 00-.464.828L3 21l3.708-.928a2 2 0 00.828-.464L15.232 5.232z"></path>
@@ -217,6 +219,27 @@
                                                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                                     </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Edit Card Form -->
+                                        <div x-show="showEditCardForm" x-transition class="p-4 rounded-lg border-2 bg-blue-50 border-blue-300 border-dashed shadow-sm">
+                                            <input type="text"
+                                                   :value="card.title"
+                                                   placeholder="Card title..."
+                                                   class="py-2 px-3 mb-2 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                                   autofocus>
+                                            <textarea placeholder="Card description..."
+                                                      class="py-2 px-3 mb-3 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                                      rows="3" x-text="card.description"></textarea>
+                                            <div class="flex gap-2">
+                                                <button class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
+                                                    Save
+                                                </button>
+                                                <button @click="showEditCardForm = false"
+                                                        class="flex-1 py-2 px-3 text-gray-700 bg-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-400">
+                                                    Cancel
                                                 </button>
                                             </div>
                                         </div>
