@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./output.css">
     <script src="./output.js"></script>
 </head>
-<body class="bg-gray-50" x-data="{ kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showNewKanbanForm: false, newKanbanTitle: '', showTitleButtons: false, editingTitle: false, tempTitle: 'Kanban Board 1', configuringColumns: false }">
+<body class="bg-gray-50" x-data="{kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showTitleButtons: false, configuringColumns: false}">
     <!-- Top Navbar -->
     <nav class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
         <div class="flex justify-between items-center py-3 px-4">
@@ -18,7 +18,8 @@
                     </svg>
                 </button>
             </div>
-            <div class="relative">
+            <div x-data="{editingTitle: false}"
+                class="relative">
                 <!-- Title Display Mode -->
                 <h1 x-show="!editingTitle" x-transition
                         @click="showTitleButtons = !showTitleButtons" class="flex gap-1 justify-center items-center py-1 px-2 text-xl font-bold text-center text-gray-900 rounded cursor-pointer">
@@ -71,7 +72,9 @@
 
     <!-- Sidebar -->
 
-    <aside :class="sidebarOpen ? '' : '-translate-x-full'" class="fixed bottom-0 left-0 top-16 z-40 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out transform lg:translate-x-0">
+    <aside x-data="{showNewKanbanForm: false}"
+           :class="sidebarOpen ? '' : '-translate-x-full'"
+           class="fixed bottom-0 left-0 top-16 z-40 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out transform lg:translate-x-0">
         <nav class="p-4 space-y-2">
             <h2 class="mb-4 text-lg font-semibold text-gray-800">My Kanbans</h2>
             
@@ -105,7 +108,7 @@
                     <button class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
                         Add
                     </button>
-                    <button @click="newKanbanTitle = ''; showNewKanbanForm = false;"
+                    <button @click="showNewKanbanForm = false;"
                             class="flex-1 py-2 px-3 text-gray-700 bg-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-400">
                         Cancel
                     </button>
