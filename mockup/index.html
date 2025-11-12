@@ -18,10 +18,10 @@
                     </svg>
                 </button>
             </div>
-            <div x-data="{editingTitle: false, showTitleButtons: false}"
+            <div x-data="{showTitleEdit: false, showTitleButtons: false}"
                 class="relative">
                 <!-- Title Display Mode -->
-                <h1 :class="editingTitle ? 'invisible' : 'visible'"
+                <h1 :class="showTitleEdit ? 'invisible' : 'visible'"
                     @click="showTitleButtons = !showTitleButtons" class="flex gap-1 justify-center items-center py-1 px-2 text-xl font-bold text-center text-gray-900 rounded cursor-pointer">
                     Kanban Board 1
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
                 </h1>
 
                 <!-- Title Edit Mode (mobile-friendly) -->
-                <div x-show="editingTitle" x-transition
+                <div x-show="showTitleEdit" x-transition
                      class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none -translate-x-5/12 w-[calc(100vw-2rem)]">
                     <input type="text"
                            value="Kanban Board 1"
@@ -39,7 +39,7 @@
                     <button class="py-2 px-3 w-full text-white bg-blue-600 rounded transition-colors sm:w-auto hover:bg-blue-700">
                         Save
                     </button>
-                    <button @click="editingTitle = false; showTitleButtons = false"
+                    <button @click="showTitleEdit = false; showTitleButtons = false"
                             class="py-2 px-3 w-full text-gray-700 bg-gray-300 rounded transition-colors sm:w-auto hover:bg-gray-400">
                         Cancel
                     </button>
@@ -48,7 +48,7 @@
                 <div x-show="showTitleButtons" x-transition
                      @click.outside="showTitleButtons = false"
                      class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
-                    <button @click="editingTitle = true; showTitleButtons = false"
+                    <button @click="showTitleEdit = true; showTitleButtons = false"
                             class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                         Edit Title
                     </button>
@@ -109,7 +109,6 @@
 
             <div x-show="showNewKanbanForm" x-transition class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
                 <input type="text"
-                       x-model="newKanbanTitle"
                        placeholder="Enter kanban name..."
                        class="py-2 px-3 mb-2 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                        autofocus>
@@ -234,8 +233,7 @@
                                           class="py-2 px-3 mb-3 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                           rows="3"></textarea>
                                 <div class="flex gap-2">
-                                    <button @click="addCard(column)"
-                                            class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
+                                    <button class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
                                         Add Card
                                     </button>
                                     <button @click="column.showAddCardForm = false"
