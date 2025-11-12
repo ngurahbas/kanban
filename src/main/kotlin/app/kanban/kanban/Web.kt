@@ -79,13 +79,10 @@ class KanbanModifyingController(
     @PutMapping("/kanban/title")
     fun updateTitle(@AuthenticationPrincipal user: KanbanUser, kanban: KanbanWeb, model: Model): String {
         service.updateBoardTitle(kanban.id!!, kanban.title)
-
         model.addAttribute("user", user)
         model.addAttribute("kanban", kanban)
-        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
-        model.addAttribute("kanbans", kanbans)
 
-        return "kanban/kanbanTitleUpdate"
+        return "navbar"
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")

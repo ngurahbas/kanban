@@ -12,11 +12,8 @@
     <link rel="stylesheet" href="/css/main.css">
     <script src="/js/main.js" defer></script>
 </head>
-<body x-data='{"advOpt": false}'>
-@template.kanban.kanbanTitle(kanban)
-<div class="flex gap-2">
-@template.kanban.sidebar(user, kanbans, false)
-@template.kanban.columns(columnCards, kanban.id, false)
-</div>
+<body x-data="{sidebarOpen: false, configuringColumns: false}">
+    @template.navbar(user, kanban)
+    @template.sidebar(user, kanban, kanbans)
 </body>
 </html>

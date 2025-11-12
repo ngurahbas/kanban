@@ -1,0 +1,86 @@
+@param user: app.kanban.security.KanbanUser
+@param kanban: app.kanban.kanban.KanbanWeb
+
+<!-- navbar -->
+<nav class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
+    <div class="flex gap-2 items-center py-3 px-4 lg:justify-between">
+        <div class="flex gap-4 items-center">
+            <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 lg:hidden hover:text-gray-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div x-data="{showTitleEdit: false, showTitleButtons: false}"
+             class="relative">
+            <!-- Title Display Mode -->
+            @if(kanban.id != null)
+            <h1 :class="showTitleEdit ? 'invisible' : 'visible'"
+                @click="showTitleButtons = !showTitleButtons"
+                class="flex gap-1 justify-center items-center py-1 px-2 text-xl font-bold text-center text-gray-900 rounded cursor-pointer">
+                ${kanban.title}
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </h1>
+            @endif
+
+            <!-- Title Edit Mode (mobile-friendly) -->
+            <form hx-put="/kanban/title"
+                  hx-target="nav"
+                  x-show="showTitleEdit" x-transition
+                  class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none -translate-x-5/12 w-[calc(100vw-2rem)]">
+                <input type="hidden" name="id" value="${kanban.id}">
+                <input type="text"
+                       name="title"
+                       value="${kanban.title}"
+                       class="flex-1 py-2 px-3 w-full min-w-0 text-lg font-bold text-center text-gray-900 bg-white rounded border border-gray-300 sm:w-64 sm:text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       autofocus>
+                <button type="submit"
+                        class="py-2 px-3 w-full text-white bg-blue-600 rounded transition-colors sm:w-auto hover:bg-blue-700">
+                    Save
+                </button>
+                <button type="button"
+                        @click="showTitleEdit = false; showTitleButtons = false"
+                        class="py-2 px-3 w-full text-gray-700 bg-gray-300 rounded transition-colors sm:w-auto hover:bg-gray-400">
+                    Cancel
+                </button>
+            </form>
+
+            <div x-show="showTitleButtons" x-transition
+                 @click.outside="showTitleButtons = false"
+                 class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
+                <button @click="showTitleEdit = true; showTitleButtons = false"
+                        class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
+                    Edit Title
+                </button>
+                <button @click="configuringColumns = true; showTitleButtons = false"
+                        class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
+                    Configure Columns
+                </button>
+            </div>
+        </div>
+        <div x-data="{showUserMenu: false}" class="hidden gap-4 items-center lg:flex">
+            <!-- User menu -->
+            <div class="relative" @keydown.escape.window="showUserMenu = false">
+                <button @click="showUserMenu = !showUserMenu"
+                        class="flex gap-2 items-center font-semibold cursor-pointer select-none">
+                    <span>${user.email}</span>
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <!-- Dropdown -->
+                <div x-show="showUserMenu" x-transition @click.outside="showUserMenu = false"
+                     class="absolute right-0 top-full z-50 p-2 mt-2 w-40 bg-white rounded-lg border border-gray-200 shadow-lg">
+                    <a href="/logout"
+                       class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
