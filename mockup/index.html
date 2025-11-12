@@ -10,7 +10,7 @@
 <body class="bg-gray-50" x-data="{kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], configuringColumns: false}">
     <!-- Top Navbar -->
     <nav class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
-        <div class="flex justify-between items-center py-3 px-4">
+        <div class="flex gap-2 lg:justify-between items-center py-3 px-4">
             <div class="flex gap-4 items-center">
                 <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 lg:hidden hover:text-gray-900">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@
                     </button>
                 </div>
             </div>
-            <div x-data="{showUserMenu: false}" class="flex gap-4 items-center">
+            <div x-data="{showUserMenu: false}" class="hidden lg:flex gap-4 items-center">
                 <!-- User menu -->
                 <div class="relative" @keydown.escape.window="showUserMenu = false">
                     <button @click="showUserMenu = !showUserMenu" class="flex gap-2 items-center font-semibold cursor-pointer select-none">
