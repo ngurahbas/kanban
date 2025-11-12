@@ -21,14 +21,13 @@
             <div x-data="{editingTitle: false}"
                 class="relative">
                 <!-- Title Display Mode -->
-                <h1 x-show="!editingTitle" x-transition
-                        @click="showTitleButtons = !showTitleButtons" class="flex gap-1 justify-center items-center py-1 px-2 text-xl font-bold text-center text-gray-900 rounded cursor-pointer">
+                <h1 :class="editingTitle ? 'invisible' : 'visible'"
+                    @click="showTitleButtons = !showTitleButtons" class="flex gap-1 justify-center items-center py-1 px-2 text-xl font-bold text-center text-gray-900 rounded cursor-pointer">
                     Kanban Board 1
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </h1>
-
 
                 <!-- Title Edit Mode (mobile-friendly) -->
                 <div x-show="editingTitle" x-transition
@@ -51,7 +50,7 @@
                             class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                         Edit Title
                     </button>
-                    <button @click="configuringColumns = true; showTitleButtons = false" 
+                    <button @click="configuringColumns = true; showTitleButtons = false"
                             class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                         Configure Columns
                     </button>
@@ -71,13 +70,12 @@
     </nav>
 
     <!-- Sidebar -->
-
     <aside x-data="{showNewKanbanForm: false}"
            :class="sidebarOpen ? '' : '-translate-x-full'"
            class="fixed bottom-0 left-0 top-16 z-40 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out transform lg:translate-x-0">
         <nav class="p-4 space-y-2">
             <h2 class="mb-4 text-lg font-semibold text-gray-800">My Kanbans</h2>
-            
+
             <!-- Kanban List -->
             <template x-for="kanban in kanbans" :key="kanban.id">
                 <a href="#"
@@ -86,7 +84,7 @@
                     <span x-text="kanban.title"></span>
                 </a>
             </template>
-            
+
             <!-- Add New Kanban Button/Form -->
             <template x-if="!showNewKanbanForm">
                 <button @click="showNewKanbanForm = true"
@@ -97,7 +95,7 @@
                     Add New Kanban
                 </button>
             </template>
-            
+
             <div x-show="showNewKanbanForm" x-transition class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
                 <input type="text"
                        x-model="newKanbanTitle"
@@ -119,7 +117,7 @@
 
     <!-- Overlay for mobile -->
     <div @click="sidebarOpen = false" :class="sidebarOpen ? '' : 'hidden'" class="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"></div>
-    
+
     <!-- Overlay for title buttons dropdown -->
     <div @click="showTitleButtons = false" x-show="showTitleButtons" class="fixed inset-0 z-40"></div>
 
@@ -224,9 +222,9 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <!-- Add Card Button (hidden when form is shown) -->
-                            <button x-show="!column.showAddCardForm" 
+                            <button x-show="!column.showAddCardForm"
                                     @click="column.showAddCardForm = true"
                                     class="py-2 px-4 mt-4 w-full text-gray-700 bg-gray-200 rounded transition-colors hover:bg-gray-300">
                                 + Add Card
