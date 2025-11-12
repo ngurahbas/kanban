@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./output.css">
     <script src="./output.js"></script>
 </head>
-<body class="bg-gray-50" x-data="{kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], showTitleButtons: false, configuringColumns: false}">
+<body class="bg-gray-50" x-data="{kanbanId: 1, sidebarOpen: false, kanbans: [{id: 1, title: 'Kanban Board  1'}, {id: 2, title: 'Kanban Board  2'}], configuringColumns: false}">
     <!-- Top Navbar -->
     <nav class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
         <div class="flex justify-between items-center py-3 px-4">
@@ -18,7 +18,7 @@
                     </svg>
                 </button>
             </div>
-            <div x-data="{editingTitle: false}"
+            <div x-data="{editingTitle: false, showTitleButtons: false}"
                 class="relative">
                 <!-- Title Display Mode -->
                 <h1 :class="editingTitle ? 'invisible' : 'visible'"
@@ -45,7 +45,9 @@
                     </button>
                 </div>
 
-                <div x-show="showTitleButtons" x-transition class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
+                <div x-show="showTitleButtons" x-transition
+                     @click.outside="showTitleButtons = false"
+                     class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
                     <button @click="editingTitle = true; showTitleButtons = false"
                             class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                         Edit Title
@@ -56,10 +58,24 @@
                     </button>
                 </div>
             </div>
-            <div class="flex gap-4 items-center">
-                <h2 class="font-semibold cursor-pointer">
-                    user@example.com
-                </h2>
+            <div x-data="{showUserMenu: false}" class="flex gap-4 items-center">
+                <!-- User menu -->
+                <div class="relative" @keydown.escape.window="showUserMenu = false">
+                    <button @click="showUserMenu = !showUserMenu" class="flex gap-2 items-center font-semibold cursor-pointer select-none">
+                        <span>user@example.com</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown -->
+                    <div x-show="showUserMenu" x-transition @click.outside="showUserMenu = false"
+                         class="absolute right-0 top-full z-50 p-2 mt-2 w-40 bg-white rounded-lg border border-gray-200 shadow-lg">
+                        <button class="block py-2 px-4 w-full text-left text-sm text-gray-700 rounded transition-colors hover:bg-gray-100">
+                            Logout
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -112,9 +128,6 @@
 
     <!-- Overlay for mobile -->
     <div @click="sidebarOpen = false" :class="sidebarOpen ? '' : 'hidden'" class="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"></div>
-
-    <!-- Overlay for title buttons dropdown -->
-    <div @click="showTitleButtons = false" x-show="showTitleButtons" class="fixed inset-0 z-40"></div>
 
     <!-- Main Content -->
     <script>
