@@ -222,3 +222,5 @@ data class KanbanCardWeb(
     @field:Size(min = 4, max = 1024)
     val description: String,
 )
+
+fun toBase64(input: String): String = java.util.Base64.getEncoder().encodeToString(input.toByteArray())

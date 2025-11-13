@@ -1,7 +1,9 @@
 @param column: String
 @param cards: List<app.kanban.kanban.KanbanCardWeb>
 
-<div class="flex-shrink-0 p-4 w-full bg-gray-100 rounded-lg md:w-80">
+<div x-data="{showAddCardForm: false}"
+    id="col-${app.kanban.kanban.toBase64(column)}"
+     class="flex-shrink-0 p-4 w-full bg-gray-100 rounded-lg md:w-80">
     <div class="flex justify-between items-center mb-4">
         <h2 class="font-semibold text-gray-800">${column}</h2>
         <span class="py-0.5 px-2.5 text-sm font-medium text-gray-700 bg-gray-300 rounded-full">${cards.size}</span>
@@ -72,22 +74,20 @@
         @endfor
     </div>
     <!-- Add Card Form (shown when clicked) -->
-    <div x-show="column.showAddCardForm" x-transition
+    <div x-show="showAddCardForm" x-transition
          class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
         <input type="text"
-               x-model="column.newCardTitle"
                placeholder="Card title..."
                class="py-2 px-3 mb-2 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                autofocus>
-        <textarea x-model="column.newCardDescription"
-                  placeholder="Card description..."
+        <textarea placeholder="Card description..."
                   class="py-2 px-3 mb-3 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   rows="3"></textarea>
         <div class="flex gap-2">
             <button class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
                 Add Card
             </button>
-            <button @click="column.showAddCardForm = false"
+            <button @click="showAddCardForm = false"
                     class="flex-1 py-2 px-3 text-gray-700 bg-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-400">
                 Cancel
             </button>
@@ -95,8 +95,8 @@
     </div>
 
     <!-- Add Card Button (hidden when form is shown) -->
-    <button x-show="!column.showAddCardForm"
-            @click="column.showAddCardForm = true"
+    <button x-show="!showAddCardForm"
+            @click="showAddCardForm = true"
             class="py-2 px-4 mt-4 w-full text-gray-700 bg-gray-200 rounded transition-colors hover:bg-gray-300">
         + Add Card
     </button>
