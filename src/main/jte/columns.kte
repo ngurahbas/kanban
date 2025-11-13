@@ -1,0 +1,12 @@
+@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
+
+<main class="pt-16 min-h-screen lg:pl-64">
+    <div class="p-6">
+        <!-- Kanban Board -->
+        <div class="flex overflow-x-auto flex-col gap-4 pb-4 md:overflow-x-visible md:flex-row">
+            @for ((column, cards) in columnCards)
+                @template.column(column, cards)
+            @endfor
+        </div>
+    </div>
+</main>
