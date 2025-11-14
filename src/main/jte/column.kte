@@ -6,7 +6,7 @@
  val cssColumnId ="col-${app.kanban.kanban.toBase62(column)}"
 }
 <div x-data="{showAddCardForm: false}"
-    id="${cssColumnId}"
+     id="${cssColumnId}"
      class="flex-shrink-0 p-4 w-full bg-gray-100 rounded-lg md:w-80">
     <div class="flex justify-between items-center mb-4">
         <h2 class="font-semibold text-gray-800">${column}</h2>
@@ -19,9 +19,8 @@
     </div>
     <!-- Add Card Form (shown when clicked) -->
     <form hx-post="/kanban/${kanbanId}/column/${column}/card"
-          hx-target="#${cssColumnId} ._cardList"
-          hx-swap="beforeend"
-          hx-on::after-request="this.reset()"
+          hx-target="#${cssColumnId}"
+          hx-swap="outerHTML"
           x-show="showAddCardForm" x-transition
           class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
         <input type="text"

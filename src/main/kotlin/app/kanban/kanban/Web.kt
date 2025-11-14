@@ -95,11 +95,12 @@ class KanbanModifyingController(
         @Valid card: KanbanCardWeb,
         model: Model
     ): String {
-        val cardIdIndex = service.addCard(kanbanId, card.title, card.description, column)
-        model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
+        service.addCard(kanbanId, card.title, card.description, column)
+        val cards = service.getCards(kanbanId, column).map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        return "card"
+        model.addAttribute("cards", cards)
+        return "column"
     }
 
     @PutMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
