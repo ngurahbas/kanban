@@ -5,12 +5,13 @@
 <div x-data="{showEditCardForm: false}"
      class="_card">
     <!-- Card Display Mode -->
-    <div x-show="!showEditCardForm" x-transition @click="showEditCardForm = true"
+    <div x-show="!showEditCardForm" x-transition
          class="p-4 bg-white rounded-lg shadow-sm transition-shadow cursor-pointer hover:shadow-md">
         <h3 class="mb-2 font-medium text-gray-900">${card.title}</h3>
         <p class="text-sm text-gray-600">${card.description}</p>
         <div class="flex gap-1 justify-end items-center pt-2 mt-3 border-t">
-            <button title="Move to previous column"
+            <button hx-put="/kanban/move/${kanbanId}/${card.id}/PREV"
+                    title="Move to previous column"
                     class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs"
                     aria-label="Move to previous column">
                 <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
@@ -20,7 +21,7 @@
                 </svg>
             </button>
             <button title="Edit card"
-                    @click.stop="showEditCardForm = true"
+                    @click="showEditCardForm = true"
                     class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs"
                     aria-label="Edit card">
                 <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
@@ -29,7 +30,8 @@
                           d="M15.232 5.232l3.536 3.536M4 20h4l10.5-10.5a2.5 2.5 0 10-3.536-3.536L4.464 16.464a2 2 0 00-.464.828L3 21l3.708-.928a2 2 0 00.828-.464L15.232 5.232z"></path>
                 </svg>
             </button>
-            <button title="Move to next column"
+            <button hx-put="/kanban/move/${kanbanId}/${card.id}/NEXT"
+                    title="Move to next column"
                     class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs"
                     aria-label="Move to next column">
                 <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"

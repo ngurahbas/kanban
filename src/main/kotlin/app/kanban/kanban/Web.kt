@@ -121,26 +121,36 @@ class KanbanModifyingController(
         return "card"
     }
 
-    @PutMapping("/kanban/move/{kanbanId}/{cardId}")
+    @PutMapping("/kanban/move/{kanbanId}/{cardId}/{movement}")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun moveCard(
         @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
         @PathVariable cardId: Int,
-        @RequestParam("changeColumn") column: String,
+        @PathVariable movement: CardMovement,
         model: Model,
         response: HttpServletResponse
-    ): String {
-        val cards = service.moveCard(kanbanId, cardId, column)
-            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
+    ): String? {
         val columns = service.getColumns(kanbanId)
-        model.addAttribute("cards", cards)
-        model.addAttribute("column", column)
-        model.addAttribute("columns", columns)
+        val card = service.getCard(kanbanId, cardId)
+        val colIdx = columns.indexOf(card.column)
+        val newIdx = if (movement == CardMovement.NEXT) colIdx + 1 else colIdx - 1
+        if (newIdx < 0 || newIdx > (columns.size - 1)) {
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            return null;
+        }
+        val newColumn = columns.elementAt(newIdx)
+        service.moveCard(kanbanId, cardId, newColumn)
+
+        val oldColumnCards = card.column to service.getCards(kanbanId, card.column)
+            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }.sortedBy { it.index }
+        val newColumnCards = newColumn to service.getCards(kanbanId, newColumn)
+            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }.sortedBy { it.index }
+        val columnCards = mapOf(oldColumnCards, newColumnCards);
+
         model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("isFirst", column == columns.first())
-        response.addHeader("HX-Retarget", "#column${column.replace(" ", "-")}")
-        return "kanban/column"
+        model.addAttribute("columnCards", columnCards)
+        return "cardMoveUpdate"
     }
 
     @DeleteMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
@@ -223,6 +233,10 @@ data class KanbanCardWeb(
     @field:Size(min = 4, max = 1024)
     val description: String,
 )
+
+enum class CardMovement {
+    NEXT, PREV
+}
 
 private val base62chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 

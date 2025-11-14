@@ -1,0 +1,6 @@
+@param kanbanId: Long?
+@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
+
+@for((column, cards) in columnCards)
+    @template.column(kanbanId, column, cards)
+@endfor
