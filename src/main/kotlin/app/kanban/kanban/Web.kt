@@ -114,11 +114,10 @@ class KanbanModifyingController(
         model: Model
     ): String {
         service.updateCard(kanbanId, cardId, card.title, card.description)
-        model.addAttribute("card", card)
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        model.addAttribute("columns", service.getColumns(kanbanId))
-        return "kanban/card"
+        model.addAttribute("card", card)
+        return "card"
     }
 
     @PutMapping("/kanban/move/{kanbanId}/{cardId}")
