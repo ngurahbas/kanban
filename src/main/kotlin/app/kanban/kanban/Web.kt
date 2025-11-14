@@ -33,12 +33,11 @@ class KanbanController(
     fun board(@AuthenticationPrincipal user: KanbanUser, model: Model): String {
         val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
 
-        model.addAttribute("user", user)
         model.addAttribute("kanban", KanbanWeb(null, ""))
-        model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
-        model.addAttribute("kanbanCreated", false)
-        model.addAttribute("user", user)
         model.addAttribute("kanbans", kanbans)
+        model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
+        model.addAttribute("user", user)
+
         return "kanban"
     }
 
@@ -51,11 +50,11 @@ class KanbanController(
         val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
         val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
 
-        model.addAttribute("user", user)
-        model.addAttribute("kanbans", kanbans)
-        model.addAttribute("kanbanCreated", false)
         model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
+        model.addAttribute("kanbans", kanbans)
         model.addAttribute("columnCards", columnCards)
+        model.addAttribute("user", user)
+
         return "kanban"
     }
 }
@@ -80,10 +79,12 @@ class KanbanModifyingController(
     @PutMapping("/kanban/title")
     fun updateTitle(@AuthenticationPrincipal user: KanbanUser, kanban: KanbanWeb, model: Model): String {
         service.updateBoardTitle(kanban.id!!, kanban.title)
+        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
         model.addAttribute("user", user)
         model.addAttribute("kanban", kanban)
+        model.addAttribute("kanbans", kanbans)
 
-        return "navbar"
+        return "titleUpdate"
     }
 
     @PostMapping("/kanban/{kanbanId}/column/{column}/card")

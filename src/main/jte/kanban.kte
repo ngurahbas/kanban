@@ -1,7 +1,7 @@
 @param kanban: app.kanban.kanban.KanbanWeb
+@param kanbans: List<app.kanban.kanban.KanbanWeb>
 @param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
 @param user: app.kanban.security.KanbanUser
-@param kanbans: List<app.kanban.kanban.KanbanWeb>
 
 <!DOCTYPE html>
 <html lang="en">

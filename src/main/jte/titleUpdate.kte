@@ -1,0 +1,6 @@
+@param user: app.kanban.security.KanbanUser
+@param kanban: app.kanban.kanban.KanbanWeb
+@param kanbans: List<app.kanban.kanban.KanbanWeb>
+
+@template.navbar(user, kanban)
+@template.sidebar(user, kanban, kanbans)
