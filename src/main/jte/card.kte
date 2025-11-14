@@ -1,4 +1,5 @@
-@param columnId: String
+@param kanbanId: Long?
+@param column: String
 @param card: app.kanban.kanban.KanbanCardWeb
 
 <div x-data="{showEditCardForm: false}">

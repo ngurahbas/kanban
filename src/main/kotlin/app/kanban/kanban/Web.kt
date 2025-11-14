@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import java.math.BigInteger
 
 
 @Controller
@@ -98,8 +99,7 @@ class KanbanModifyingController(
         model.addAttribute("card", KanbanCardWeb(cardIdIndex.id, cardIdIndex.index, card.title, card.description))
         model.addAttribute("kanbanId", kanbanId)
         model.addAttribute("column", column)
-        model.addAttribute("columns", service.getColumns(kanbanId))
-        return "kanban/card"
+        return "card"
     }
 
     @PutMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
@@ -223,4 +223,24 @@ data class KanbanCardWeb(
     val description: String,
 )
 
-fun toBase64(input: String): String = java.util.Base64.getEncoder().encodeToString(input.toByteArray())
+private val base62chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+fun toBase62(input: String): String {
+    val textBytes = input.toByteArray(Charsets.UTF_8)
+    var num = BigInteger(1, textBytes)
+
+    if (num == BigInteger.ZERO) {
+        return base62chars[0].toString()
+    }
+
+    val result = StringBuilder()
+    val base = BigInteger.valueOf(62)
+
+    while (num > BigInteger.ZERO) {
+        val remainder = num.mod(base).toInt()
+        result.append(base62chars[remainder])
+        num = num.divide(base)
+    }
+
+    return result.reverse().toString()
+}

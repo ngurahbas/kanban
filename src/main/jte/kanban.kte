@@ -15,6 +15,6 @@
 <body x-data="{sidebarOpen: false, configuringColumns: false}">
     @template.navbar(user, kanban)
     @template.sidebar(user, kanban, kanbans)
-    @template.columns(columnCards)
+    @template.columns(kanban.id, columnCards)
 </body>
 </html>
