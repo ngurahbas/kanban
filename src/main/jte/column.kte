@@ -21,6 +21,7 @@
     <form hx-post="/kanban/${kanbanId}/column/${column}/card"
           hx-target="#${cssColumnId} ._cardList"
           hx-swap="beforeend"
+          hx-on::after-request="this.reset()"
           x-show="showAddCardForm" x-transition
           class="p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
         <input type="text"
