@@ -2,7 +2,8 @@
 @param kanban: app.kanban.kanban.KanbanWeb
 
 <!-- navbar -->
-<nav class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
+<nav hx-swap-oob="true"
+     id="navbar" class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
     <div class="flex gap-2 items-center py-3 px-4 lg:justify-between">
         <div class="flex gap-4 items-center">
             <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 lg:hidden hover:text-gray-900">

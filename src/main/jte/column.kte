@@ -6,6 +6,7 @@
  val cssColumnId ="col-${app.kanban.kanban.toBase62(column)}"
 }
 <div x-data="{showAddCardForm: false}"
+     hx-swap-oob="true"
      id="${cssColumnId}"
      class="flex-shrink-0 p-4 w-full bg-gray-100 rounded-lg md:w-80">
     <div class="flex justify-between items-center mb-4">
