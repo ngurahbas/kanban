@@ -104,19 +104,17 @@ class KanbanModifyingController(
         return "column"
     }
 
-    @PutMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    @PutMapping("/kanban/{kanbanId}/{cardId}")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun editCard(
         @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
-        @PathVariable column: String,
         @PathVariable cardId: Int,
         @Valid card: KanbanCardWeb,
         model: Model
     ): String {
         service.updateCard(kanbanId, cardId, card.title, card.description)
         model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("column", column)
         model.addAttribute("card", card)
         return "card"
     }

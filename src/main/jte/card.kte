@@ -1,5 +1,4 @@
 @param kanbanId: Long?
-@param column: String
 @param card: app.kanban.kanban.KanbanCardWeb
 
 <div x-data="{showEditCardForm: false}"
@@ -56,10 +55,12 @@
 
     <!-- Edit Card Form -->
     <form x-show="showEditCardForm" x-transition
-          hx-put="/kanban/${kanbanId}/column/${column}/card/${card.id}"
+          hx-put="/kanban/${kanbanId}/${card.id}"
           hx-target="closest ._card"
           hx-swap="outerHTML"
           class="p-4 bg-blue-50 rounded-lg border-2 border-blue-300 border-dashed shadow-sm">
+        <input type="hidden" name="id" value="${card.id}">
+        <input type="hidden" name="index" value="${card.index}">
         <input type="text" name="title" value="${card.title}"
                placeholder="Card title..."
                class="py-2 px-3 mb-2 w-full rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"

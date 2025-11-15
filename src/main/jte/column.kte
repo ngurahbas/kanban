@@ -15,7 +15,7 @@
     </div>
     <div class="space-y-3 _cardList">
         @for(card in cards)
-            @template.card(kanbanId, column, card)
+            @template.card(kanbanId, card)
         @endfor
     </div>
     <!-- Add Card Form (shown when clicked) -->
