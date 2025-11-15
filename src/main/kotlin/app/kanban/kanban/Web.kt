@@ -153,13 +153,12 @@ class KanbanModifyingController(
         return "cardMoveUpdate"
     }
 
-    @DeleteMapping("/kanban/{kanbanId}/column/{column}/card/{cardId}")
+    @DeleteMapping("/kanban/{kanbanId}/{cardId}")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     @ResponseBody
     fun deleteCard(
         @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
-        @PathVariable column: String,
         @PathVariable cardId: Int
     ): String {
         service.deleteCard(kanbanId, cardId)
