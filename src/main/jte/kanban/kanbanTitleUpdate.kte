@@ -1,7 +1,0 @@
-@param user: app.kanban.security.KanbanUser
-@param kanbans: List<app.kanban.kanban.KanbanWeb>
-@param kanban: app.kanban.kanban.KanbanWeb
-
-@template.kanban.kanbanTitle(kanban)
-@template.kanban.sidebar(user, kanbans, true)
-<title id="page-title" hx-swap-oob="true">${kanban.title}</title>
