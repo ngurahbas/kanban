@@ -57,6 +57,29 @@ class KanbanController(
 
         return "kanban"
     }
+
+    @GetMapping("/kanban/{id}/configure-columns")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
+    fun configureColumns(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
+        val columns = service.getColumns(id)
+        model.addAttribute("kanbanId", id)
+        model.addAttribute("columns", columns)
+        return "configureColumns"
+    }
+
+    @GetMapping("/kanban/{id}/columns")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
+    fun getColumns(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
+        val kanbanDb = service.getBoard(id)
+        val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
+            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
+        val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
+
+        model.addAttribute("kanbanId", id)
+        model.addAttribute("columnCards", columnCards)
+
+        return "columns"
+    }
 }
 
 @Controller
