@@ -1,0 +1,25 @@
+@param kanbanId: Long
+@param refColumn: String?
+
+<div x-data="{showAddColumnForm: false}"
+     class="flex-shrink-0 bg-white rounded-lg border-2 border-gray-300 border-dashed transition-colors cursor-pointer hover:border-blue-400 _columnBox">
+    <div x-show="!showAddColumnForm" @click="showAddColumnForm = true" class="p-4">
+        <span class="font-light text-gray-400">+</span>
+    </div>
+    <form x-show="showAddColumnForm"
+          hx-post="/kanban/${kanbanId}/new-column-after"
+          hx-target="#main"
+          hx-swap="outerHTML"
+          class="p-4">
+        @if(refColumn != null)
+        <input type="hidden" name="refColumn" value="${refColumn}">
+        @endif
+        <input type="text" name="newColumn"
+               placeholder="Enter column names"
+               class="py-1 px-2 rounded border border-gray-300">
+        <button type="submit"
+                class="py-1 px-2 text-white bg-blue-600 rounded hover:bg-blue-700">add</button>
+        <button @click="showAddColumnForm = false"
+                class="py-1 px-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">cancel</button>
+    </form>
+</div>

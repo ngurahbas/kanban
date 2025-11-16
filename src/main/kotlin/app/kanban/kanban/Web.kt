@@ -186,34 +186,35 @@ class KanbanModifyingController(
         return ""
     }
 
-    @PostMapping("/kanban/{kanbanId}/new-column-after/{refColumn}")
+    @PostMapping("/kanban/{kanbanId}/new-column-after")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
     fun addColumn(
         @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
-        @PathVariable refColumn: String,
+        @RequestParam refColumn: String?,
         @RequestParam newColumn: String,
         model: Model
     ): String {
         val columns = service.getColumns(kanbanId)
         val newColumns = arrayListOf<String>()
 
-        for (column in columns) {
-            newColumns.add(column)
-            if (refColumn == column) {
-                newColumns.add(newColumn)
+        if (refColumn == null) {
+            newColumns.add(newColumn)
+            newColumns.addAll(columns)
+        } else {
+            for (column in columns) {
+                newColumns.add(column)
+                if (refColumn == column) {
+                    newColumns.add(newColumn)
+                }
             }
         }
-        service.updateColumns(kanbanId, newColumns.toSet())
+        val columnsSet = newColumns.toSet()
+        service.updateColumns(kanbanId, columnsSet)
 
-        val kanbanCardByColumn = service.getCards(kanbanId).groupBy { it.column }
-            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
-        val columnCards = newColumns.associateWith { kanbanCardByColumn[it] ?: listOf() }
-
-        model.addAttribute("columnCards", columnCards)
         model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("swapOob", false)
-        return "kanban/columns"
+        model.addAttribute("columns", columnsSet)
+        return "configureColumns"
     }
 
     @DeleteMapping("/kanban/{kanbanId}/delete-column/{column}")
