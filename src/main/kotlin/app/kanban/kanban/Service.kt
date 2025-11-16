@@ -43,6 +43,8 @@ data class KanbanOwnerShip(
 
 data class CardInsertResult(val id: Int, val index: Int)
 
+data class ColumnInfo(val column: String?, val count: Int)
+
 @Service
 class KanbanService(
     private val kanbanBoardRepository: KanbanBoardRepository,
@@ -88,10 +90,8 @@ class KanbanService(
         kanbanCardRepository.delete(kanbanId, cardId)
     }
 
-    @Cacheable(cacheNames = ["kanbanColumns"], key = "#kanbanId")
     fun getColumns(kanbanId: Long) = kanbanBoardRepository.findColumns(kanbanId)
 
-    @CacheEvict(cacheNames = ["kanbanColumns"], key = "#kanbanId")
     fun updateColumns(kanbanId: Long, columns: Set<String>) = kanbanBoardRepository.updateColumns(kanbanId, columns.toTypedArray())
 
     @CacheEvict(cacheNames = ["kanbanColumns"], key = "#kanbanId")
@@ -99,13 +99,19 @@ class KanbanService(
         val columns = kanbanBoardRepository.findColumns(kanbanId)
         val updatedColumns = columns.minus(column)
         kanbanBoardRepository.updateColumns(kanbanId, updatedColumns.toTypedArray())
-        return updatedColumns;
+        return updatedColumns
     }
 
     fun getKanbans(identifierId: Long) = kanbanBoardRepository.findKanbansByOwnerIdentifierId(identifierId)
 
     fun hasKanbanAccess(identifierId: Long, kanbanId: Long) = kanbanBoardRepository.findKanbansByOwnerIdentifierId(identifierId)
         .any { it.id == kanbanId}
+
+    fun getColumnsStat(boardId: Long): Map<String, Int> {
+        val columns = getColumns(boardId)
+        val columnsStat = kanbanCardRepository.findColumnsStat(boardId)
+        return columns.associateWith { column -> columnsStat.find { it.column == column }?.count ?: 0 }
+    }
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -122,9 +128,11 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
 
     fun findById(id: Long): KanbanBoard
 
+    @Cacheable(cacheNames = ["kanbanColumns"], key = "#id")
     @Query("SELECT unnest(columns) FROM kanban_board WHERE id = :id")
     fun findColumns(id: Long): Set<String>
 
+    @CacheEvict(cacheNames = ["kanbanColumns"], key = "#kanbanId")
     @Modifying
     @Query("UPDATE kanban_board SET columns = :columns WHERE id = :kanbanId")
     fun updateColumns(kanbanId: Long, columns: Array<String>)
@@ -182,6 +190,14 @@ interface KanbanCardRepository : CrudRepository<KanbanCard, Long> {
     @Modifying
     @Query("DELETE FROM kanban_card WHERE board_id = :boardId AND id = :cardId")
     fun delete(boardId: Long, cardId: Int)
+
+    @Query("""
+        SELECT c."column", count(*) AS count
+        FROM kanban_card c
+        WHERE c.board_id = :boardId
+        GROUP BY c."column"
+    """)
+    fun findColumnsStat(boardId: Long): List<ColumnInfo>
 }
 
 interface KanbanOwnershipRepository : Repository<KanbanOwnerShip, Long> {

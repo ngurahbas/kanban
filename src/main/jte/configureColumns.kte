@@ -1,5 +1,5 @@
 @param kanbanId: Long
-@param columns: Set<String>
+@param columnsStat: Map<String, Int>
 
 <main id="main" class="pt-16 min-h-screen md:pl-64">
     <div class="p-6">
@@ -18,8 +18,8 @@
         <!-- Column Boxes -->
         <div class="flex flex-wrap gap-4">
             @template.newColumnBox(kanbanId , null)
-            @for ((index, column) in columns.withIndex())
-                @template.columnBox(column)
+            @for ((column, count) in columnsStat)
+                @template.columnBox(kanbanId, column, count)
                 @template.newColumnBox(kanbanId , column)
             @endfor
         </div>

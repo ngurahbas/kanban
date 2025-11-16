@@ -61,9 +61,9 @@ class KanbanController(
     @GetMapping("/kanban/{id}/configure-columns")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
     fun configureColumns(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
-        val columns = service.getColumns(id)
+        val columnsStat = service.getColumnsStat(id)
         model.addAttribute("kanbanId", id)
-        model.addAttribute("columns", columns)
+        model.addAttribute("columnsStat", columnsStat)
         return "configureColumns"
     }
 
@@ -212,8 +212,10 @@ class KanbanModifyingController(
         val columnsSet = newColumns.toSet()
         service.updateColumns(kanbanId, columnsSet)
 
+        val columnsStat = service.getColumnsStat(kanbanId)
+
         model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("columns", columnsSet)
+        model.addAttribute("columnsStat", columnsStat)
         return "configureColumns"
     }
 
@@ -225,15 +227,14 @@ class KanbanModifyingController(
         @PathVariable column: String,
         model: Model
     ): String {
-        val newColumns = service.deleteColumn(kanbanId, column)
+        service.deleteColumn(kanbanId, column)
 
-        val kanbanCardByColumn = service.getCards(kanbanId).groupBy { it.column }
-            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
-        val columnCards = newColumns.associateWith { kanbanCardByColumn[it] ?: listOf() }
-        model.addAttribute("columnCards", columnCards)
+        val columnsStat = service.getColumnsStat(kanbanId)
+
         model.addAttribute("kanbanId", kanbanId)
-        model.addAttribute("swapOob", false)
-        return "kanban/columns"
+        model.addAttribute("columnsStat", columnsStat)
+
+        return "configureColumns"
     }
 }
 
