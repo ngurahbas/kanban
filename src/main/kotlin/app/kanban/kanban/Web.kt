@@ -91,7 +91,7 @@ class KanbanModifyingController(
     }
 
     @PostMapping("/kanban/title")
-    fun saveKanban(kanban: KanbanWeb): ResponseEntity<String> {
+    fun saveKanban(@Valid kanban: KanbanWeb): ResponseEntity<String> {
         var id: Long? = kanban.id
         if (kanban.id == null) {
             id = service.createBoard(kanban.title, defaultColumns)
@@ -100,7 +100,7 @@ class KanbanModifyingController(
     }
 
     @PutMapping("/kanban/title")
-    fun updateTitle(@AuthenticationPrincipal user: KanbanUser, kanban: KanbanWeb, model: Model): String {
+    fun updateTitle(@AuthenticationPrincipal user: KanbanUser, @Valid kanban: KanbanWeb, model: Model): String {
         service.updateBoardTitle(kanban.id!!, kanban.title)
         val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
         model.addAttribute("user", user)
@@ -242,6 +242,8 @@ val defaultColumns = setOf("To do", "In progress", "Done")
 
 data class KanbanWeb(
     val id: Long?,
+    @field:NotBlank
+    @field:Size(min = 4, max = 128)
     val title: String,
 )
 
@@ -249,7 +251,7 @@ data class KanbanCardWeb(
     val id: Int?,
     val index: Int?,
     @field:NotBlank
-    @field:Size(min = 4, max = 256)
+    @field:Size(min = 4, max = 128)
     val title: String,
     @field:NotBlank
     @field:Size(min = 4, max = 1024)
