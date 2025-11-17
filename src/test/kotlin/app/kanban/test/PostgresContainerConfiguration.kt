@@ -19,6 +19,7 @@ class PostgresContainerConfiguration : BeforeAllCallback {
                 .withDatabaseName(DATABASE_NAME)
                 .withUsername(USERNAME)
                 .withPassword(PASSWORD)
+                .withReuse(true)
     }
     
     override fun beforeAll(context: ExtensionContext) {
