@@ -38,7 +38,7 @@
                        name="title"
                        value="${kanban.title}"
                        class="flex-1 py-2 px-3 w-full min-w-0 text-lg font-bold text-center text-gray-900 bg-white rounded border border-gray-300 sm:w-64 sm:text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                       autofocus>
+                       required minlength="4" maxlength="128" autofocus>
                 <button type="submit"
                         class="py-2 px-3 w-full text-white bg-blue-600 rounded transition-colors sm:w-auto hover:bg-blue-700">
                     Save
