@@ -88,7 +88,7 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstallPackages") {
     description = "Install npm packages"
     dependsOn("npmSetup")
 
-    args.set(listOf("install", "--save-dev", "@tailwindcss/cli", "tailwindcss", "daisyui", "alpinejs", "@alpinejs/persist", "esbuild", "htmx.org"))
+    args.set(listOf("install", "--save-dev", "@tailwindcss/cli", "tailwindcss", "alpinejs", "esbuild", "htmx.org"))
     workingDir.set(file("${project.projectDir}"))
 }
 
