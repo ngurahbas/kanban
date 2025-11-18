@@ -7,7 +7,7 @@
      id="navbar" class="fixed top-0 right-0 left-0 z-50 h-16 bg-white shadow-md">
     <div class="flex gap-2 items-center py-3 px-4 lg:justify-between">
         <div class="flex gap-4 items-center">
-            <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 lg:hidden hover:text-gray-900">
+            <button @click="sidebarOpen = !sidebarOpen" :class="sidebarHighlight ? 'ring-2 ring-blue-400 ring-offset-2' : ''" class="text-gray-600 lg:hidden hover:text-gray-900">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4 6h16M4 12h16M4 18h16"></path>
