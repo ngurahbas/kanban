@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <script src="/js/main.js" defer></script>
 </head>
-<body x-data="{sidebarOpen: false, configuringColumns: false}">
+<body x-data="{sidebarOpen: false, configuringColumns: false, sidebarHighlight: false}">
     @template.navbar(user, kanban)
     @template.sidebar(user, kanban, kanbans)
     @template.columns(kanban.id, columnCards)

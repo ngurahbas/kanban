@@ -6,6 +6,10 @@
         <!-- Kanban Board / Empty State -->
         @if (kanbanId == null)
             <p class="text-sm text-gray-600">No kanban selected. Please choose a kanban from the sidebar.</p>
+            <!-- Trigger a brief sidebar highlight to guide the user -->
+            <span aria-hidden="true"
+                  class="hidden"
+                  x-init="sidebarHighlight = true; setTimeout(() => { sidebarHighlight = false }, 2500)"></span>
         @else
             <div class="flex overflow-x-auto flex-col gap-4 pb-4 md:overflow-x-visible md:flex-row">
                 @for ((column, cards) in columnCards)
