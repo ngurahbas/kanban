@@ -3,11 +3,15 @@
 
 <main id="main" class="pt-16 min-h-screen lg:pl-64">
     <div class="p-6">
-        <!-- Kanban Board -->
-        <div class="flex overflow-x-auto flex-col gap-4 pb-4 md:overflow-x-visible md:flex-row">
-            @for ((column, cards) in columnCards)
-                @template.column(kanbanId, column, cards, false)
-            @endfor
-        </div>
+        <!-- Kanban Board / Empty State -->
+        @if (kanbanId == null)
+            <p class="text-sm text-gray-600">No kanban selected. Please choose a kanban from the sidebar.</p>
+        @else
+            <div class="flex overflow-x-auto flex-col gap-4 pb-4 md:overflow-x-visible md:flex-row">
+                @for ((column, cards) in columnCards)
+                    @template.column(kanbanId, column, cards, false)
+                @endfor
+            </div>
+        @endif
     </div>
 </main>
