@@ -9,7 +9,7 @@
 <div x-data="{showAddCardForm: false}"
      hx-swap-oob="${oob}"
      id="${cssColumnId}"
-     class="flex flex-col flex-shrink-0 p-4 w-full min-h-80 bg-gray-100 rounded-lg md:w-80">
+     class="flex flex-col flex-shrink-0 p-4 w-full min-h-40 bg-gray-100 rounded-lg md:w-80">
     <div class="flex justify-between items-center mb-4">
         <h2 class="font-semibold text-gray-800">${column}</h2>
         <span class="py-0.5 px-2.5 text-sm font-medium text-gray-700 bg-gray-300 rounded-full">${cards.size}</span>
