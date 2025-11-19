@@ -4,7 +4,7 @@
 <div x-data="{showEditCardForm: false}"
      class="_card">
     <!-- Card Display Mode -->
-    <div x-show="!showEditCardForm" x-transition
+    <div x-cloak x-show="!showEditCardForm" x-transition
          class="p-4 bg-white rounded-lg shadow-sm transition-shadow cursor-pointer hover:shadow-md">
         <div class="flex justify-between items-start mb-2">
             <h3 class="font-medium text-gray-900">${card.title}</h3>
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Edit Card Form -->
-    <form x-show="showEditCardForm" x-transition
+    <form x-cloak x-show="showEditCardForm" x-transition
           hx-put="/kanban/${kanbanId}/${card.id}"
           hx-target="closest ._card"
           hx-swap="outerHTML"

@@ -31,7 +31,7 @@
             <!-- Title Edit Mode (mobile-friendly) -->
             <form hx-put="/kanban/title"
                   hx-target="nav"
-                  x-show="showTitleEdit" x-transition
+                  x-cloak x-show="showTitleEdit" x-transition
                   class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none -translate-x-5/12 w-[calc(100vw-2rem)]">
                 <input type="hidden" name="id" value="${kanban.id}">
                 <input type="text"
@@ -50,7 +50,7 @@
                 </button>
             </form>
 
-            <div x-show="showTitleButtons" x-transition
+            <div x-cloak x-show="showTitleButtons" x-transition
                  @click.outside="showTitleButtons = false"
                  class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
                 <button @click="showTitleEdit = true; showTitleButtons = false"
@@ -78,7 +78,7 @@
                 </button>
 
                 <!-- Dropdown -->
-                <div x-show="showUserMenu" x-transition @click.outside="showUserMenu = false"
+                <div x-cloak x-show="showUserMenu" x-transition @click.outside="showUserMenu = false"
                      class="absolute right-0 top-full z-50 p-2 mt-2 w-40 bg-white rounded-lg border border-gray-200 shadow-lg">
                     <a href="/logout"
                        class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">

@@ -3,10 +3,10 @@
 
 <div x-data="{showAddColumnForm: false}"
      class="flex-shrink-0 bg-white rounded-lg border-2 border-gray-300 border-dashed transition-colors cursor-pointer hover:border-blue-400 _columnBox">
-    <div x-show="!showAddColumnForm" @click="showAddColumnForm = true" class="p-4">
+    <div x-cloak x-show="!showAddColumnForm" @click="showAddColumnForm = true" class="p-4">
         <span class="font-light text-gray-400">+</span>
     </div>
-    <form x-show="showAddColumnForm"
+    <form x-cloak x-show="showAddColumnForm"
           hx-post="/kanban/${kanbanId}/new-column-after"
           hx-target="#main"
           hx-swap="outerHTML"
