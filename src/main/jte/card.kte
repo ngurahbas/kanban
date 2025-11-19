@@ -22,7 +22,7 @@
         <div class="flex gap-1 justify-end items-center pt-2 mt-3 border-t">
             <button hx-put="/kanban/move/${kanbanId}/${card.id}/PREV"
                     title="Move to previous column"
-                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs"
+                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm active:scale-95 group shadow-xs"
                     aria-label="Move to previous column">
                 <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
                      stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +32,7 @@
             </button>
             <button title="Edit card"
                     @click="showEditCardForm = true"
-                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs"
+                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm active:scale-95 group shadow-xs"
                     aria-label="Edit card">
                 <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
                      stroke="currentColor" viewBox="0 0 24 24">
@@ -42,7 +42,7 @@
             </button>
             <button hx-put="/kanban/move/${kanbanId}/${card.id}/NEXT"
                     title="Move to next column"
-                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95 group shadow-xs"
+                    class="inline-flex justify-center items-center p-2 text-gray-500 bg-white rounded-md border border-gray-200 transition hover:text-gray-700 hover:bg-gray-50 hover:shadow-sm active:scale-95 group shadow-xs"
                     aria-label="Move to next column">
                 <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none"
                      stroke="currentColor" viewBox="0 0 24 24">
