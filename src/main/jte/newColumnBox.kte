@@ -15,6 +15,7 @@
         <input type="hidden" name="refColumn" value="${refColumn}">
         @endif
         <input type="text" name="newColumn"
+               required
                placeholder="Enter column names"
                class="py-1 px-2 rounded border border-gray-300">
         <button type="submit"
