@@ -32,22 +32,24 @@
             <form hx-put="/kanban/title"
                   hx-target="nav"
                   x-cloak x-show="showTitleEdit" x-transition
-                  class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none w-[calc(100vw-2rem)]">
+                  class="absolute p-3 mt-4 bg-blue-50 rounded-md border-2 border-blue-300 border-dashed">
                 <input type="hidden" name="id" value="${kanban.id}">
                 <input type="text"
                        name="title"
                        value="${kanban.title}"
-                       class="flex-1 py-2 px-3 w-full min-w-0 text-lg font-bold text-center text-gray-900 bg-white rounded border border-gray-300 sm:w-64 sm:text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       class="py-2 px-3 w-80 mb-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                        required minlength="4" maxlength="128" autofocus>
-                <button type="submit"
-                        class="py-2 px-3 w-full text-white bg-blue-600 rounded transition-colors sm:w-auto hover:bg-blue-700">
-                    Save
-                </button>
-                <button type="button"
-                        @click="showTitleEdit = false; showTitleButtons = false"
-                        class="py-2 px-3 w-full text-gray-700 bg-gray-300 rounded transition-colors sm:w-auto hover:bg-gray-400">
-                    Cancel
-                </button>
+                <div class="flex gap-2">
+                    <button type="submit"
+                            class="flex-1 py-2 px-3 text-white bg-blue-600 rounded-md transition-colors duration-200 hover:bg-blue-700">
+                        Save
+                    </button>
+                    <button type="button"
+                            @click="showTitleEdit = false; showTitleButtons = false"
+                            class="flex-1 py-2 px-3 text-gray-700 bg-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-400">
+                        Cancel
+                    </button>
+                </div>
             </form>
 
             <div x-cloak x-show="showTitleButtons" x-transition
