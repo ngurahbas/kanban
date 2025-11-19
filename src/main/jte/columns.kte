@@ -5,7 +5,7 @@
     <div class="p-6">
         <!-- Kanban Board / Empty State -->
         @if (kanbanId == null)
-            <p class="text-sm text-gray-600">No kanban selected. Please choose a kanban or add a new one from the sidebar.</p>
+            <p class="text-lg font-bold text-gray-600">No kanban selected. Please choose a kanban or add a new one from the sidebar.</p>
             <!-- Trigger blinking kanban items and button to guide the user -->
             <span aria-hidden="true"
                   class="hidden"
