@@ -32,7 +32,7 @@
             <form hx-put="/kanban/title"
                   hx-target="nav"
                   x-cloak x-show="showTitleEdit" x-transition
-                  class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none -translate-x-5/12 w-[calc(100vw-2rem)]">
+                  class="flex absolute flex-col gap-2 p-3 max-w-md bg-blue-50 rounded-md border-2 border-blue-300 border-dashed sm:flex-row sm:items-center sm:w-auto sm:max-w-none w-[calc(100vw-2rem)]">
                 <input type="hidden" name="id" value="${kanban.id}">
                 <input type="text"
                        name="title"
@@ -52,7 +52,7 @@
 
             <div x-cloak x-show="showTitleButtons" x-transition
                  @click.outside="showTitleButtons = false"
-                 class="absolute left-1/2 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform -translate-x-1/2">
+                 class="absolute left-0 top-full z-50 p-2 mt-2 bg-white rounded-lg border border-gray-200 shadow-lg transform">
                 <button @click="showTitleEdit = true; showTitleButtons = false"
                         class="block py-2 px-4 w-full text-sm text-left text-gray-700 rounded transition-colors hover:bg-gray-100">
                     Edit Title
