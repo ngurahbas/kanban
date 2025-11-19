@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("com.github.node-gradle.node") version "7.1.0"
     id("gg.jte.gradle") version "3.1.16"
+    id("org.graalvm.buildtools.native") version "0.10.6"
 }
 
 group = "app"
