@@ -4,4 +4,4 @@
 
 @template.navbar(user, kanban)
 @template.sidebar(user, kanban, kanbans)
-<title hx-swap-oob="true" id="title">${kanban.title}</title>
+<title hx-swap-oob="true" id="title">Kanban: ${kanban.title}</title>
