@@ -15,6 +15,10 @@
 <body x-data="{sidebarOpen: false, configuringColumns: false, sidebarHighlight: false}">
     @template.navbar(user, kanban)
     @template.sidebar(user, kanban, kanbans)
+    <!-- Mobile overlay to close sidebar when clicking outside -->
+    <div @click="sidebarOpen = false"
+         :class="sidebarOpen ? '' : 'hidden'"
+         class="fixed inset-0 z-30 bg-black/30 lg:hidden"></div>
     @template.columns(kanban.id, columnCards)
 </body>
 </html>
