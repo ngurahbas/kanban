@@ -144,6 +144,7 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
         FROM kanban_ownership o
         JOIN kanban_board k 
         ON o.identifier_id = :identifierId AND k.id = ANY(o.board_ids)
+        ORDER BY k.updated_at DESC
     """
     )
     fun findKanbansByOwnerIdentifierId(identifierId: Long): List<KanbanBoard>
