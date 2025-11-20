@@ -18,7 +18,7 @@
     <!-- Mobile overlay to close sidebar when clicking outside -->
     <div @click="sidebarOpen = false"
          :class="sidebarOpen ? '' : 'hidden'"
-         class="fixed inset-0 z-30 bg-black/30 lg:hidden"></div>
+         class="fixed inset-0 z-30 lg:hidden bg-black/30"></div>
     @template.columns(kanban.id, columnCards)
 </body>
 </html>
