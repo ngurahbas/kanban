@@ -1,0 +1,15 @@
+@param kanban: app.kanban.kanban.KanbanWeb
+@param kanbans: List<app.kanban.kanban.KanbanWeb>
+
+<div>
+    @for(k in kanbans)
+        !{
+                val htmlClass = if(k.id == kanban.id) "bg-blue-50 text-blue-700 border-l-4 border-blue-700" else "text-gray-700 hover:bg-gray-100"
+            }
+        <a href="/kanban/${k.id}"
+           :class="sidebarHighlight ? 'ring-2 ring-blue-400 ring-offset-2' : ''"
+           class="block py-2 px-3 rounded-md transition-colors duration-200 ${htmlClass}">
+            <span>${k.title}</span>
+        </a>
+    @endfor
+</div>
