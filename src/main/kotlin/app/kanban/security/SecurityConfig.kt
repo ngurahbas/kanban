@@ -32,7 +32,7 @@ class SecurityConfig(
         http
             .csrf { it.ignoringRequestMatchers("/kanban/**")/*TODO make csrf works*/ }
             .authorizeHttpRequests {
-                it.requestMatchers("/login", "/oauth2/**", "/css/**", "/js/**").permitAll()
+                it.requestMatchers("/", "/login", "/oauth2/**", "/css/**", "/js/**").permitAll()
                     .anyRequest().authenticated()
             }.oauth2Login { it.defaultSuccessUrl("/kanban", true) }
             .securityContext { it.securityContextRepository(trimDownSecurityContextRepository) }
