@@ -236,6 +236,14 @@ class KanbanModifyingController(
 
         return "configureColumns"
     }
+
+    @DeleteMapping("/kanban/{kanbanId}")
+    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
+    @ResponseBody
+    fun deleteKanban(@AuthenticationPrincipal user: KanbanUser, @PathVariable kanbanId: Long): String {
+        service.deleteBoard(kanbanId)
+        return ""
+    }
 }
 
 val defaultColumns = setOf("To do", "In progress", "Done")

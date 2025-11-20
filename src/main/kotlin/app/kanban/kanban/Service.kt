@@ -112,6 +112,8 @@ class KanbanService(
         val columnsStat = kanbanCardRepository.findColumnsStat(boardId)
         return columns.associateWith { column -> columnsStat.find { it.column == column }?.count ?: 0 }
     }
+
+    fun deleteBoard(kanbanId: Long) = kanbanBoardRepository.deleteById(kanbanId)
 }
 
 interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
@@ -145,6 +147,8 @@ interface KanbanBoardRepository : Repository<KanbanBoard, Long> {
     """
     )
     fun findKanbansByOwnerIdentifierId(identifierId: Long): List<KanbanBoard>
+
+    fun deleteById(kanbanId: Long)
 }
 
 interface KanbanCardRepository : CrudRepository<KanbanCard, Long> {
