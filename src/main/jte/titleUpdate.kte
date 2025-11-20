@@ -3,5 +3,5 @@
 @param kanbans: List<app.kanban.kanban.KanbanWeb>
 
 @template.navbar(user, kanban)
-@template.sidebar(user, kanban, kanbans)
+@template.kanbans(kanban, kanbans, true)
 <title hx-swap-oob="true" id="title">Kanban: ${kanban.title}</title>
