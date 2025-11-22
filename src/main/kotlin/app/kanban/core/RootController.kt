@@ -10,11 +10,9 @@ class RootController {
 
     @GetMapping("/")
     fun root(@AuthenticationPrincipal user: KanbanUser?): String {
-        // If authenticated, go straight to kanban
         if (user != null) {
             return "redirect:/kanban"
         }
-        // Otherwise render a simple SEO-friendly page that indicates redirect to /login
         return "root"
     }
 }
