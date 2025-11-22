@@ -1,10 +1,10 @@
 @param kanbanId: Long?
 @param column: String
-@param cards: List<app.kanban.kanban.KanbanCardWeb>
+@param cards: List<app.kanban.web.data.KanbanCardWeb>
 @param oob: Boolean = true
 
 !{
- val cssColumnId ="col-${app.kanban.kanban.toBase62(column)}"
+ val cssColumnId ="col-${app.kanban.web.toBase62(column)}"
 }
 <div x-data="{showAddCardForm: false}"
      hx-swap-oob="${oob}"

@@ -1,5 +1,5 @@
 @param kanbanId: Long?
-@param card: app.kanban.kanban.KanbanCardWeb
+@param card: app.kanban.web.data.KanbanCardWeb
 
 <div x-data="{showEditCardForm: false}"
      class="_card">

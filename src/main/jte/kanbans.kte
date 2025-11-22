@@ -1,5 +1,5 @@
-@param kanban: app.kanban.kanban.KanbanWeb
-@param kanbans: List<app.kanban.kanban.KanbanWeb>
+@param kanban: app.kanban.web.data.KanbanWeb
+@param kanbans: List<app.kanban.web.data.KanbanWeb>
 @param oob: Boolean = false
 
 <div :class="sidebarHighlight ? 'ring-2 ring-blue-400 ring-offset-2' : ''"

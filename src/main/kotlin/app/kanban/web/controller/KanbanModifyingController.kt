@@ -1,86 +1,24 @@
-package app.kanban.kanban
+package app.kanban.web.controller
 
+import app.kanban.kanban.KanbanService
 import app.kanban.security.KanbanUser
+import app.kanban.web.data.CardMovement
+import app.kanban.web.data.KanbanCardWeb
+import app.kanban.web.data.KanbanWeb
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Size
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import java.math.BigInteger
-
-
-@Controller
-class KanbanController(
-    private val service: KanbanService
-) {
-    companion object {
-        private val logger = LoggerFactory.getLogger(KanbanController::class.java)
-    }
-
-    @GetMapping("/kanban")
-    fun board(@AuthenticationPrincipal user: KanbanUser, model: Model): String {
-        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
-
-        model.addAttribute("kanban", KanbanWeb(null, ""))
-        model.addAttribute("kanbans", kanbans)
-        model.addAttribute("columnCards", mapOf<String, List<KanbanCardWeb>>())
-        model.addAttribute("user", user)
-
-        return "kanban"
-    }
-
-    @GetMapping("/kanban/{id}")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
-    fun getKanbanById(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
-        val kanbanDb = service.getBoard(id)
-        val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
-            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
-        val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
-        val kanbans = service.getKanbans(user.identifierId).map { KanbanWeb(it.id, it.title) }.toList()
-
-        model.addAttribute("kanban", KanbanWeb(kanbanDb.id, kanbanDb.title))
-        model.addAttribute("kanbans", kanbans)
-        model.addAttribute("columnCards", columnCards)
-        model.addAttribute("user", user)
-
-        return "kanban"
-    }
-
-    @GetMapping("/kanban/{id}/configure-columns")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
-    fun configureColumns(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
-        val columnsStat = service.getColumnsStat(id)
-        model.addAttribute("kanbanId", id)
-        model.addAttribute("columnsStat", columnsStat)
-        return "configureColumns"
-    }
-
-    @GetMapping("/kanban/{id}/columns")
-    @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #id)")
-    fun getColumns(@AuthenticationPrincipal user: KanbanUser, @PathVariable id: Long, model: Model): String {
-        val kanbanDb = service.getBoard(id)
-        val kanbanCardByColumn = service.getCards(id).groupBy { it.column }
-            .mapValues { it.value.map { card -> KanbanCardWeb(card.id, card.index, card.title, card.description) }.sortedBy { it.index} }
-        val columnCards = kanbanDb.columns.associateWith { kanbanCardByColumn[it] ?: listOf() }
-
-        model.addAttribute("kanbanId", id)
-        model.addAttribute("columnCards", columnCards)
-
-        return "columns"
-    }
-}
 
 @Controller
 class KanbanModifyingController(
@@ -88,6 +26,7 @@ class KanbanModifyingController(
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(KanbanModifyingController::class.java)
+        private val defaultColumns = setOf("To do", "In progress", "Done")
     }
 
     @PostMapping("/kanban/title")
@@ -244,50 +183,4 @@ class KanbanModifyingController(
         service.deleteBoard(kanbanId)
         return ""
     }
-}
-
-val defaultColumns = setOf("To do", "In progress", "Done")
-
-data class KanbanWeb(
-    val id: Long?,
-    @field:NotBlank
-    @field:Size(min = 4, max = 128)
-    val title: String,
-)
-
-data class KanbanCardWeb(
-    val id: Int?,
-    val index: Int?,
-    @field:NotBlank
-    @field:Size(min = 4, max = 128)
-    val title: String,
-    @field:NotBlank
-    @field:Size(min = 4, max = 1024)
-    val description: String,
-)
-
-enum class CardMovement {
-    NEXT, PREV
-}
-
-private val base62chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-fun toBase62(input: String): String {
-    val textBytes = input.toByteArray(Charsets.UTF_8)
-    var num = BigInteger(1, textBytes)
-
-    if (num == BigInteger.ZERO) {
-        return base62chars[0].toString()
-    }
-
-    val result = StringBuilder()
-    val base = BigInteger.valueOf(62)
-
-    while (num > BigInteger.ZERO) {
-        val remainder = num.mod(base).toInt()
-        result.append(base62chars[remainder])
-        num = num.divide(base)
-    }
-
-    return result.reverse().toString()
 }

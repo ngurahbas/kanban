@@ -1,5 +1,5 @@
 @param kanbanId: Long?
-@param columnCards: Map<String, List<app.kanban.kanban.KanbanCardWeb>>
+@param columnCards: Map<String, List<app.kanban.web.data.KanbanCardWeb>>
 
 <main id="main" class="pt-16 min-h-screen lg:pl-64">
     <div class="p-6">

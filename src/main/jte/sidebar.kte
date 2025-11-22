@@ -1,6 +1,6 @@
 @param user: app.kanban.security.KanbanUser
-@param kanban: app.kanban.kanban.KanbanWeb
-@param kanbans: List<app.kanban.kanban.KanbanWeb>
+@param kanban: app.kanban.web.data.KanbanWeb
+@param kanbans: List<app.kanban.web.data.KanbanWeb>
 
 <!-- Sidebar -->
 <aside x-data="{showNewKanbanForm: false}"
