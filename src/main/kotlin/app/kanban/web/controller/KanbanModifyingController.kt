@@ -115,14 +115,24 @@ class KanbanModifyingController(
 
     @DeleteMapping("/kanban/{kanbanId}/{cardId}")
     @PreAuthorize("@kanbanService.hasKanbanAccess(#user.identifierId, #kanbanId)")
-    @ResponseBody
     fun deleteCard(
         @AuthenticationPrincipal user: KanbanUser,
         @PathVariable kanbanId: Long,
-        @PathVariable cardId: Int
+        @PathVariable cardId: Int,
+        model: Model
     ): String {
+        val card = service.getCard(kanbanId, cardId)
+
         service.deleteCard(kanbanId, cardId)
-        return ""
+
+        val cards = service.getCards(kanbanId, card.column)
+            .map { KanbanCardWeb(it.id, it.index, it.title, it.description) }
+            .sortedBy { it.index }
+
+        model.addAttribute("kanbanId", kanbanId)
+        model.addAttribute("column", card.column)
+        model.addAttribute("cards", cards)
+        return "column"
     }
 
     @PostMapping("/kanban/{kanbanId}/new-column-after")
