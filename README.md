@@ -74,10 +74,8 @@ The application supports OAuth2 authentication with:
 
 ### Google OAuth2 Setup
 
-1. Create a Google Cloud project
-2. Enable Google+ API
-3. Create OAuth2 credentials
-4. Set environment variables:
+1. Create a Google Oauth2 client at Google API Console
+2. Set environment variables:
    ```bash
    export GOOGLE_CLIENT_ID=your-client-id
    export GOOGLE_CLIENT_SECRET=your-client-secret
@@ -89,7 +87,7 @@ The application supports OAuth2 authentication with:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License
 
 ## 🆘 Troubleshooting
 
