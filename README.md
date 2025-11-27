@@ -10,7 +10,7 @@ Get the application running in seconds with Docker and Gradle:
 docker compose up -d && ./gradlew bootRun
 ```
 
-That's it! The application will be available at `http://localhost:8080`. You can login through keycloak oauth2 link with credentials: username: `testuser` password: `passsword`.
+That's it! The application will be available at `http://localhost:8080`. You can login via [keycloak oauth2 link](http://localhost:8080/oauth2/authorization/keycloak) with credentials: username: `testuser` password: `passsword`.
 
 ## 📋 Prerequisites
 
