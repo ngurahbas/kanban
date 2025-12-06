@@ -120,7 +120,7 @@ tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmCompileJs") {
     description = "Compile JS"
     dependsOn("npmInstallPackages")
 
-    args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--outfile=src/main/resources/static/js/main.js"))
+    args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--minify", "--outfile=src/main/resources/static/js/main.js"))
     workingDir.set(file("${project.projectDir}"))
 }
 
