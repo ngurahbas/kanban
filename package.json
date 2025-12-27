@@ -1,0 +1,26 @@
+{
+  "name": "kanban",
+  "version": "1.0.0",
+  "description": "A modern web-based kanban board application built with Spring Boot and Kotlin, featuring real-time collaboration, OAuth2 authentication, and a responsive user interface.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngurahbas/kanban.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ngurahbas/kanban/issues"
+  },
+  "homepage": "https://github.com/ngurahbas/kanban#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "alpinejs": "^3.15.3",
+    "esbuild": "^0.27.2",
+    "htmx.org": "^2.0.8",
+    "tailwindcss": "^4.1.18"
+  }
+}

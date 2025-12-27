@@ -41,8 +41,6 @@ out/
 
 #npm controlled by gradlew
 node_modules
-/package.json
-/package-lock.json
 
 #generated css js
 src/main/resources/static/css/main.css

@@ -83,9 +83,6 @@ tasks.register<Exec>("tailwindCompileCss") {
 tasks.register<Exec>("npmCompileJs") {
     group = "npm"
     description = "Compile JS"
-
-//    args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--minify", "--outfile=src/main/resources/static/js/main.js"))
-//    workingDir.set(file("${project.projectDir}"))
     commandLine = listOf("${project.projectDir}/node_modules/.bin/esbuild", "--bundle", "--minify", "--outfile=./src/main/resources/static/js/main.js", "./src/main/js/main")
 }
 
@@ -104,9 +101,6 @@ tasks.named("bootJar") {
 
 tasks.named<Delete>("clean") {
     delete(
-        file("${project.projectDir}/node_modules"),
-        file("${project.projectDir}/package.json"),
-        file("${project.projectDir}/package-lock.json"),
         file("${project.projectDir}/src/main/resources/static/css/main.css"),
         file("${project.projectDir}/src/main/resources/static/js/main.js")
     )
