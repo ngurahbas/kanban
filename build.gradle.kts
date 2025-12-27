@@ -1,10 +1,10 @@
 plugins {
     kotlin("jvm") version "2.3.0"
-    kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.spring") version "2.3.0"
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.github.node-gradle.node") version "7.1.0"
-    id("gg.jte.gradle") version "3.1.16"
+    id("gg.jte.gradle") version "3.2.1"
 }
 
 group = "app"
@@ -38,8 +38,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
-    implementation("gg.jte:jte-spring-boot-starter-3:3.1.16")
-    implementation("gg.jte:jte-kotlin:3.1.16")
+    implementation("gg.jte:jte-spring-boot-starter-3:3.2.1")
+    implementation("gg.jte:jte-kotlin:3.2.1")
 
     // Redis/Valkey session storage
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
