@@ -3,7 +3,6 @@ plugins {
     kotlin("plugin.spring") version "2.3.0"
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
-    id("com.github.node-gradle.node") version "7.1.0"
     id("gg.jte.gradle") version "3.2.1"
 }
 
@@ -68,45 +67,12 @@ tasks.named("processResources") {
     dependsOn("tailwindCompileCss", "npmCompileJs")
 }
 
-node {
-    version.set("20.11.1")
-    npmVersion.set("10.2.4")
-    download.set(true)
-    nodeProjectDir.set(file("${project.projectDir}"))
-}
-
-/**
- * initialize package.json
- */
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInit") {
-    group = "npm"
-    description = "Initialize npm project with package.json"
-    dependsOn("npmSetup")
-
-    args.set(listOf("init", "-y"))
-    workingDir.set(file("${project.projectDir}"))
-}
-
-/**
- * install or updates npm packages
- */
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstallPackages") {
-    group = "npm"
-    description = "Install npm packages"
-    dependsOn("npmSetup")
-
-    args.set(listOf("install", "--save-dev", "@tailwindcss/cli", "tailwindcss", "alpinejs", "esbuild", "htmx.org"))
-    workingDir.set(file("${project.projectDir}"))
-}
-
 /**
  * compile CSS
  */
 tasks.register<Exec>("tailwindCompileCss") {
     group = "npm"
     description = "Compile CSS"
-    dependsOn("npmInstallPackages")
-
     workingDir = file("${project.projectDir}")
     commandLine = listOf("${project.projectDir}/node_modules/.bin/tailwindcss", "-i", "src/main/css/main.css", "-o", "src/main/resources/static/css/main.css")
 }
@@ -114,13 +80,13 @@ tasks.register<Exec>("tailwindCompileCss") {
 /**
  * compile js
  */
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmCompileJs") {
+tasks.register<Exec>("npmCompileJs") {
     group = "npm"
     description = "Compile JS"
-    dependsOn("npmInstallPackages")
 
-    args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--minify", "--outfile=src/main/resources/static/js/main.js"))
-    workingDir.set(file("${project.projectDir}"))
+//    args.set(listOf("exec", "npx", "esbuild", "--", "src/main/js/main.js", "--bundle", "--minify", "--outfile=src/main/resources/static/js/main.js"))
+//    workingDir.set(file("${project.projectDir}"))
+    commandLine = listOf("${project.projectDir}/node_modules/.bin/esbuild", "--bundle", "--minify", "--outfile=./src/main/resources/static/js/main.js", "./src/main/js/main")
 }
 
 jte {
