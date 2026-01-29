@@ -1,9 +1,10 @@
-plugins {
+ plugins {
     kotlin("jvm") version "2.3.0"
     kotlin("plugin.spring") version "2.3.0"
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("gg.jte.gradle") version "3.2.1"
+    id("org.graalvm.buildtools.native") version "0.10.6"
 }
 
 group = "app"
@@ -26,7 +27,7 @@ dependencyManagement {
     }
 }
 
-dependencies {
+ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -38,8 +39,9 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("gg.jte:jte-spring-boot-starter-3:3.2.1")
-    implementation("gg.jte:jte-kotlin:3.2.1")
-
+    implementation("gg.jte:jte-kotlin:3.2.1") {
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
+    }
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -49,11 +51,23 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    testImplementation("org.graalvm.buildtools.native:sbt-graalvm-native-image-test-runner")
 }
 
-kotlin {
+ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
+}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            buildArgs.add("--verbose")
+            buildArgs.add("--allow-incomplete-classpath")
+            buildArgs.add("-H:+ReportExceptionStackTraces")
+        }
     }
 }
 
